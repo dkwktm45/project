@@ -19,7 +19,6 @@ public class user {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long user_id;
 
-
     private String user_name;
     private String user_phone;
     private String user_gym;
