@@ -1,20 +1,16 @@
 package com.example.project_2th.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@ToString(callSuper = true)
 @Table(name = "user_exercies")
 public class UserExercies {
     @Id
@@ -28,4 +24,7 @@ public class UserExercies {
     private String cnt;
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private user user;
 }

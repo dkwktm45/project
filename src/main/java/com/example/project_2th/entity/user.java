@@ -1,11 +1,9 @@
 package com.example.project_2th.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,11 +11,13 @@ import javax.persistence.*;
 @Entity
 @Builder
 @Table(name = "user")
+@ToString(callSuper = true)
 public class user {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long user_id;
+
 
     private String user_name;
     private String user_phone;
@@ -30,4 +30,17 @@ public class user {
     private int manager_yn;
     private String ad_comment;
     private int month;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    private List<UserExercieVideos> userExercieVideosList;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    private List<UserExercies> userExerciesList;
+
+
+
 }
