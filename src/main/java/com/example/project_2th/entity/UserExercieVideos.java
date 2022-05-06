@@ -3,6 +3,7 @@ package com.example.project_2th.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,11 +18,15 @@ public class UserExercieVideos {
     private Long video_seq;
     private Long ex_seq;
     private String file_name;
+
     private String user_name;
     private String video_date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private user user;
-}
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private user user_id;
 
+    @OneToMany
+    @JoinColumn(name = "video_seq")
+    private List<DeepPostures> posturesList;
+}

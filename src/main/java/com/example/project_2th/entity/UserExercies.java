@@ -4,6 +4,7 @@ package com.example.project_2th.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +15,13 @@ import javax.persistence.*;
 @Table(name = "user_exercies")
 public class UserExercies {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long ex_seq;
-    private String user_id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private user user_id;
+
     private String ex_name;
     private String ex_kinds;
     private String user_set;
@@ -24,7 +30,4 @@ public class UserExercies {
     private String cnt;
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @ToString.Exclude
-    private user user;
 }

@@ -3,6 +3,7 @@ package com.example.project_2th.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "user")
+@EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
 public class user {
 
@@ -33,14 +35,13 @@ public class user {
 
     @OneToMany
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    private List<UserExercieVideos> userExercieVideosList;
+    private List<UserExercies> userExerciesList;
 
     @OneToMany
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
-    private List<UserExercies> userExerciesList;
+    private List<UserExercieVideos> VideosList;
 
-
-
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<UserCalendar> calendarList;
 }
