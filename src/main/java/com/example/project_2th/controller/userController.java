@@ -1,16 +1,24 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.entity.user;
+import com.example.project_2th.repository.guestRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.List;
-
+@Controller
+@RequiredArgsConstructor
+@Slf4j
 public class userController {
+
+    @Autowired
+    private final guestRepository guestRepository;
+
 //
 //    @Autowired
 //    private mainMapper mapper;
@@ -60,12 +68,32 @@ public class userController {
 //    }
 //
 //
-//    @RequestMapping("/login.do")
-//    public String login() {
-//
-//        return "login";
-//    }
-//
+    @GetMapping("/login")
+    public String login() {
+
+        return "login";
+    }
+
+    @PostMapping(value="/loginInsert")
+    public String memberLogin(@ModelAttribute user user) throws Exception {
+        log.info("id : {},gym : {}", user.getUserId(),user.getUserGym());
+        user loginUser = guestRepository.findByUserIdAndUserGym(user.getUserId(),user.getUserGym());
+        if (!(loginUser == null)) {
+            return "redirect:/main";
+        }
+        return "redirect:/login";
+    }
+
+    @GetMapping("/main")
+    public String main(){
+        return "main";
+    }
+
+    @GetMapping("/test")
+    public String test() {
+
+        return "test";
+    }
 //    @RequestMapping("/cam.do")
 //    public String cam() {
 //        return "cam";
@@ -94,11 +122,7 @@ public class userController {
 //    }
 //
 //
-//    @RequestMapping(value="/loginInsert.do", method= {RequestMethod.GET, RequestMethod.POST})
-//    public String memberLogin(guest memberVO , HttpServletRequest req,  RedirectAttributes rttr) throws Exception {
-//
-//
-//    }
+
 //
 //    @RequestMapping(value="/insertJoin.do", method= {RequestMethod.GET, RequestMethod.POST})
 //    public String insertJoin(guest memberVO ) {

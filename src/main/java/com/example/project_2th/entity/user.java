@@ -17,20 +17,21 @@ import java.util.List;
 public class user {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long user_id;
+    @Column(name = "user_id")
+    private Long userId;
 
 
-    private String user_name;
-    private String user_phone;
-    private String user_gym;
-    private String user_expire_date;
-    private String user_birthdate;
+    private String userName;
+    private String userPhone;
+    @Column(name = "user_gym")
+    private String userGym;
+    private String userExpireDate;
+    private String userBirthdate;
     private String contents;
     private String day;
     private String time;
-    private int manager_yn;
-    private String ad_comment;
+    private int managerYn;
+    private String adComment;
     private int month;
 
     @OneToMany
