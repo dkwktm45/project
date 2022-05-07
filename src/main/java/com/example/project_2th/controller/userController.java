@@ -76,9 +76,13 @@ public class userController {
 
     @PostMapping(value="/loginInsert")
     public String memberLogin(@ModelAttribute user user) throws Exception {
-        log.info("id : {},gym : {}", user.getUserId(),user.getUserGym());
-        user loginUser = guestRepository.findByUserIdAndUserGym(user.getUserId(),user.getUserGym());
-        if (!(loginUser == null)) {
+        log.info("id : {},gym : {}", user.getUserPhone() , user.getUserGym());
+
+        user loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
+
+        if (loginUser != null) {
+
+            log.info("로그인 성공");
             return "redirect:/main";
         }
         return "redirect:/login";

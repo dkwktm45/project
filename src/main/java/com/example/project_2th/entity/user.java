@@ -18,6 +18,7 @@ public class user {
 
     @Id
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
 
