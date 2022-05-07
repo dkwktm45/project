@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,16 +76,17 @@ public class userController {
     }
 
     @PostMapping(value="/loginInsert")
-    public String memberLogin(@ModelAttribute user user) throws Exception {
+    public String memberLogin(@ModelAttribute user user, Model model) throws Exception {
         log.info("id : {},gym : {}", user.getUserPhone() , user.getUserGym());
 
         user loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
 
         if (loginUser != null) {
-
             log.info("로그인 성공");
-            return "redirect:/main";
+            model.addAttribute("user",loginUser.getUserName());
+            return "main";
         }
+        log.info("로그인 실패?");
         return "redirect:/login";
     }
 
