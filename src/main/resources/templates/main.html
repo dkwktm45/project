@@ -10,27 +10,26 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-
 <h1>main page</h1>
 <div class="black_bg">1
     <div class="modal_wrap">
         <div class="modal_main">
             <div class = "modal_top">
-                <div style = "font-size:80px;"><b style="font-size: 80px;"><br th:text="${user}">userName</b></div>
+                <div style = "font-size:80px;"><b style="font-size: 80px;"><br th:text="${user.getUserName()}"></div>
                 <div class = "modal_top_left">
                     <div><br>만기일</div>
                 </div>
                 <div class = "modal_top_right">
-                    <div><br><%=member.getUser_expire_date() %><br>D-day 30일</div>
+                    <div><br><br th:text="${user.getUserExpireDate()}"></div>
                 </div>
             </div>
             <div class = "modal_mid">
                 <div class = "modal_mid_mid">
-                    <div class = "modal_mid_left"><img id="moicon" src="/image/diary.png" onclick = "go_calender()"></div>
+                    <div class = "modal_mid_left"><img id="moicon" src="/image/diary.png" onclick ="th:href='@{/infoCalender(user=${user}}'"></div>
                     <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_calender()">운동 다이어리</b></div>
                 </div>
                 <div class = "modal_mid_mid">
-                    <div class = "modal_mid_left"><img id="moicon" src="/image/video.png" onclick = "go_record()"></div>
+                    <div class = "modal_mid_left"><img id="moicon" src="/image/video.png" onclick ="th:href='@{/record(user=${user}}'"></div>
                     <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_record()">운동 영상</b></div>
                 </div>
             </div>
@@ -211,8 +210,6 @@
                  style="width: 120px; height: 120px;">
         </div>
     </div>
-
-
     <div class="main_mid">
         <div class="mid_top">
 
@@ -225,7 +222,6 @@
                     </tr>
                 </table>
             </div>
-
             <div class="div_u1">
                 <table>
                     <tr>
@@ -235,7 +231,6 @@
                     </tr>
                 </table>
             </div>
-
             <div class="div_d1">
                 <table>
                     <tr>
@@ -245,7 +240,6 @@
                     </tr>
                 </table>
             </div>
-
             <div class="div_p1">
                 <table>
                     <tr>
@@ -255,194 +249,16 @@
                     </tr>
                 </table>
             </div>
-
         </div>
-        <div class="mid_bot" >
-
-            <div class="div_g2">
-                <table class="mid_bot_table" id="NSK_font">
-                    <tr>
-                        <td>
-                            <img id="mbimg" class="mbimg" src="/image/스탠딩플라이체스트백.png" >
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/시티드체스트프레스.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tate">스탠딩 플라이 체스트&백 </td>
-                        <td class="tate">시티드 체스트 프레스</td>
-                    </tr>
-                    <tr><td class="tate2"></td><td></td></tr>
-                    <tr>
-                        <td>
-                            <img class="mbimg" src="/image/인클라인체스트프레스.png">
-                        </td>
-                        <td>
-                            <img id = "mbimg2" class="mbimg" src="/image/펙덱플라이.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tate">인클라인 체스트 프레스</td>
-                        <td class="tate">체스트 플라이</td>
-                    </tr>
-                    <tr><td class="tate2"></td><td></td></tr>
-                    <tr>
-                        <td>
-                            <img id="mbimg" class="mbimg" src="/image/해머플렛벤치.png" >
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/해머디크라인벤치.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td  class="tate">해머 플렛 벤치</td>
-                        <td  class="tate">해머 디크라인 벤치</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="div_u2">
-                <table class="mid_bot_table" id="NSK_font">
-                    <tr>
-                        <td>
-                            <img id="mbimg3" class="mbimg" src="/image/덤벨 솔더프레스.png" >
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/레터럴레이즈.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td  class="tate">덤벨 숄더프레스</td>
-                        <td  class="tate">레터럴 레이즈</td>
-                    </tr>
-                    <tr><td class="tate2"></td><td></td></tr>
-                    <tr>
-                        <td>
-                            <img class="mbimg" src="/image/스탠딩레터럴레이즈.png">
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/시티드딥.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td  class="tate">스탠딩 레터럴 레이즈</td>
-                        <td  class="tate">시티드 딥</td>
-                    </tr>
-                    <tr><td class="tate2"></td><td></td></tr>
-                    <tr>
-                        <td>
-                            <img id="mbimg" class="mbimg" src="/image/스미스수직형.png" >
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/벤트오버레터럴레이즈.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td  class="tate">스미스 (수직형)</td>
-                        <td  class="tate">벤트오버 레터럴 레이즈</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="div_d2">
-                <table class="mid_bot_table" id="NSK_font">
-                    <tr>
-                        <td>
-                            <img id="mbimg" class="mbimg" src="/image/렛풀다운.png" >
-                        </td>
-                        <td>
-                            <img id="mbimg4" class="mbimg" src="/image/시티드로우.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tate">렛풀다운</td>
-                        <td class="tate">시티드 로우</td>
-                    </tr>
-                    <tr><td class="tate2"></td><td></td></tr>
-                    <tr>
-                        <td>
-                            <img class="mbimg" src="/image/로우풀리.png">
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/친&딥어시스트.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tate">로우풀리</td>
-                        <td class="tate">친 & 딥 어시스트</td>
-                    </tr>
-                    <tr><td class="tate2"></td><td></td></tr>
-                    <tr>
-                        <td>
-                            <img id="mbimg" class="mbimg" src="/image/프론트로우.png" >
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/와이드풀다운프론트.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tate">프론트 로우</td>
-                        <td class="tate">와이드 풀다운 프론트</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="div_p2">
-                <table class="mid_bot_table" id="NSK_font">
-                    <tr>
-                        <td>
-                            <img id="mbimg" class="mbimg" src="/image/암컬.png" >
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/오버헤드 트라이셉스 익스텐션.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tate">암 컬</td>
-                        <td class="tate">오버헤드 트라이셉스 익스텐션</td>
-                    </tr>
-                    <tr><td class="tate2"></td><td></td></tr>
-                    <tr>
-                        <td>
-                            <img class="mbimg" src="/image/바벨 컬.png">
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/라잉 트라이셉스 익스텐션.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tate">바벨 컬</td>
-                        <td class="tate">라잉 트라이셉스 익스텐션</td>
-                    </tr>
-                    <tr><td class="tate2"></td><td></td></tr>
-                    <tr>
-                        <td>
-                            <img id="mbimg" class="mbimg" src="/image/덤벨 컬.png" >
-                        </td>
-                        <td>
-                            <img class="mbimg" src="/image/프리처컬벤치.png">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tate">덤벨 컬</td>
-                        <td class="tate">프리처 컬 벤치</td>
-                    </tr>
-                </table>
-            </div>
-
+        <div class="mid_bot">
+            <th:block th:replace="exerciseTypePage/chest :: chestFragment" ></th:block>
+            <th:block th:replace="exerciseTypePage/shoulder :: shoulderFragment"></th:block>
+            <th:block th:replace="exerciseTypePage/back :: backFragement"></th:block>
+            <th:block th:replace="exerciseTypePage/arm :: armFragement"></th:block>
         </div>
-        <div class="main_bot" id="NSK_font">
-            <div class="bicon" id="가슴"><img class="bimg" src="/image/가슴.png"><br>가슴</div>
-            <div class="bicon" id="어깨"><img class="bimg" src="/image/어깨.png"><br>어깨</div>
-            <div class="bicon" id="등"><img class="bimg" src="/image/등.png"><br>등</div>
-            <div class="bicon" id="팔"><img class="bimg" src="/image/팔.png"><br>팔</div>
-        </div>
-
+        <th:block th:replace="footer/footer :: footer" ></th:block>
     </div>
-
 </div>
-
 <script>
     window.onload = function() {
 
@@ -541,20 +357,6 @@
         document.getElementById('어깨').addEventListener('click', u_click);
         document.getElementById('등').addEventListener('click', d_click);
         document.getElementById('팔').addEventListener('click', p_click);
-
-    }
-
-
-    /*
-            <%  guest member = (guest) session.getAttribute("member");%>
-    */
-
-    function go_calender(){
-        location.href = "/web/infoCalender.do?user_id=<%=member.getUser_id()%>";
-    }
-
-    function go_record(){
-//            location.href = "/web/record.do?user_id="+<%=member.getUser_id()%>;
     }
 
     function go_cam(exinfo,kind){

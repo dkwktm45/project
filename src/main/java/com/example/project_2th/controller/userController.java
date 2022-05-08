@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -55,13 +57,11 @@ public class userController {
 //        return "main";
 //    }
 //
-//    @RequestMapping("/record.do")
-//    public String record(String user_id, HttpServletRequest req) {
-//
-//
-//        return "record";
-//    }
-//
+    @GetMapping("/record")
+    public String record() {
+        return "record";
+    }
+
 //
 //    @RequestMapping("/join.do")
 //    public String join() {
@@ -83,7 +83,7 @@ public class userController {
 
         if (loginUser != null) {
             log.info("로그인 성공");
-            model.addAttribute("user",loginUser.getUserName());
+            model.addAttribute("user",loginUser);
             return "main";
         }
         log.info("로그인 실패?");
@@ -96,10 +96,15 @@ public class userController {
     }
 
     @GetMapping("/test")
-    public String test() {
-
+    public String test(HttpSession httpSession) {
         return "test";
     }
+
+    @GetMapping(value="/infoCalender")
+    public String infoCalender(){
+        return "redirect:/test";
+    }
+
 //    @RequestMapping("/cam.do")
 //    public String cam() {
 //        return "cam";
@@ -119,14 +124,9 @@ public class userController {
 //
 //    }
 //
-//
-//    @RequestMapping(value="/infoCalender.do")
-//    public String infoCalender(String user_id ,HttpServletRequest req){
-//
-//        return "redirect:/test.do";
-//
-//    }
-//
+
+
+
 //
 
 //
