@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.persistence.Column;
+import java.util.List;
 
 public interface guestRepository extends JpaRepository<user,Long> {
 
@@ -17,4 +18,7 @@ public interface guestRepository extends JpaRepository<user,Long> {
             @Param("user_gym") String userGym);
 
     user findByUserPhoneAndUserGym(String userPhone, String userGym);
+
+
+    user findByUserId(Long userId);
 }

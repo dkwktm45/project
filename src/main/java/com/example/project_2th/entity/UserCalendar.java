@@ -1,28 +1,26 @@
 package com.example.project_2th.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@ToString(callSuper = true)
 public class UserCalendar {
-    // 달력에 들어갈 거였네...시바
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동으로 숫자가 증가
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private user user_id;
+    @ToString.Exclude
+    private user user;
 
-    private String ex_day;
-    private String timediff;
-    private String user_weight;
+    private Timestamp exDay;
+    private String timeDiff;
+    private String userWeight;
 }

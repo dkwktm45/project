@@ -4,14 +4,13 @@ import com.example.project_2th.entity.user;
 import com.example.project_2th.repository.guestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -21,6 +20,7 @@ public class userController {
 
     @Autowired
     private final guestRepository guestRepository;
+
 
 //
 //    @Autowired
@@ -57,6 +57,13 @@ public class userController {
 //        return "main";
 //    }
 //
+    // 기록페이지 re
+    @GetMapping("/goRecord")
+    public String goRecord() {
+        return "redirect:record";
+    }
+
+    // 기록페이지
     @GetMapping("/record")
     public String record() {
         return "record";
@@ -69,12 +76,14 @@ public class userController {
 //    }
 //
 //
+
+
     @GetMapping("/login")
     public String login() {
-
         return "login";
     }
 
+    // login -> main
     @PostMapping(value="/loginInsert")
     public String memberLogin(@ModelAttribute user user, Model model) throws Exception {
         log.info("id : {},gym : {}", user.getUserPhone() , user.getUserGym());
@@ -87,7 +96,7 @@ public class userController {
             return "main";
         }
         log.info("로그인 실패?");
-        return "redirect:/login";
+        return "redirect:login";
     }
 
     @GetMapping("/main")
@@ -95,26 +104,30 @@ public class userController {
         return "main";
     }
 
+    // calender
     @GetMapping("/test")
     public String test(HttpSession httpSession) {
         return "test";
     }
 
+    // gocalender
     @GetMapping(value="/infoCalender")
-    public String infoCalender(){
-        return "redirect:/test";
+    public String infoCalender(String user_id , HttpServletRequest req){
+        HttpSession session = req.getSession();
+
+        return "redirect:test";
     }
 
-//    @RequestMapping("/cam.do")
-//    public String cam() {
-//        return "cam";
-//    }
-//
-//    @RequestMapping("/warmingup.do")
-//    public String warmingup() {
-//        return "warmingup";
-//    }
-//
+
+////    @RequestMapping("/cam.do")
+////    public String cam() {
+////        return "cam";
+////    }
+////
+////    @RequestMapping("/warmingup.do")
+////    public String warmingup() {
+////        return "warmingup";
+////    }
 //
 //    //안 쓰는 것
 //    @RequestMapping(value="/insertEx.do")
