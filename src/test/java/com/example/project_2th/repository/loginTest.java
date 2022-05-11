@@ -18,7 +18,6 @@ public class loginTest {
     guestRepository guestRepository;
 
 
-
     @Test
     void login(){
         user user = new user();
@@ -33,6 +32,7 @@ public class loginTest {
 
         System.out.println(user2.getUserGym());
     }
+
     @Test
     void calender(){
         user user = new user();

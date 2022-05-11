@@ -1,0 +1,222 @@
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+#title_name{
+    position: absolute;
+    top: 20%;
+    left:35%;
+    font-family:Regular;
+    font-size:180px;
+}
+
+#title_name2{
+    position: absolute;
+    top: 28%;
+    left:10%;
+    font-family:Regular;
+    font-size:180px;
+}
+
+.form-select{
+    margin-left: 60px;
+    width: 850px;
+    height: 100px;
+    border-radius: 40px;
+    font-size: 60px;
+    font-weight: bolder;
+
+}
+#form > div.middle1 > div:nth-child(1) > select > option:nth-child(1){
+    color: rgba(255, 255, 255, 0.5);
+}
+.form-select option{
+    padding-left: 30px;
+    width: 800px;
+    height: 100px;
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+.middle1 .input-group{
+    margin: auto;
+    width:850px;
+    height:100px;
+}
+.middle1 .input-group .input-lg{
+    border-radius: 40px;
+
+    font-size: 60px;
+    font-weight: bolder;
+}
+.button{
+    background-color:rgb(147,148,177);
+    border-radius:40px;
+    font-family:Regular;
+    font-weight:bolder;
+    border: none;
+    width:850px;
+    height:100px;
+    font-size:60px;
+}
+footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 500px;
+    width:100%;
+    line-height:80px;
+}
+
+
+#form{
+    position: absolute;
+    top: 35%;
+    width:100%;
+}
+
+
+table{
+    position:relative;
+    border-radius:30px;
+}
+
+/*  #user_gym{
+display:none
+} */
+/* #user_gym{
+   position:relative;
+   border-radius:40px;
+   font-weight:bolder;
+   appearance:none;
+   padding: 50px 50px 50px 50px;
+   width:950px;
+   height:200px;
+   font-size:60px;
+   font-family:Regular;
+   }
+   #user_gym:focus{
+   position:relative;
+   border-radius:40px;
+   font-weight:bolder;
+   appearance:none;
+   padding: 50px 50px 50px 50px;
+   width:950px;
+   height:200px;
+   font-size:60px;
+   font-family:Regular;
+   } */
+
+/*    #b{
+   position:relative;
+   width:150px;
+   height:50px;
+   font-size:30px;
+   } */
+
+
+
+/*        @font-face{
+            font-family:Regular;
+            src:url('resources/font/FrancoisOne-Regular.ttf');
+        }*/
+
+
+option{
+    font-weight:bolder;
+    width:500px;
+    height:100px;
+}
+
+#modal_btn{
+    position:relative;
+}
+
+#option_click{
+    position:absolute;
+    top:12%;
+    right:8%;
+    transform: rotate(90deg);
+}
+
+
+
+/* 옵션 영역 스타일 */
+.select ul{
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    border:1px solid salmon;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+    z-index: 2;
+}
+.select ul li{	/* 셀렉트목록 */
+    padding: 30px;
+    height: 100px;
+}
+.select ul li:first-child{
+    background: white;
+}
+.select ul li:nth-child(2){
+    background: white;
+}
+.select ul li:nth-child(3){
+    background: white;
+}
+.select ul li:nth-child(4){
+    background: white;
+}
+.select ul li:nth-child(5){
+    background: white;
+}
+.select ul li:hover{
+    background-color: white;
+}
+/* 아이콘 스타일 */
+i{
+    vertical-align: bottom;
+    margin-right: 5px;
+}
+i img{
+    width: 60px;
+}
+
+.hide{
+    height: 300px;
+    display: none;
+}
+
+#exercise{
+    font-family:Regular;
+    width: 850px;
+    height: 100px;
+    font-weight: bolder;
+    font-size: 60px;
+    padding: 50px;
+    border: 1px solid black;
+    text-align: left;
+}
+
+ul{
+    list-style:none;
+    padding-left:0px;
+}
+
+#choice{
+    padding: 30px;
+    height: 100px;
+    font-family: Regular;
+    font-weight: bolder;
+    position: absolute;
+    font-size: 60px;
+    top: 182px;
+    left: 120px;
+}
