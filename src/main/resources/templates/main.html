@@ -367,12 +367,13 @@
         location.href = "/web/warmingup.do";
     }
 
+
     function go_calender(){
-        location.href = "/infoCalender?user="+[[${username}]];
+        location.href = "/infoCalender?userId="+[[${user.userId}]];
     }
 
     function go_record(){
-        location.href = "/goRecord?user="+[[${username}]];
+        location.href = "/goRecord?userId="+[[${user.userId}]];
     }
 
     function go_main(){

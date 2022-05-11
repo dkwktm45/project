@@ -1,5 +1,6 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.entity.UserCalendar;
 import com.example.project_2th.entity.user;
 import com.example.project_2th.repository.guestRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,7 +62,7 @@ public class userController {
     // 기록페이지 re
     @GetMapping("/goRecord")
     public String goRecord() {
-        return "redirect:record";
+        return "redirect:/record";
     }
 
     // 기록페이지
@@ -96,7 +98,7 @@ public class userController {
             return "main";
         }
         log.info("로그인 실패?");
-        return "redirect:login";
+        return "redirect:/login";
     }
 
     @GetMapping("/main")
@@ -106,16 +108,23 @@ public class userController {
 
     // calender
     @GetMapping("/test")
-    public String test(HttpSession httpSession) {
+    public String test() {
         return "test";
     }
 
     // gocalender
     @GetMapping(value="/infoCalender")
-    public String infoCalender(String user_id , HttpServletRequest req){
-        HttpSession session = req.getSession();
+    public String infoCalender(HttpServletRequest req){
 
-        return "redirect:test";
+        HttpSession session = req.getSession();
+        Long userId = Long.valueOf(req.getParameter("userId"));
+
+        List<UserCalendar> exinfo = guestRepository
+                .findByUserId(userId)
+                .getCalendarList();
+        exinfo.forEach(System.out::println);
+        session.setAttribute("exinfo",exinfo);
+        return "redirect:/test";
     }
 
 
