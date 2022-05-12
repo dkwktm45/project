@@ -1,11 +1,10 @@
 package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.UserCalendar;
-import com.example.project_2th.entity.user;
-import com.example.project_2th.repository.guestRepository;
+import com.example.project_2th.entity.User;
+import com.example.project_2th.repository.GuestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +20,7 @@ import java.util.List;
 public class userController {
 
     @Autowired
-    private final guestRepository guestRepository;
+    private final GuestRepository guestRepository;
 
 
 //
@@ -87,10 +86,10 @@ public class userController {
 
     // login -> main
     @PostMapping(value="/loginInsert")
-    public String memberLogin(@ModelAttribute user user, Model model) throws Exception {
+    public String memberLogin(@ModelAttribute User user, Model model) throws Exception {
         log.info("id : {},gym : {}", user.getUserPhone() , user.getUserGym());
 
-        user loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
+        User loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
 
         if (loginUser != null) {
             log.info("로그인 성공");
@@ -122,8 +121,11 @@ public class userController {
         List<UserCalendar> exinfo = guestRepository
                 .findByUserId(userId)
                 .getCalendarList();
+
         exinfo.forEach(System.out::println);
         session.setAttribute("exinfo",exinfo);
+        session.setAttribute("userId",userId);
+
         return "redirect:/test";
     }
 

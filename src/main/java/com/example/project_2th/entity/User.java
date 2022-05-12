@@ -3,7 +3,6 @@ package com.example.project_2th.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,7 +13,7 @@ import java.util.List;
 @Table(name = "user")
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
-public class user {
+public class User {
 
     @Id
     @Column(name = "user_id")

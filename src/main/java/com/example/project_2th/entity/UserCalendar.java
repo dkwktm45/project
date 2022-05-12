@@ -3,7 +3,7 @@ package com.example.project_2th.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 @Data
 @AllArgsConstructor
@@ -16,11 +16,13 @@ public class UserCalendar {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동으로 숫자가 증가
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @ToString.Exclude
-    private user user;
+    private User user;
 
-    private Timestamp exDay;
+    private Date exDay;
+
     private String timeDiff;
     private String userWeight;
+
 }

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface userCalendarRepositroy extends JpaRepository<UserCalendar,Long> {
-    List<userCalendarRepositroy> findByUser(Long userId);
+public interface UserCalendarRepositroy extends JpaRepository<UserCalendar,Long> {
+    List<UserCalendarRepositroy> findByUser(Long userId);
 }

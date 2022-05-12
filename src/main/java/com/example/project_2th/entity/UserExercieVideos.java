@@ -24,7 +24,7 @@ public class UserExercieVideos {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private user user_id;
+    private User user_id;
 
     @OneToMany
     @JoinColumn(name = "video_seq")

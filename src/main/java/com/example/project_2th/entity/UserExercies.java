@@ -4,7 +4,7 @@ package com.example.project_2th.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.sql.Date;
 
 @Data
 @NoArgsConstructor
@@ -14,20 +14,21 @@ import java.util.List;
 @ToString(callSuper = true)
 @Table(name = "user_exercies")
 public class UserExercies {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ex_seq;
+    private Long exSeq;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private user user_id;
+    @ToString.Exclude
+    private User user;
 
-    private String ex_name;
-    private String ex_kinds;
-    private String user_set;
-    private String ex_count;
-    private String ex_date;
+
+    private Date exDay;
+    private String exName;
+    private String exKinds;
+    private String userSet;
+    private String exCount;
     private String cnt;
-    private Long id;
 
 }

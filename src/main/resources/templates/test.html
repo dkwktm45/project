@@ -2,9 +2,9 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset='utf-8'/>
-    <link href='main.css' rel='stylesheet'/>
-    <script src='main.js'></script>
+    <script src="js/calendar.js"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="/css/test.css">
     <link rel="stylesheet" href="/css/test.css">
 </head>
 <body>
@@ -63,60 +63,68 @@
     </div>
 
 </div>
-<script th:inline="javascript">
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    let exinfoList = /*[[${session.exinfo}]]*/;
+    let UserId = /*[[${session.userId}]]*/;
+
+    /*]]*/
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         events: [],
+
         eventClick: function (info) {
 
             var dateSettings = {"year": "numeric", "month": "2-digit", "day": "2-digit"};
             var rentdate = calendar.formatDate(info.event.start, dateSettings);
+            rentdate = rentdate.replace("/","-");
+            rentdate = rentdate.replace("/","-");
 
-            rentdate = rentdate.replace("/", "-");
-            rentdate = rentdate.replace("/", "-");
-            year = rentdate.substr(6, 9);
-            MD = rentdate.substr(0, 5);
-/*
-            var resultDay = year + "-" + MD;
+            year = rentdate.substr(6,9);
+            MD = rentdate.substr(0,5);
+            var resultDay = year+"-"+MD;
+
             $.ajax({
-                url: "/web/calendarView.do?user_id=" + info.event.id + "&ex_date=" + resultDay,
+                url: "/calendarView?userId=" + UserId + "&exDay=" + resultDay,
                 type: "GET",
                 dataType: "json",
                 success: function (result) {
                     var html1;
-                    $.each(result, (index, obj) => {
-                        html1 += "<div class = 'modal2_top'>";
-                        html1 += "<div class='modal2_top_top'>";
-                        html1 += "<div class = 'modal2_top_left'>";
-                        html1 += "<div id='NSK_font'><b>" + obj.ex_name + "</b></div></div>";
-                        html1 += "<div class = 'modal2_top_right'>";
-                        html1 += "</div>";
-                        html1 += "</div>";
-                        html1 += "<div id='NSK_font' class='modal2_top_bot'>";
-                        for (var i = obj.user_set; i > 0; i--) {
-                            html1 += "<div class='set1'>" + (obj.user_set - (i - 1)) + "set</div><div class='set2'>" + obj.user_set + "set</div>";
-                            html1 += "<div class='reps'>" + obj.ex_count + "reps</div>";
-                            html1 += "<div class='reps2'>" + obj.ex_count + "reps</div>";
+                    console.log(result);
+                     $.each(result, (index, obj) => {
+                         html1 += "<div class = 'modal2_top'>";
+                         html1 += "<div class='modal2_top_top'>";
+                         html1 += "<div class = 'modal2_top_left'>";
+                         html1 += "<div id='NSK_font'><b>" + obj.exName + "</b></div></div>";
+                         html1 += "<div class = 'modal2_top_right'>";
+                         html1 += "</div>";
+                         html1 += "</div>";
+                         html1 += "<div id='NSK_font' class='modal2_top_bot'>";
+                         for (var i = obj.userSet; i > 0; i--) {
+                             html1 += "<div class='set1'>" + (obj.userSet - (i - 1)) + "set</div><div class='set2'>" + obj.userSet + "set</div>";
+                             html1 += "<div class='reps'>" + obj.exCount + "reps</div>";
+                             html1 += "<div class='reps2'>" + obj.exCount + "reps</div>";
 
-                            if (i == 1) {
-                                html1 += "<div class='border'></div>";
-                            }
-                        }
-                        html1 += "</div>";
-                        html1 += "</div>";
+                             if (i == 1) {
+                                 html1 += "<div class='border'></div>";
+                             }
+                         }
+                         html1 += "</div>";
+                         html1 += "</div>";
 
-                    })
+                     })
 
-                    $(".modal2_wrap").html(html1);
+                     $(".modal2_wrap").html(html1);
+
                 },
                 error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
-            });*/
+            });
 
 
-            console.log(info.event.start)
+            //console.log(info.event.start)
             $('.modal2_wrap').css('display', 'block');
             $('.record_bg').css('display', 'block');
 
@@ -124,33 +132,42 @@
     });
     calendar.render();
 
-    function onClick2() {
-            $('.modal2_wrap').css('display', 'block');
-            $('.record_bg').css('display', 'block');
-        }
 
-        function offClick2() {
-            $('.modal2_wrap').css('display', 'none');
-            $('.record_bg').css('display', 'none');
-        }
+    for (var i = 0; i < exinfoList.length; i++) {
 
-
-        $('.fc-event-title-container').on('click', function () {
-            console.log(1);
-            $('.modal2_wrap').css('display', 'block');
-            $('.record_bg').css('display', 'block');
+        calendar.addEvent({
+            id: UserId,
+            start: exinfoList[i].exDay,
+            title: 150 + "kal"
         });
+    }
+
+    function onClick2() {
+        $('.modal2_wrap').css('display', 'block');
+        $('.record_bg').css('display', 'block');
+    }
+
+    function offClick2() {
+        $('.modal2_wrap').css('display', 'none');
+        $('.record_bg').css('display', 'none');
+    }
 
 
-        function convertDate(date) {
-            var date = (new Date(date.yyyymmdd()).getTime() / 1000);
-            location.href = "http://danjae.mgsoft21.co.kr/home/sub.php?menukey=42&s=" + date;
-        }
+    $('.fc-event-title-container').on('click', function () {
+        console.log(1);
+        $('.modal2_wrap').css('display', 'block');
+        $('.record_bg').css('display', 'block');
+    });
+
+
+    function convertDate(date) {
+        var date = (new Date(date.yyyymmdd()).getTime() / 1000);
+        location.href = "http://danjae.mgsoft21.co.kr/home/sub.php?menukey=42&s=" + date;
+    }
 
 
 </script>
-<script th:inline="javascript">
-    console.log(/*[[${session.exinfo}]]*/)
+<script type="text/javascript" th:inline="javascript">
 
     function clickKal() {
         console.log("test")
@@ -166,20 +183,6 @@
 
     document.querySelector("#modal_btn").addEventListener("click", show1);
     document.querySelector(".black_bg").addEventListener("click", close1);
-
-    /* function onClick2() {
-        document.querySelector('.modal2_wrap').style.display ='block';
-        document.querySelector('.record_bg').style.display ='block';
-    };   
-    function offClick2() {
-        document.querySelector('.modal2_wrap').style.display ='none';
-        document.querySelector('.record_bg').style.display ='none';
-    }
-
-    var className = document.getElementsByClassName('fc-event-title-container');
-    for(var i = 0; i < className.length; i++){
-       className[i].addEventListener('click', onClick2, false);
-    }  */
 
     document.querySelector('.record_bg').addEventListener('click', offClick2);
 
