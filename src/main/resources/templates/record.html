@@ -6,1001 +6,976 @@
     <script src='resources/record.js'></script>
     <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
-<script src="https://unpkg.com/tippy.js@6"></script>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<style>
-
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: 'Noto Sans KR', sans-serif;
-}
-
-    .black_bg{
-        /* display: none; */
-        position: fixed;
-        content: "";
-        width: 100%;
-        height: 100vh;
-        background-color:rgba(218, 215, 216, 0.5);
-        top:0;
-        left: 0;
-        z-index: 1000;
-        
-          /* 숨기기 */
-        z-index: -1;
-        opacity: 0;
-    }
-    
-    .modal_wrap{
-        /* display: none; */
-        width: 585px;
-        height: 1280px;
-        position: relative;
-        left: 50%;
-/*      top:10%;
-        margin: -254px 0 0 -236px; */
-        background:#FFFFFF;
-/*      z-index: 2; */
-        border-top-left-radius: 50px;
-        border-bottom-left-radius: 50px;
-    }
-    
-.modal_main{
-  position: absolute;
-    top: 53%;
-    left: 52%;
-    width: 100%;
-    height: 100%;
-  transform: translate(-50%, -50%);
-  
-   /* 초기에 약간 아래에 배치 */
-  transform: translate(-50%, -40%);
-}
-
-.show1 {
-  opacity: 1;
-  z-index: 1000;
-  transition: all .5s;
-}
-
-.show1 .modal_main {
-  transform: translate(-50%, -50%);
-  transition: all .5s;
-}
-    
-    /* .record_p, .record_g, .record_b, .record_d, .record_u */
-    .record_wrap{
-        display: none;
-        width: 90%;
-        height: 93%;
-        position: absolute;
-        top:13%;
-        left: 25%;
-        margin: -254px 0 0 -236px;
-        background:#FFFFFF;
-        z-index: 2;
-        border-radius:2em;
-        overflow: auto;
-    }
-    .record_bg{
-        display: none;
-        position: absolute;
-        content: "";
-        width: 100%;
-        height: 100%;
-        background-color:rgba(218, 215, 216, 0.5);
-        top:0;
-        left: 0;
-        z-index: 1;
-    }
-
-/*        .diary_wrap{
-        display: none;
-        width: 100%;
-        height: 30%;
-        position: absolute;
-        top:26.3%;
-        left: 20%;
-        margin: -254px 0 0 -236px;
-        background:#FFFFFF;
-        z-index: 2;
-         border-radius:5em; 
-    }
-    .diary_bg{
-        display: none;
-        position: absolute;
-        content: "";
-        width: 100%;
-        height: 100%;
-        background-color:rgba(218, 215, 216, 0.5);
-        top:0;
-        left: 0;
-        z-index: 1;
-    } */
-
-   
-.modal_top{
-width:100%;
-height:30%;
-text-align: center;
-}
-
-.modal_top_left{
-    font-size: 50px;
-    width: 40%;
-    height: 50%;
-    float: left;
-    top: 56px;
-    margin-bottom: 40px;
-    text-align: right;
-}
-
-.modal_top_right{
-font-size: 40px;
-width: 55%;
-height: 64%;
-float: right;
-text-align: left;
-top: 6%;
-margin-bottom: 20px;
-}
-
-.modal_mid{
-width:100%;
-height:60%;
-font-size:50px;
-text-align: center;
-/* margin-top: -60px; */
-}
-
-.modal_mid_mid{
-height:20%;
-padding: 0px 30px 0px 0px;
-}
-
-#modal_mid_b{
-text-align: center;
-font-size:40px;
-}
-
-.modal_mid_left{
-width:40%;
-height:100%;
-float:left;
-text-align: right;
-}
-
-.modal_mid_right{
-width:55%;
-height:100%;
-float:right;
-text-align: left;
-}
-
-#moicon{
-width: 130px;
-height: 130px;
-}
-
-.modal_bot{
-width:100%;
-height:10%;
-font-size:40px;
-text-align: center;
-}
-
-.main_top {
-width:100%;
-height:8%;
-background-color : white;
-}
-
-.top_left{
-float:left;
-width:80%;
-height:100%;
-}
-
-#modal_btn{
-position:relative;
-top:20%;
-}
-
-.top_right{
-position:relative;
-float:right;
-width:20%;
-height:100%;
-}
-
-
-/* #NSK_font{
-font-family: 'Noto Sans KR', sans-serif;
-} */
-
-#record{
-   position:relative;
-   font-size:70px;
-   padding-right:20px;
-   font-weight:bolder;
-   right:-15%;
-   font-family: 'Noto Sans KR', sans-serif;
-   }
-   
-/*    select{
-   position:relative;
-   border-radius:40px;
-   font-weight:bolder;
-   appearance:none;
-   right:-20%;
-   } */
-
-.diary_top{
-height: 100%;
-}
-
-#diary_btn{
-    position: absolute;
-    right: 3%;
-    top: 9.5%;
-   }
-   
-   
-#button{
-   background-color: white;
-   width:450px;
-   height:300px;
-}
-input{
-font-size:60px;
-text-align: center;
-}
-
-#mid{
-   border-spacing: 50px;
-     border-collapse: separate;
-     filter : drop-shadow(0 0 0 white);
-}
-
-
-#training{
-   filter : opacity(.5) drop-shadow(0 0 0 gray);
-   top: 110px;
-    right: 40px;
-    position: relative;
-}
-
-#videioTrainging{
-   filter : opacity(.5) drop-shadow(0 0 0 gray);
-   top: 110px;
-    left: 40px;
-    position: relative;
-}
-
-#button_gym{
-border: none;
-/* position: absolute;
-top : 84%;
-left : 34%; */
-}
-
-
-hr{
-      position:relative;
-   width:98%;
-   filter : opacity(.5) drop-shadow(0 0 0 gray);
-}
-
-#record_top_title{
-font-size:100px;
-font-weight:bolder;
-padding: 50px 50px 50px 50px;
-}
-
-#record_middle_content{
-position:relative;
-top:10%;
-}
-
-.videotag{
-position:relative;
-width:1000px;
-height:800px;
-max-width: 100%;
-}
-
-.bottom1{
-border-spacing: 50px;
-border-collapse: separate;
-width: 1000px;
-height:1000px;
-padding-left: 5px;
-color: white;
-}
-
-.bottom1 tr{
-/* height:20%;
-width:100%; */
-}
-
-.bottom1 td{
-font-size: 70px;
-font-weight: bold;
-    color: black;
-}
-
-#bottom2{
-border-spacing: 50px;
-border-collapse: separate;
-width: 50%;
-float: right;
-}
-
-.gdImg{
-height: 400px;
-width: 450px;
-}
-
-a{
-font-size:50px;
-font-family: 'Noto Sans KR', sans-serif;
-font-weight:bolder;
-}
-
-.ttleft{
-font-size: 60px;
-font-family: 'Noto Sans KR', sans-serif;
-    font-weight: bolder;
-        width: 50%;
-    height: 100%;
-    float: left;
-   padding-top: 0px;
-    padding-left: 4px;
-}
-.ttright{
-font-size: 50px;
-font-family: 'Noto Sans KR', sans-serif;
-    font-weight: bolder;
-        width: 50%;
-    height: 100%;
-    float: right;
-        text-align: right;
-    padding-right: 50px;
-}
-
-#out{
-    position: relative;
-    width: 100px;
-    height: 100px;
-    left: 18%;
-}
-
-b{
-font-size:80px;
-}
-
-h1{
-position:relative;
-left:-10%;
-top: -5%;
-}
-
-h2{
-position:relative;
-
-}
-
-.middle{
-background-color:#F1F2F6;
-}
-
-.d{
-padding: 50px 0px 0px 0px;
-}
-
-.main_map {
-   width:100%;
-   height:100%;
-   background-color : #F1F2F6;
-}
-
-.main_mid {
-width:100%;
-height:70%;
-/* border-bottom: 20px solid #DACDF5; */
-/** background-color:red;
-float:left; **/}
-
-.mid_top{
-width:100%;
-
-}
-
-.mid_bot{
-width:100%;
-/* height:90%; */
-}
-
-#record_video0, #record_video1, #record_video2,
-#record_video5, #record_video4, #record_video3,
-#record_video6, #record_video7, #record_video8{
-width: 450px;
-height: 450px;
-}
-
-.vdate{
-margin-top: -30px;
-text-align: center;
-font-size:50px;
-font-weight : bolder;
-}
-
-.main_bot {
-width:100%;
-height:20%;
-background-color : #F1F2F6;
-text-align: center;
-padding-top: 30%;
-}
-.calender{
-
-}
-.hide{
-height: 300px;
-}
-
-#exercise{
-width:400px;
-height:100px;
-font-size:45px;
-font-family: 'Noto Sans KR', sans-serif;
-}
-
-.item {
-    width: 450px;
-    float: left;
-    margin-left: 90px;
-    margin-top: 50px;
-    margin-bottom: 0px;
-}
-
-#calendar{
-    height: 30%;
-    width: 120%;
-    text-align: center;
-    margin-right: 33px;
-}
-#cal_left{
-width: 85%;
-float: left;
-position: relative;
-text-align: right;
-}
-#cal_right{
-    width: 15%;
-    height: 100%;
-    position: relative;
-    float: right;
-}
-#memos{
-text-align: center;
-}
-#texts{
-    width: 90%;
-    text-align: center;
-}
-#dates{
-    border-radius: 60px;
-    font-family: 'Noto Sans KR', sans-serif;
-    border: none;
-    height: 100px;
-    width: 500px;
-}
-.date{
-font-family: 'Noto Sans KR', sans-serif;
-text-align: left;
-font-size: 45px;
-margin-top: -50px;
-}
-</style>
-
-<script>
-window.onload = function() {
-    
-   function show1 () {
-        document.querySelector(".black_bg").className = "black_bg show1";
-      }
-   function close1 () {
-        document.querySelector(".black_bg").className = "black_bg";
-      }
-   
-    document.querySelector("#modal_btn").addEventListener("click", show1);
-    document.querySelector(".black_bg").addEventListener("click", close1);
-      
-    
-    function onClick7() {
-       var changeSrc= $(this).attr('src');
-       $("#video").attr("src",changeSrc);
-       
-       var video_seq= $(this).attr('class');
-       document.querySelector('.record_wrap').style.display ='block';
-        document.querySelector('.record_bg').style.display ='block';
-        
-         $.ajax({
-           url : "/web/insertPose.do?video_seq="+video_seq,
-           type : "GET",
-           dataType : "json",
-           success : function(result){
-              var html1;
-              var html2;
-
-              if(result.length !=""){
-              $.each(result,(index,obj)=>{
-/*                  html1+="<tr>";
-                 html1+="<td>"; */
-                 /* html1+="<img src='resources/img/"+obj.post_result+".png'>"; */
-/*                  html1+="<img class='gdImg' src='resources/img/팔.png'>";
-                 html1+="</td>";
-                 html2+="</tr>"
-                 html2+="<tr>"
-                 html2+="<td>"+obj.ai_comment+"</td>";
-                 html2+="</tr>" */
-                 if(index == 0 ){
-                    html1+="<div class='jase'>자세교정</div>";
-                 }
-                    html1+="<tr>";
-                     html1+="<td>";
-                     html1+="<div><img class='gdImg' src="+obj.pose_result+"'/static/image/.jpg'></div>";
-                     html1+="</td>";
-                     html1+="<td>"+obj.ai_comment+"</td>";
-                     html1+="</tr>"
-                 
-                 
-              })
-              }else{
-                 html1+="<div class='good'>자세 교정게 없네요?!?!<br>이번 운동은 정말 잘한거 같아요!!</div>";
-                 $(".record_wrap").css("height","58%");
-                 $(".record_wrap").css("top","30%");
-              }
-              
-              $(".bottom1").html(html1);
-              
-           }
-        }); 
-    }   
-    
-    function offClick7() {
-        document.querySelector('.record_wrap').style.display ='none';
-        document.querySelector('.record_bg').style.display ='none';
-    }
-    
- 
-    document.getElementById('record_video0').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-    
-    document.getElementById('record_video1').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-    
-    document.getElementById('record_video2').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-    
-    document.getElementById('record_video3').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-
-    document.getElementById('record_video4').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-    
-    document.getElementById('record_video5').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-
-    document.getElementById('record_video6').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-    
-    document.getElementById('record_video7').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-    
-    document.getElementById('record_video8').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-    
-    document.getElementById('record_video9').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7); 
-    
-    /* 달력 기본날짜 오늘날짜로 */
-    today = new Date();
-
-   console.log("today.toISOString() >>>" + today.toISOString());
-   today = today.toISOString().slice(0, 10);
-   console.log("today >>>> " + today);
-   bir = document.getElementById("dates");
-   bir.value = today;
-   
-
-   <%  guest member = (guest) session.getAttribute("member");%>
-   
-}
-
-function go_main() { /* 아이콘 누르면 메인으로 */
-      location.href = "/web/main.do";
-  }
-function go_calender(){
-   location.href = "/web/test.do";
-}
-
-
-
-function go_record(){
-   location.href = "/web/record.do?user_id="+<%=member.getUser_id()%>;
-}
-</script>
-<style> 
-
-[type="date"] {
-  background:#fff 
-/*   url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set
-  /blacks/16x16/calendar_2.png) */
-  url(resources/img/circlesm.png)
-    90% 50% no-repeat ;
-}
-[type="date"]::-webkit-inner-spin-button {
-  display: none;
-}
-[type="date"]::-webkit-calendar-picker-indicator {
-  opacity: 0;
-}
-</style>
-
-<script type="text/javascript">
-   function showDiary(){
-        const element = document.getElementById('change');
-        element.innerHTML = '<div id="calendar"><input type="date" id="dates" onchange = "insertdate()"></div>';
-      }
-</script>
-
-<style>
-/* reset */
-*{
-    list-style: none;
-    /* margin: 0; */
-    padding: 0;
-    /* font-size: 45px; */
-    box-sizing: border-box;
-}
-
-/* common */
-/* body{
-    padding: 30px;
-} */
-.hide{
-    display: none;
-}
-.show {
-  /* display: none; */
-}
-
-/* 셀렉트 영역 스타일 */
-.select{
-    position: relative;
-    padding: 5px 10px;
-    width: 400px;
-    height: 100px;
-    margin-left: 95px;
-    border-radius: 60px;
-    /* border:1px solid salmon; */
-    background-color: white;
-    background-image: url("https://img.icons8.com/material-rounded/24/000000/expand-arrow.png");
-    background-repeat: no-repeat;
-    background-position: 96% center;
-    cursor: pointer;
-    padding-left: 35px;
-    padding-top: 15px;
-}
-
-/* 옵션 영역 스타일 */
-.select ul{
-    position: absolute;
-    top: 30px;
-    left: 0;
-    width: 100%;
-    border:1px solid salmon;
-    border-radius: 5px;
-    background-color: white;
-    cursor: pointer;
-    z-index: 2;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-.select ul li{   /* 셀렉트목록 */
-    padding: 10px;
-    height: 100px;
-
-}
-.select ul li:first-child{
-    background: white;
-}
-.select ul li:nth-child(2){
-    background: white;
-}
-.select ul li:nth-child(3){
-    background: white;
-}
-.select ul li:nth-child(4){
-    background: white;
-}
-.select ul li:nth-child(5){
-    background: white;
-}
-.select ul li:hover{
-    background-color: white;
-}
-/* 아이콘 스타일 */
-i{
-    vertical-align: bottom;
-    margin-right: 5px;
-}
-i img{
-    width: 60px;
-    float: left;
-margin-left: 40px;
-margin-top: 8px;
-}
-
-#choice{
-padding: 30px;
-height: 100px;
-font-family: 'Noto Sans KR', sans-serif;
-position: fixed;
-font-size: 45px;
-top: 230px;
-left: 600px;
-}
-
-.sunteck{
-float: left;
-margin-left: 30px;
-}
-
-.jase{
-font-size:60px;
-font-family: 'Noto Sans KR', sans-serif;
-text-align: center;
-font-weight: bolder;
-width: 195%;
-margin-top: 50px;
-border-bottom: 8px solid red;
-padding-bottom: 50px;
-color:red;
-opacity: 0.5;
-}
-.good{
-font-size: 50px;
-    text-align: center;
-    color: red;
-    font-family: 'Noto Sans KR';
-    font-weight: bold;
-    opacity: 0.8;
-    line-height: 100px;
-    width: 1100px;
-    margin: -49px 0px 0px -59px;
-}
-</style>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <style>
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .black_bg{
+            /* display: none; */
+            position: fixed;
+            content: "";
+            width: 100%;
+            height: 100vh;
+            background-color:rgba(218, 215, 216, 0.5);
+            top:0;
+            left: 0;
+            z-index: 1000;
+
+            /* 숨기기 */
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .black_bg {
+            /* display: none; */
+            position: fixed;
+            content: "";
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(218, 215, 216, 0.5);
+            top: 0;
+            left: 0;
+            z-index: 1000;
+
+            /* 숨기기 */
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .modal_wrap {
+            /* display: none; */
+            width: 50%;
+            height: 50%;
+            position: relative;
+            left: 50%;
+            /*      top:10%;
+                    margin: -254px 0 0 -236px; */
+            background: #FFFFFF;
+            /*      z-index: 2; */
+            border-top-left-radius: 50px;
+            border-bottom-left-radius: 50px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: bold;
+        }
+        .show1 {
+            opacity: 1;
+            z-index: 1000;
+            transition: all .5s;
+        }
+
+        .show1 .modal_main {
+            transform: translate(-50%, -50%);
+            transition: all .5s;
+        }
+
+        .modal_main {
+            position: absolute;
+            top: 53%;
+            left: 52%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+
+            /* 초기에 약간 아래에 배치 */
+            transform: translate(-50%, -40%);
+        }
+
+
+        .modal_top {
+            width: 100%;
+            height: 30%;
+            text-align: center;
+        }
+
+        .modal_top_left {
+            font-size: 50px;
+            width: 40%;
+            height: 50%;
+            float: left;
+            top: 56px;
+            margin-bottom: 40px;
+            text-align: right;
+        }
+
+        .modal_top_right {
+            font-size: 40px;
+            width: 55%;
+            height: 64%;
+            float: right;
+            text-align: left;
+            top: 6%;
+            margin-bottom: 20px;
+        }
+
+        .modal_mid {
+            width: 100%;
+            height: 60%;
+            font-size: 50px;
+            text-align: center;
+            margin-top: -60px;
+        }
+
+        .modal_mid_mid {
+            height: 20%;
+            padding: 0px 30px 0px 0px;
+        }
+
+        #modal_mid_b {
+            text-align: center;
+            font-size: 40px;
+        }
+
+        .modal_mid_left {
+            width: 40%;
+            height: 100%;
+            float: left;
+            text-align: right;
+        }
+
+        .modal_mid_right {
+            width: 55%;
+            height: 100%;
+            float: right;
+            text-align: left;
+        }
+        /* .record_p, .record_g, .record_b, .record_d, .record_u */
+        .record_wrap{
+            display: none;
+            width: 90%;
+            height: 93%;
+            position: absolute;
+            top:13%;
+            left: 25%;
+            margin: -254px 0 0 -236px;
+            background:#FFFFFF;
+            z-index: 2;
+            border-radius:2em;
+            overflow: auto;
+        }
+        .record_bg{
+            display: none;
+            position: absolute;
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-color:rgba(218, 215, 216, 0.5);
+            top:0;
+            left: 0;
+            z-index: 1;
+        }
+
+
+        #moicon{
+            width: 130px;
+            height: 130px;
+        }
+
+        .modal_bot{
+            width:100%;
+            height:10%;
+            font-size:40px;
+            text-align: center;
+        }
+
+        .main_top {
+            width:100%;
+            height:8%;
+            background-color : white;
+        }
+
+        .top_left{
+            float:left;
+            width:80%;
+            height:100%;
+        }
+
+        #modal_btn{
+            position:relative;
+            top:20%;
+        }
+
+        .top_right{
+            position:relative;
+            float:right;
+            width:20%;
+            height:100%;
+        }
+
+
+        /* #NSK_font{
+        font-family: 'Noto Sans KR', sans-serif;
+        } */
+
+        #record{
+            position:relative;
+            font-size:59px;
+            padding-right:20px;
+            font-weight:bolder;
+            right:-8%;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        /*    select{
+           position:relative;
+           border-radius:40px;
+           font-weight:bolder;
+           appearance:none;
+           right:-20%;
+           } */
+
+        .diary_top{
+            height: 100%;
+        }
+
+        #diary_btn{
+            position: absolute;
+            right: 3%;
+            top: 9.5%;
+        }
+
+
+        #button{
+            background-color: white;
+            width:450px;
+            height:300px;
+        }
+        input{
+            font-size:60px;
+            text-align: center;
+        }
+
+        #mid{
+            border-spacing: 50px;
+            border-collapse: separate;
+            filter : drop-shadow(0 0 0 white);
+        }
+
+
+        #training{
+            filter : opacity(.5) drop-shadow(0 0 0 gray);
+            top: 110px;
+            right: 40px;
+            position: relative;
+        }
+
+        #videioTrainging{
+            filter : opacity(.5) drop-shadow(0 0 0 gray);
+            top: 110px;
+            left: 40px;
+            position: relative;
+        }
+
+        #button_gym{
+            border: none;
+            /* position: absolute;
+            top : 84%;
+            left : 34%; */
+        }
+
+
+        hr{
+            position:relative;
+            width:98%;
+            filter : opacity(.5) drop-shadow(0 0 0 gray);
+        }
+
+        #record_top_title{
+            font-size:100px;
+            font-weight:bolder;
+            padding: 50px 50px 50px 50px;
+        }
+
+        #record_middle_content{
+            position:relative;
+            top:10%;
+        }
+
+        .videotag{
+            position:relative;
+            width:1000px;
+            height:800px;
+            max-width: 100%;
+        }
+
+        .bottom1{
+            border-spacing: 50px;
+            border-collapse: separate;
+            width: 1000px;
+            height:1000px;
+            padding-left: 5px;
+            color: white;
+        }
+
+        .bottom1 tr{
+            /* height:20%;
+            width:100%; */
+        }
+
+        .bottom1 td{
+            font-size: 70px;
+            font-weight: bold;
+            color: black;
+        }
+
+        #bottom2{
+            border-spacing: 50px;
+            border-collapse: separate;
+            width: 50%;
+            float: right;
+        }
+
+        .gdImg{
+            height: 400px;
+            width: 450px;
+        }
+
+        a{
+            font-size:50px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight:bolder;
+        }
+
+        .ttleft{
+            font-size: 60px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: bolder;
+            width: 50%;
+            height: 100%;
+            float: left;
+            padding-top: 0px;
+            padding-left: 4px;
+        }
+        .ttright{
+            font-size: 50px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: bolder;
+            width: 50%;
+            height: 100%;
+            float: right;
+            text-align: right;
+            padding-right: 50px;
+        }
+
+        #out{
+            position: relative;
+            width: 100px;
+            height: 100px;
+            left: 18%;
+        }
+
+        b{
+            font-size:80px;
+        }
+
+        h1{
+            position:relative;
+            left:-10%;
+            top: -5%;
+        }
+
+        h2{
+            position:relative;
+
+        }
+
+        .middle{
+            background-color:#F1F2F6;
+        }
+
+        .d{
+            padding: 50px 0px 0px 0px;
+        }
+
+        .main_map {
+            width:100%;
+            height:100%;
+            background-color : #F1F2F6;
+        }
+
+        .main_mid {
+            width:100%;
+            height:70%;
+            /* border-bottom: 20px solid #DACDF5; */
+            /** background-color:red;
+            float:left; **/}
+
+        .mid_top{
+            width:100%;
+
+        }
+
+        .mid_bot{
+            width:100%;
+            /* height:90%; */
+        }
+
+        #record_video0, #record_video1, #record_video2,
+        #record_video5, #record_video4, #record_video3,
+        #record_video6, #record_video7, #record_video8{
+            width: 450px;
+            height: 450px;
+        }
+
+        .vdate{
+            margin-top: -30px;
+            text-align: center;
+            font-size:50px;
+            font-weight : bolder;
+        }
+
+        .main_bot {
+            width:100%;
+            height:20%;
+            background-color : #F1F2F6;
+            text-align: center;
+            padding-top: 30%;
+        }
+        .calender{
+
+        }
+        .hide{
+            height: 300px;
+        }
+
+        #exercise{
+            width:310px;
+            height:100px;
+            font-size:45px;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .item {
+            width: 450px;
+            float: left;
+            margin-left: 90px;
+            margin-top: 50px;
+            margin-bottom: 0px;
+        }
+
+        #calendar{
+            height: 30%;
+            width: 120%;
+            text-align: center;
+            margin-right: 33px;
+        }
+        #cal_left{
+            width: 85%;
+            float: left;
+            position: relative;
+            text-align: right;
+        }
+        #cal_right{
+            width: 15%;
+            height: 100%;
+            position: relative;
+            float: right;
+        }
+        #memos{
+            text-align: center;
+        }
+        #texts{
+            width: 90%;
+            text-align: center;
+        }
+        #dates{
+            border-radius: 60px;
+            font-family: 'Noto Sans KR', sans-serif;
+            border: none;
+            height: 100px;
+            width: 500px;
+        }
+        .date{
+            font-family: 'Noto Sans KR', sans-serif;
+            text-align: left;
+            font-size: 45px;
+            margin-top: -50px;
+        }
+    </style>
+
+    <script>
+        window.onload = function() {
+            function onClick7() {
+                var changeSrc= $(this).attr('src');
+                $("#video").attr("src",changeSrc);
+
+                var video_seq= $(this).attr('class');
+                document.querySelector('.record_wrap').style.display ='block';
+                document.querySelector('.record_bg').style.display ='block';
+
+                $.ajax({
+                    url : "/web/insertPose.do?video_seq="+video_seq,
+                    type : "GET",
+                    dataType : "json",
+                    success : function(result){
+                        var html1;
+                        var html2;
+
+                        if(result.length !=""){
+                            $.each(result,(index,obj)=>{
+                                /*                  html1+="<tr>";
+                                                 html1+="<td>"; */
+                                /* html1+="<img src='image/"+obj.post_result+".png'>"; */
+                                /*                  html1+="<img class='gdImg' src='image/팔.png'>";
+                                                 html1+="</td>";
+                                                 html2+="</tr>"
+                                                 html2+="<tr>"
+                                                 html2+="<td>"+obj.ai_comment+"</td>";
+                                                 html2+="</tr>" */
+                                if(index == 0 ){
+                                    html1+="<div class='jase'>자세교정</div>";
+                                }
+                                html1+="<tr>";
+                                html1+="<td>";
+                                html1+="<div><img class='gdImg' src='/image/"+obj.pose_result+".jpg'></div>";
+                                html1+="</td>";
+                                html1+="<td>"+obj.ai_comment+"</td>";
+                                html1+="</tr>"
+
+
+                            })
+                        }else{
+                            html1+="<div class='good'>자세 교정게 없네요?!?!<br>이번 운동은 정말 잘한거 같아요!!</div>";
+                            $(".record_wrap").css("height","58%");
+                            $(".record_wrap").css("top","30%");
+                        }
+
+                        $(".bottom1").html(html1);
+
+                    }
+                });
+            }
+
+            function offClick7() {
+                document.querySelector('.record_wrap').style.display ='none';
+                document.querySelector('.record_bg').style.display ='none';
+            }
+
+
+            document.getElementById('record_video0').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video1').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video2').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video3').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video4').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video5').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video6').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video7').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video8').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            document.getElementById('record_video9').addEventListener('click', onClick7);
+            document.querySelector('.record_bg').addEventListener('click', offClick7);
+
+            /* 달력 기본날짜 오늘날짜로 */
+            today = new Date();
+
+            console.log("today.toISOString() >>>" + today.toISOString());
+            today = today.toISOString().slice(0, 10);
+            console.log("today >>>> " + today);
+            bir = document.getElementById("dates");
+            bir.value = today;
+
+
+            <%  guest member = (guest) session.getAttribute("member");%>
+
+        }
+
+        function go_main() { /* 아이콘 누르면 메인으로 */
+            location.href = "/web/main.do";
+        }
+        function go_calender(){
+            location.href = "/web/test.do";
+        }
+
+
+
+        function go_record(){
+            location.href = "/web/record.do?user_id="+<%=member.getUser_id()%>;
+        }
+    </script>
+    <style>
+
+        [type="date"] {
+            background:#fff
+                /*   url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set
+                  /blacks/16x16/calendar_2.png) */
+            url(image/circlesm.png)
+            90% 50% no-repeat ;
+        }
+        [type="date"]::-webkit-inner-spin-button {
+            display: none;
+        }
+        [type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 0;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function showDiary(){
+            const element = document.getElementById('change');
+            document.getElementById("diary_btn").style.display='none';
+            element.innerHTML = '<div id="calendar"><input type="date" id="dates" onchange = "insertdate()"></div>';
+        }
+    </script>
+
+    <style>
+        /* reset */
+        *{
+            list-style: none;
+            /* margin: 0; */
+            padding: 0;
+            /* font-size: 45px; */
+            box-sizing: border-box;
+        }
+
+        .hide{
+            display: none;
+        }
+
+        /* 셀렉트 영역 스타일 */
+        .select{
+            position: relative;
+            margin-left: 58px;
+            border-radius: 60px;
+            /* border:1px solid salmon; */
+            background-color: white;
+            background-repeat: no-repeat;
+            background-position: 90% center;
+            cursor: pointer;
+            padding-left: 8px;
+            padding-top: 15px;
+        }
+
+        /* 옵션 영역 스타일 */
+        .select ul{
+            position: absolute;
+            top: 30px;
+            left: 0;
+            width: 100%;
+            border:1px solid salmon;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            z-index: 2;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .select ul li{   /* 셀렉트목록 */
+            padding: 10px;
+            height: 100px;
+
+        }
+        .select ul li:first-child{
+            background: white;
+        }
+        .select ul li:nth-child(2){
+            background: white;
+        }
+        .select ul li:nth-child(3){
+            background: white;
+        }
+        .select ul li:nth-child(4){
+            background: white;
+        }
+        .select ul li:nth-child(5){
+            background: white;
+        }
+        .select ul li:hover{
+            background-color: white;
+        }
+        /* 아이콘 스타일 */
+        i{
+            vertical-align: bottom;
+            margin-right: 5px;
+        }
+        i img{
+            width: 60px;
+            float: left;
+            margin-left: 40px;
+            margin-top: 8px;
+        }
+
+        #choice{
+            padding: 30px;
+            height: 100px;
+            font-family: 'Noto Sans KR', sans-serif;
+            position: fixed;
+            font-size: 45px;
+            top: 230px;
+            left: 600px;
+        }
+
+        .sunteck{
+            float: left;
+            margin-left: 30px;
+        }
+
+        .jase{
+            font-size:60px;
+            font-family: 'Noto Sans KR', sans-serif;
+            text-align: center;
+            font-weight: bolder;
+            width: 195%;
+            margin-top: 50px;
+            border-bottom: 8px solid red;
+            padding-bottom: 50px;
+            color:red;
+            opacity: 0.5;
+        }
+        .good{
+            font-size: 50px;
+            text-align: center;
+            color: red;
+            font-family: 'Noto Sans KR';
+            font-weight: bold;
+            opacity: 0.8;
+            line-height: 100px;
+            width: 1100px;
+            margin: -49px 0px 0px -59px;
+        }
+    </style>
 
 </head>
 <body>
-<% member = (guest) session.getAttribute("member");%>
-   <div class="black_bg">
-   <div class="modal_wrap">
-   <div class="modal_main">
-      <div class = "modal_top">
-         <div id="NSK_font" style = "font-size:80px;"><b><br>이진영 님</b></div>
-         <div class = "modal_top_left"> 
-            <div id="NSK_font" style ="font-weight:bolder;"><br>만기일</div>
-         </div>
-         <div class = "modal_top_right">
-            <div id="NSK_font" style ="font-weight:bolder;"><br>2021-12-07<br>D-day 30일</div>
-         </div>
-      </div>
-      <div class = "modal_mid">
-         <div class = "modal_mid_mid">
-            <div class = "modal_mid_left"><img id="moicon" src="resources/img/diary.png" onclick="go_calender()"></div>
-            <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
-         </div>   
-         <div class = "modal_mid_mid">
-            <div class = "modal_mid_left"><img id="moicon" src="resources/img/video.png" onclick = "go_record()"></div>
-            <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_record()">운동 영상</b></div>
-         </div>      
-      </div>
-      <div class = "modal_bot">
-         <div style="font-size: 40px;font-weight:bolder;">고객센터     010-4903-4073</div>
-      </div>
-   </div>
-   </div>
-   </div>
+<div class="black_bg">
+    <div class="modal_wrap">
+        <div class="modal_main">
+            <div class = "modal_top">
+                <div id="NSK_font" style = "font-size:80px;"><b><br>이진영 님</b></div>
+                <div class = "modal_top_left">
+                    <div id="NSK_font" style ="font-weight:bolder;"><br>만기일</div>
+                </div>
+                <div class = "modal_top_right">
+                    <div id="NSK_font" style ="font-weight:bolder;"><br>2021-12-07<br>D-day 30일</div>
+                </div>
+            </div>
+            <div class = "modal_mid">
+                <div class = "modal_mid_mid">
+                    <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick="go_calender()"></div>
+                    <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
+                </div>
+                <div class = "modal_mid_mid">
+                    <div class = "modal_mid_left"><img id="moicon" src="image/video.png" onclick = "go_record()"></div>
+                    <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_record()">운동 영상</b></div>
+                </div>
+            </div>
+            <div class = "modal_bot">
+                <div style="font-size: 40px;font-weight:bolder;">고객센터     010-4903-4073</div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="record_bg"></div>
-    <div class="record_wrap">
-      <div class="record_top" style="width:100%; height:200px;">
-         <div id="record_top_title">
-         <div class="ttleft"> 체스트프레스 </div> 
-         <div class="ttright"><img id="out" src="resources/img/out.png" onclick = "go_record()"></div>
-         </div>
-         <hr style="border: solid 5px gray;">
-      </div>
-      
-      <div class="record_middle" style="width:100%; height:950px;" align="center">   
-         <div id="record_middle_content">
+<div class="record_wrap">
+    <div class="record_top" style="width:100%; height:200px;">
+        <div id="record_top_title">
+            <div class="ttleft"> 체스트프레스 </div>
+            <div class="ttright"><img id="out" src="image/out.png" onclick = "go_record()"></div>
+        </div>
+        <hr style="border: solid 5px gray;">
+    </div>
+
+    <div class="record_middle" style="width:100%; height:950px;" align="center">
+        <div id="record_middle_content">
             <video class="videotag" src="/cam/??.webm" id="video" controls>
                 <source src="/cam/??.webm"/>
             </video>
-         </div>   
-      </div>
-         <table align="center" class=bottom1>
-         </table>
+        </div>
+    </div>
+    <table align="center" class=bottom1>
+    </table>
 
-<!--          <table align="center" id=bottom2>
-         </table> -->
-   </div>
+    <!--          <table align="center" id=bottom2>
+             </table> -->
+</div>
 <div class="main_map">
 
 
-<div class="main_top" style = "text-align : center;">
-   <div class="top_left">
-      <h1 style = "font-size:80px;">The Ai Fitness</h1>
-   </div>
-   <div class="top_right">
-      <img id="modal_btn" src="resources/img/menu.png"
-               style="width: 120px; height: 120px;">
-   </div>
-</div>
-<script>
- function test(){
-    $.ajax({ 
-      url :"/web/memberExinfo.do?user_id=<%=member.getUser_id()%>",
-      method:"GET",
-      dataType: 'json',
-      success: function(data2) {
-         $.each(data2, (index, obj)=>{
-            var inD = 'div_d'+index;
-            document.getElementById(inD).className = obj.ex_kinds;
-         });
-         
-      }
-   });  
-}
- 
- function insertdate(){
-    var DATE = document.querySelector('input[type="date"]').value;
-    $.ajax({
-       url : "/web/dateVideo.do?user_id=<%=member.getUser_id()%>&video_date="+DATE,
-       method :"GET",
-       dataType : "text",
-       async:false,
-       success : function(result){
-          location.href = "/web/"+result;
-       },
-       error : function(data){
-          alert("error"+data);
-       }
-       
-    })
-    
- }
-</script>
-<div class="main_mid">
-   <div class="mid_top">
-      <table style="padding-top: 40px;">
-         <tr>
-            <td><div id="change"> <a id="record" align ="center">자세교정 녹화본</a> </div></td>
-            <td>
-               
-                  <div class="select" data-role="selectBox" name="exercise" id="exercise" onclick = "test()">
+    <div class="main_top" style = "text-align : center;">
+        <div class="top_left">
+            <h1 style = "font-size:80px;">The Ai Fitness</h1>
+        </div>
+        <div class="top_right">
+            <img id="modal_btn" src="image/menu.png"
+                 style="width: 120px; height: 120px;">
+        </div>
+    </div>
+    <script>
+        function test(){
+            $.ajax({
+                url :"/web/memberExinfo.do?user_id=<%=member.getUser_id()%>",
+                method:"GET",
+                dataType: 'json',
+                success: function(data2) {
+                    $.each(data2, (index, obj)=>{
+                        var inD = 'div_d'+index;
+                        document.getElementById(inD).className = obj.ex_kinds;
+                    });
+
+                }
+            });
+        }
+
+        function insertdate(){
+            var DATE = document.querySelector('input[type="date"]').value;
+            $.ajax({
+                url : "/web/dateVideo.do?user_id=<%=member.getUser_id()%>&video_date="+DATE,
+                method :"GET",
+                dataType : "text",
+                async:false,
+                success : function(result){
+                    location.href = "/web/"+result;
+                },
+                error : function(data){
+                    alert("error"+data);
+                }
+
+            })
+
+        }
+    </script>
+    <div class="main_mid">
+        <div class="mid_top">
+            <table style="padding-top: 40px;">
+                <tr>
+                    <td><div id="change"> <a id="record" align ="center">자세교정 녹화본</a> </div></td>
+                    <td>
+
+                        <div class="select" data-role="selectBox" name="exercise" id="exercise" onclick = "test()">
                      <span date-value="optValue" class="selected-option">
                         <!-- 선택된 옵션 값이 출력되는 부분 -->
                      </span>
-                     <!-- 옵션 영역 -->
-                     <ul class="hide" id="wrap">
-                        <li class ="전체"><i><img src="resources/img/menu.png" alt="전체"/></i><div class="sunteck">전체</div></li>
-                        <li class ="div_d"><i><img src="resources/img/등.png"  alt="등" /></i><div class="sunteck">등</div></li>
-                        <li class ="div_p"><i><img src="resources/img/팔.png" alt="팔" /></i><div class="sunteck">팔</div></li>                           
-                        <li class ="div_g"><i><img src="resources/img/가슴.png" alt="가슴" /></i><div class="sunteck">가슴</div></li>
-                        <li class ="div_u"><i><img src="resources/img/어깨.png" alt="어깨" /></i><div class="sunteck">어깨</div></li>
-                        <li class ="div_b"><i><img src="resources/img/복근.png" alt="복근" /></i><div class="sunteck">복근</div></li>
-                     </ul>
-                  </div>
-               <div id="choice"><i><img src="resources/img/menu.png" alt="전체"/></i>
-                  <div style="float: right; margin-left: 25px;">전체</div>
-               </div>
-                  </td>
-                  
-            <td></td>
-         </tr>      
-      </table>
-      <div>
-       <ul>
-        <li class="menu">
-            <a onclick='showDiary()' value='changeDiary'><img id="diary_btn" src="resources/img/weightDiary.png" width="100px" height="100px"></a>
-            <ul class="hide">
+                            <!-- 옵션 영역 -->
+                            <ul class="hide" id="wrap">
+                                <li class ="전체"><i><img src="image/menu.png" alt="전체"/></i><div class="sunteck">전체</div></li>
+                                <li class ="div_d"><i><img src="image/등.png"  alt="등" /></i><div class="sunteck">등</div></li>
+                                <li class ="div_p"><i><img src="image/팔.png" alt="팔" /></i><div class="sunteck">팔</div></li>
+                                <li class ="div_g"><i><img src="image/가슴.png" alt="가슴" /></i><div class="sunteck">가슴</div></li>
+                                <li class ="div_u"><i><img src="image/어깨.png" alt="어깨" /></i><div class="sunteck">어깨</div></li>
+                                <li class ="div_b"><i><img src="image/복근.png" alt="복근" /></i><div class="sunteck">복근</div></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
             <div>
+                <ul>
+                    <li class="menu">
+                        <a onclick='showDiary()' value='changeDiary'><img id="diary_btn" src="image/weightDiary.png" width="100px" height="100px"></a>
+                        <ul class="hide">
+                            <div>
+                            </div>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-            </ul>
-        </li>
-      </ul>
-      </div>
-   </div>
-<div id="container">
-   <c:forEach var= 'vo' items = "${memberVideo}" varStatus="status" >
-     <div id = "div_d${status.index}" class="div_p${status.index}">
-        <div class="item">
-
-        <video src="/cam/${vo.file_name}.webm" class="${vo.video_seq}" id="record_video${status.index}"></video>
-        <div class="vdate">${vo.video_date}</div>
-
         </div>
-     </div>
-   </c:forEach>
-</div>
+        <div id="container">
+            <c:forEach var= 'vo' items = "${memberVideo}" varStatus="status" >
+                <div id = "div_d${status.index}" class="div_p${status.index}">
+                    <div class="item">
 
-</div>
-   
-<div class="main_bot" id="NSK_font">
-      <img id="gym2" align="bottom" src="resources/img/gym2.png" width="150px" height="150px" onclick = "go_main()">
-</div>
+                        <video src="/cam/${vo.file_name}.webm" class="${vo.video_seq}" id="record_video${status.index}"></video>
+                        <div class="vdate">${vo.video_date}</div>
+
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+
+    </div>
+
+    <div class="main_bot" id="NSK_font">
+        <img id="gym2" align="bottom" src="image/gym2.png" width="150px" height="150px" onclick = "go_main()">
+    </div>
 
 </div>
 <script> /* 컨테이너 */
-  var container = document.querySelector( '#container' );
-  var msnry = new Masonry( container, {
+var container = document.querySelector( '#container' );
+var msnry = new Masonry( container, {
     // options
     columnWidth: 100,
     itemSelector: '.item',
-  } );
+} );
 </script>
 <script> /* 셀렉트 선택시 동영상 상자 */
 $('.전체').click(function(){
-      $('.등').show();
-      $('.가슴').show();
-      $('.팔').show();
-      $('.어깨').show();
-      $('.복근').show();
-   })
-   $('.div_d').click(function(){
-       $('.등').show();
-       $('.팔').hide();
-       $('.가슴').hide();
-       $('.어깨').hide();
-       $('.복근').hide();
-   })
-   $('.div_p').click(function(){
-        $('.팔').show();
-      $('.등').hide();
-       $('.가슴').hide();
-       $('.어깨').hide();
-       $('.복근').hide();
-   })
-   $('.div_g').click(function(){
-      $('.가슴').show();
-       $('.등').hide();
-       $('.팔').hide();
-       $('.어깨').hide();
-       $('.복근').hide();
-   })
-   $('.div_u').click(function(){
-      $('.어깨').show();
-      $('.등').hide();
-       $('.팔').hide();
-       $('.가슴').hide();
-       $('.복근').hide();
-   })       
-   $('.duv_b').click(function(){
-      $('.복근').show();
-      $('.등').hide();
-       $('.팔').hide();
-       $('.가').hide();
-       $('.div_u').hide();
-   })   
+    $('.등').show();
+    $('.가슴').show();
+    $('.팔').show();
+    $('.어깨').show();
+    $('.복근').show();
+})
+$('.div_d').click(function(){
+    $('.등').show();
+    $('.팔').hide();
+    $('.가슴').hide();
+    $('.어깨').hide();
+    $('.복근').hide();
+})
+$('.div_p').click(function(){
+    $('.팔').show();
+    $('.등').hide();
+    $('.가슴').hide();
+    $('.어깨').hide();
+    $('.복근').hide();
+})
+$('.div_g').click(function(){
+    $('.가슴').show();
+    $('.등').hide();
+    $('.팔').hide();
+    $('.어깨').hide();
+    $('.복근').hide();
+})
+$('.div_u').click(function(){
+    $('.어깨').show();
+    $('.등').hide();
+    $('.팔').hide();
+    $('.가슴').hide();
+    $('.복근').hide();
+})
+$('.duv_b').click(function(){
+    $('.복근').show();
+    $('.등').hide();
+    $('.팔').hide();
+    $('.가').hide();
+    $('.div_u').hide();
+})
+function show1 () {
+    document.querySelector(".black_bg").className = "black_bg show1";
+}
+function close1 () {
+    document.querySelector(".black_bg").className = "black_bg";
+}
+
+document.querySelector("#modal_btn").addEventListener("click", show1);
+document.querySelector(".black_bg").addEventListener("click", close1);
 </script>
-<script type="text/javascript"> /* 셀렉트 */
+<script type="text/javascript">
+    /* 셀렉트 */
 const body = document.querySelector('body');
 const select = document.querySelector(`[data-role="selectBox"]`);
 const values = select.querySelector(`[date-value="optValue"]`);
