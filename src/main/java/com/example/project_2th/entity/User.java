@@ -3,6 +3,7 @@ package com.example.project_2th.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.List;
 
 @Data
@@ -25,7 +26,7 @@ public class User {
     private String userPhone;
     @Column(name = "user_gym")
     private String userGym;
-    private String userExpireDate;
+    private Date userExpireDate;
     private String userBirthdate;
     private String contents;
     private String day;

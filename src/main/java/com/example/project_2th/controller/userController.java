@@ -33,12 +33,12 @@ public class userController {
 //    }
 //
 //    @RequestMapping("/admin_member.do")
-//    public String admin_member(Model model) {
+//    public String admin_member(Model session) {
 //
 //    }
 //
 //    @RequestMapping("/extensionMember.do")
-//    public String extensionMember(guest memberVO,Model model) {
+//    public String extensionMember(guest memberVO,Model session) {
 //
 //    }
 //
@@ -60,7 +60,9 @@ public class userController {
 //
     // 기록페이지 re
     @GetMapping("/goRecord")
-    public String goRecord() {
+    public String goRecord(HttpServletRequest req) {
+        HttpSession session = req.getSession(true);
+
         return "redirect:/record";
     }
 
@@ -86,14 +88,14 @@ public class userController {
 
     // login -> main
     @PostMapping(value="/loginInsert")
-    public String memberLogin(@ModelAttribute User user, Model model) throws Exception {
+    public String memberLogin(@ModelAttribute User user, HttpSession session) throws Exception {
         log.info("id : {},gym : {}", user.getUserPhone() , user.getUserGym());
 
         User loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
 
         if (loginUser != null) {
             log.info("로그인 성공");
-            model.addAttribute("user",loginUser);
+            session.setAttribute("user",loginUser);
             return "main";
         }
         log.info("로그인 실패?");
@@ -115,16 +117,15 @@ public class userController {
     @GetMapping(value="/infoCalender")
     public String infoCalender(HttpServletRequest req){
 
-        HttpSession session = req.getSession();
-        Long userId = Long.valueOf(req.getParameter("userId"));
+        HttpSession session = req.getSession(true);
+        User user = (User) session.getAttribute("user");
 
         List<UserCalendar> exinfo = guestRepository
-                .findByUserId(userId)
+                .findByUserId(user.getUserId())
                 .getCalendarList();
 
         exinfo.forEach(System.out::println);
         session.setAttribute("exinfo",exinfo);
-        session.setAttribute("userId",userId);
 
         return "redirect:/test";
     }

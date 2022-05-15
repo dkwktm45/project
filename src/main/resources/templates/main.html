@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
@@ -8,38 +10,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
+    <link rel="stylesheet" th:href="@{/css/side/modal.css}" >
+    <script th:src="@{/js/side/modal.js}"></script>
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-<div class="black_bg">
-    <div class="modal_wrap">
-        <div class="modal_main">
-            <div class = "modal_top">
-                <div style = "font-size:80px;"><b style="font-size: 80px;"><br th:text="${user.getUserName()}"></div>
-                <div class = "modal_top_left">
-                    <div><br>만기일</div>
-                </div>
-                <div class = "modal_top_right">
-                    <div><br><br th:text="${user.getUserExpireDate()}"></div>
-                </div>
-            </div>
-            <div class = "modal_mid">
-                <div class = "modal_mid_mid">
-                    <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick="go_calender()"></div>
-                    <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
-                </div>
-                <div class = "modal_mid_mid">
-                    <div class = "modal_mid_left"><img id="moicon" src="image/video.png" onclick="go_record()"></div>
-                    <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_record()">운동 영상</b></div>
-                </div>
-            </div>
-            <div class = "modal_bot">
-                <div>고객센터     010-4903-4073</div>
-            </div>
-        </div>
-    </div>
-</div>
+<th:block th:replace="sidebar/modal :: sideModal">
 
+    <th:block layout:fragment="css"></th:block>
+    <th:block layout:fragment="script"></th:block>
+</th:block>
 <div class="record_bg"></div>
 <div class="record_wrap">
     <div class="record_top" style="width: 100%; height: 200px;">
@@ -258,7 +238,6 @@
 </div>
 <script th:inline="javascript">
     window.onload = function() {
-
         function show1 () {
             document.querySelector(".black_bg").className = "black_bg show1";
         }
@@ -268,6 +247,7 @@
 
         document.querySelector("#modal_btn").addEventListener("click", show1);
         document.querySelector(".black_bg").addEventListener("click", close1);
+
 
 
         function onClick1() {
@@ -366,13 +346,6 @@
     }
 
 
-    function go_calender(){
-        location.href = "/infoCalender?userId="+[[${user.userId}]];
-    }
-
-    function go_record(){
-        location.href = "/goRecord?userId="+[[${user.userId}]];
-    }
 
     function go_main(){
         location.href = "/web/main.do";

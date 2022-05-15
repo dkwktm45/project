@@ -4,20 +4,19 @@
     <meta charset='utf-8'/>
     <script src="js/calendar.js"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <link rel="stylesheet" href="/css/test.css">
-    <link rel="stylesheet" href="/css/test.css">
+    <link rel="stylesheet" href="/css/test.css?after">
 </head>
 <body>
 <div class="black_bg">
     <div class="modal_wrap">
         <div class="modal_main">
-            <div class="modal_top">
-                <div id="NSK_font" style="font-size:80px;"><b><br>이진영 님</b></div>
-                <div class="modal_top_left">
-                    <div id="NSK_font"><br>만기일</div>
+            <div class = "modal_top">
+                <div style = "font-size:80px;"><b><br th:text="${session.user.getUserName()}"></div>
+                <div class = "modal_top_left">
+                    <div>만기일</div>
                 </div>
-                <div class="modal_top_right">
-                    <div id="NSK_font"><br>2021-12-07<br>D-day 30일</div>
+                <div class = "modal_top_right">
+                    <div th:text="${session.user.getUserExpireDate()}"></div>
                 </div>
             </div>
             <div class="modal_mid">
@@ -66,7 +65,7 @@
 <script type="text/javascript" th:inline="javascript">
     /*<![CDATA[*/
     let exinfoList = /*[[${session.exinfo}]]*/;
-    let UserId = /*[[${session.userId}]]*/;
+    let UserId = /*[[${session.user.userId}]]*/;
 
     /*]]*/
     var calendarEl = document.getElementById('calendar');
@@ -169,11 +168,11 @@
 </script>
 <script type="text/javascript" th:inline="javascript">
 
-    function clickKal() {
-        console.log("test")
-    }
+    document.querySelector("#modal_btn").addEventListener("click", show1);
+    document.querySelector(".black_bg").addEventListener("click", close1);
 
     function show1() {
+        console.log("test")
         document.querySelector(".black_bg").className = "black_bg show1";
     }
 
@@ -181,8 +180,6 @@
         document.querySelector(".black_bg").className = "black_bg";
     }
 
-    document.querySelector("#modal_btn").addEventListener("click", show1);
-    document.querySelector(".black_bg").addEventListener("click", close1);
 
     document.querySelector('.record_bg').addEventListener('click', offClick2);
 

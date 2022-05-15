@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link>
+</head>
+<body>
+<div th:fragment="sideModal" class="black_bg">
+  <div class="modal_wrap">
+    <div class="modal_main">
+      <div class = "modal_top">
+        <div style = "font-size:80px;"><b style="font-size: 80px;"><br th:text="${session.user.getUserName()}"></div>
+        <div class = "modal_top_left">
+          <div>만기일</div>
+        </div>
+        <div class = "modal_top_right">
+          <div th:text="${session.user.getUserExpireDate()}"></div>
+        </div>
+      </div>
+      <div class = "modal_mid">
+        <div class = "modal_mid_mid">
+          <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick="go_calender()"></div>
+          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
+        </div>
+        <div class = "modal_mid_mid">
+          <div class = "modal_mid_left"><img id="moicon" src="image/video.png" onclick="go_record()"></div>
+          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_record()">운동 영상</b></div>
+        </div>
+      </div>
+      <div class = "modal_bot">
+        <div>고객센터     010-4903-4073</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
