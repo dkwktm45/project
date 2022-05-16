@@ -10,12 +10,12 @@
 <div class="black_bg">
     <div class="modal_wrap">
         <div class="modal_main">
-            <div class = "modal_top">
-                <div style = "font-size:80px;"><b><br th:text="${session.user.getUserName()}"></div>
-                <div class = "modal_top_left">
-                    <div>만기일</div>
+            <div class="modal_top">
+                <div id="NSK_font" style="font-size:80px;"><b><br th:text="${session.user.getUserName()}"></div>
+                <div class="modal_top_left">
+                    <div><br>만기일</div>
                 </div>
-                <div class = "modal_top_right">
+                <div class="modal_top_right">
                     <div th:text="${session.user.getUserExpireDate()}"></div>
                 </div>
             </div>
@@ -62,12 +62,11 @@
     </div>
 
 </div>
-<script type="text/javascript" th:inline="javascript">
+<script th:inline="javascript">
     /*<![CDATA[*/
     let exinfoList = /*[[${session.exinfo}]]*/;
-    let UserId = /*[[${session.user.userId}]]*/;
+    let UserId = /*[[${session.user}]]*/;
 
-    /*]]*/
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
@@ -83,46 +82,46 @@
             year = rentdate.substr(6,9);
             MD = rentdate.substr(0,5);
             var resultDay = year+"-"+MD;
+/*
 
             $.ajax({
                 url: "/calendarView?userId=" + UserId + "&exDay=" + resultDay,
                 type: "GET",
                 dataType: "json",
                 success: function (result) {
-/*
                     var html1;
                     console.log(result);
-                     $.each(result, (index, obj) => {
-                         html1 += "<div class = 'modal2_top'>";
-                         html1 += "<div class='modal2_top_top'>";
-                         html1 += "<div class = 'modal2_top_left'>";
-                         html1 += "<div id='NSK_font'><b>" + obj.exName + "</b></div></div>";
-                         html1 += "<div class = 'modal2_top_right'>";
-                         html1 += "</div>";
-                         html1 += "</div>";
-                         html1 += "<div id='NSK_font' class='modal2_top_bot'>";
-                         for (var i = obj.userSet; i > 0; i--) {
-                             html1 += "<div class='set1'>" + (obj.userSet - (i - 1)) + "set</div><div class='set2'>" + obj.userSet + "set</div>";
-                             html1 += "<div class='reps'>" + obj.exCount + "reps</div>";
-                             html1 += "<div class='reps2'>" + obj.exCount + "reps</div>";
+                    $.each(result, (index, obj) => {
+                        html1 += "<div class = 'modal2_top'>";
+                        html1 += "<div class='modal2_top_top'>";
+                        html1 += "<div class = 'modal2_top_left'>";
+                        html1 += "<div id='NSK_font'><b>" + obj.exName + "</b></div></div>";
+                        html1 += "<div class = 'modal2_top_right'>";
+                        html1 += "</div>";
+                        html1 += "</div>";
+                        html1 += "<div id='NSK_font' class='modal2_top_bot'>";
+                        for (var i = obj.userSet; i > 0; i--) {
+                            html1 += "<div class='set1'>" + (obj.userSet - (i - 1)) + "set</div><div class='set2'>" + obj.userSet + "set</div>";
+                            html1 += "<div class='reps'>" + obj.exCount + "reps</div>";
+                            html1 += "<div class='reps2'>" + obj.exCount + "reps</div>";
 
-                             if (i == 1) {
-                                 html1 += "<div class='border'></div>";
-                             }
-                         }
-                         html1 += "</div>";
-                         html1 += "</div>";
+                            if (i == 1) {
+                                html1 += "<div class='border'></div>";
+                            }
+                        }
+                        html1 += "</div>";
+                        html1 += "</div>";
 
-                     })
+                    })
 
-                     $(".modal2_wrap").html(html1);
-*/
+                    $(".modal2_wrap").html(html1);
 
                 },
                 error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             });
+*/
 
 
             //console.log(info.event.start)
@@ -138,7 +137,7 @@
 
         calendar.addEvent({
             id: UserId,
-            start: exinfoList[i].exDay,
+            start: "2022-05-16",
             title: 150 + "kal"
         });
     }
@@ -160,15 +159,16 @@
         $('.record_bg').css('display', 'block');
     });
 
+    /*]]>*/
 
 </script>
 <script type="text/javascript" th:inline="javascript">
 
-    document.querySelector("#modal_btn").addEventListener("click", show1);
-    document.querySelector(".black_bg").addEventListener("click", close1);
+    function clickKal() {
+        console.log("test")
+    }
 
     function show1() {
-        console.log("test")
         document.querySelector(".black_bg").className = "black_bg show1";
     }
 
@@ -176,6 +176,8 @@
         document.querySelector(".black_bg").className = "black_bg";
     }
 
+    document.querySelector("#modal_btn").addEventListener("click", show1);
+    document.querySelector(".black_bg").addEventListener("click", close1);
 
     document.querySelector('.record_bg').addEventListener('click', offClick2);
 

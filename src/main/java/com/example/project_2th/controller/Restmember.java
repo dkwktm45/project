@@ -49,8 +49,6 @@ public class Restmember {
                 System.out.println(day);
                 day = exDay;
                 break;
-            }else{
-                day = null;
             }
         }
 

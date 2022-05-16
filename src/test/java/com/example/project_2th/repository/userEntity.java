@@ -71,10 +71,14 @@ public class userEntity {
                 .findByUserId(1L)
                 .getUserExerciesList();
 
+        result.forEach(System.out::println);
+
+
         List<UserExercies> exinfoList = null;
         Date day = null;
         for(int i = 0; i < result.size(); i++){
             day = result.get(i).getExDay();
+            System.out.println(day);
             if (day.equals(timestamp)) {
                 System.out.println(day);
                 day = timestamp;
@@ -82,11 +86,8 @@ public class userEntity {
             }
         }
 
-        System.out.println(day);
         exinfoList = exinfoRepository.findByExDay(day);
         exinfoList.forEach(System.out::println);
-
-
     }
 
 

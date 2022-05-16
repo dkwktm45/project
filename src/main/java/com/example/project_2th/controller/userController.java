@@ -133,7 +133,7 @@ public class userController {
         exinfo.forEach(System.out::println);
         session.setAttribute("exinfo",exinfo);
 
-        return "redirect:/test";
+        return "redirect:test";
     }
 
     @PostMapping(value="/insertEx")
