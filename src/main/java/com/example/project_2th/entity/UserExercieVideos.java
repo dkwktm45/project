@@ -22,9 +22,7 @@ public class UserExercieVideos {
     private String user_name;
     private String video_date;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user_id;
+
 
     @OneToMany
     @JoinColumn(name = "video_seq")

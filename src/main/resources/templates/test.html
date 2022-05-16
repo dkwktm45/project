@@ -4,7 +4,7 @@
     <meta charset='utf-8'/>
     <script src="js/calendar.js"></script>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <link rel="stylesheet" href="/css/test.css?after">
+    <link rel="stylesheet" href="/css/test.css">
 </head>
 <body>
 <div class="black_bg">
@@ -89,6 +89,7 @@
                 type: "GET",
                 dataType: "json",
                 success: function (result) {
+/*
                     var html1;
                     console.log(result);
                      $.each(result, (index, obj) => {
@@ -115,6 +116,7 @@
                      })
 
                      $(".modal2_wrap").html(html1);
+*/
 
                 },
                 error: function (request, status, error) {
@@ -157,12 +159,6 @@
         $('.modal2_wrap').css('display', 'block');
         $('.record_bg').css('display', 'block');
     });
-
-
-    function convertDate(date) {
-        var date = (new Date(date.yyyymmdd()).getTime() / 1000);
-        location.href = "http://danjae.mgsoft21.co.kr/home/sub.php?menukey=42&s=" + date;
-    }
 
 
 </script>

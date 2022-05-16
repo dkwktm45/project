@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,12 +13,9 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "user")
-@EqualsAndHashCode(callSuper = false)
-@ToString(callSuper = true)
 public class User {
 
     @Id
-    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
@@ -35,15 +33,13 @@ public class User {
     private String adComment;
     private int month;
 
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<UserExercies> userExerciesList;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = false,updatable = false)
+    @ToString.Exclude
+    private final List<UserExercies> userExerciesList = new ArrayList<>();
 
     @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<UserExercieVideos> VideosList;
-
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<UserCalendar> calendarList;
+    @JoinColumn(name = "user_id", insertable = false,updatable = false)
+    @ToString.Exclude
+    private final List<UserCalendar> calendarList = new ArrayList<>();
 }

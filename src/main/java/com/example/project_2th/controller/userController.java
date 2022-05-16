@@ -2,6 +2,8 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.UserCalendar;
 import com.example.project_2th.entity.User;
+import com.example.project_2th.entity.UserExercies;
+import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.GuestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -22,6 +26,8 @@ public class userController {
     @Autowired
     private final GuestRepository guestRepository;
 
+    @Autowired
+    private final ExinfoRepository exinfoRepository;
 
 //
 //    @Autowired
@@ -130,26 +136,32 @@ public class userController {
         return "redirect:/test";
     }
 
+    @PostMapping(value="/insertEx")
+    public String insertEx( HttpServletRequest req) throws Exception {
 
-////    @RequestMapping("/cam.do")
-////    public String cam() {
-////        return "cam";
-////    }
-////
-////    @RequestMapping("/warmingup.do")
-////    public String warmingup() {
-////        return "warmingup";
-////    }
-//
-//    //안 쓰는 것
-//    @RequestMapping(value="/insertEx.do")
-//    public String insertEx(exinfo memberVO , HttpServletRequest req,  RedirectAttributes rttr) throws Exception {
-//
-//        return "redirect:/cam.do";
-//
-//    }
-//
+        UserExercies userExercies = new UserExercies();
+        HttpSession session = req.getSession(true);
+        User user = (User) session.getAttribute("user");
+        System.out.println(user.getUserId());
 
+
+        userExercies.setUser(user);
+        userExercies.setUserSet(req.getParameter("userSet"));
+        userExercies.setExCount(req.getParameter("exCount"));
+        userExercies.setExName(req.getParameter("exName"));
+        userExercies.setExKinds(req.getParameter("exKinds"));
+        userExercies.setExDay(Date.valueOf(LocalDate.now()));
+
+        exinfoRepository.save(userExercies);
+
+
+        return "redirect:/cam.do";
+
+    }
+    @RequestMapping("/cam.do")
+    public String cam() {
+        return "cam";
+    }
 
 
 //

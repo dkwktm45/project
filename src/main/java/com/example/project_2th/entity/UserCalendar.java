@@ -16,13 +16,12 @@ public class UserCalendar {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동으로 숫자가 증가
     private Long id;
 
-    @ManyToOne
-    @ToString.Exclude
-    private User user;
-
     private Date exDay;
 
     private String timeDiff;
     private String userWeight;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
