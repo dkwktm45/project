@@ -16,15 +16,16 @@ public class UserExercieVideos {
     @Id
     @GeneratedValue
     private Long video_seq;
-    private Long ex_seq;
-    private String file_name;
 
+    private String file_name;
     private String user_name;
     private String video_date;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
+    @OneToOne(mappedBy = "user_exercies_videos")
+    private UserExercies userExercies;
 
-    @OneToMany
-    @JoinColumn(name = "video_seq")
-    private List<DeepPostures> posturesList;
 }

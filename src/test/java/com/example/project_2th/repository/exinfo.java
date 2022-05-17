@@ -2,12 +2,19 @@ package com.example.project_2th.repository;
 
 import com.example.project_2th.entity.User;
 import com.example.project_2th.entity.UserExercies;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import groovy.util.logging.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
+import java.io.DataInput;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,4 +61,16 @@ public class exinfo{
 
         result.forEach(System.out::println);
     }
+
+    @DisplayName("기존 유저의 운동 정보에서 Cnt 값을 수정")
+    @Test
+    public void updateCnt() throws IOException, ParseException {
+        UserExercies result = exinfoRepository.findByOne(1L,"체스트 플라이");
+
+        result.setCnt("10");
+        exinfoRepository.save(result);
+    }
+
+    @Test
+    public void
 }

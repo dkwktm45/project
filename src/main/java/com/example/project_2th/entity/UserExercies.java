@@ -29,4 +29,9 @@ public class UserExercies {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne
+    @JoinColumn(name = "ex_seq")
+    private UserExercieVideos userExercieVideos;
+
+
 }

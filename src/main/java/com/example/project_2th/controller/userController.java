@@ -2,11 +2,16 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.UserCalendar;
 import com.example.project_2th.entity.User;
+import com.example.project_2th.entity.UserExercieVideos;
 import com.example.project_2th.entity.UserExercies;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.GuestRepository;
+import com.example.project_2th.repository.UserVideoRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.DataInput;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +35,8 @@ public class userController {
     @Autowired
     private final ExinfoRepository exinfoRepository;
 
+    @Autowired
+    private final UserVideoRepository userVideoRepository;
 //
 //    @Autowired
 //    private mainMapper mapper;
@@ -47,23 +55,7 @@ public class userController {
 //    public String extensionMember(guest memberVO,Model session) {
 //
 //    }
-//
-//    @RequestMapping("/test.do")
-//    public String test() {
-//        return "test";
-//    }
-//    @RequestMapping("/calender.do")
-//    public String calender() {
-//        return "calender";
-//    }
-//
-//
-//
-//    @RequestMapping("/main.do")
-//    public String main() {
-//        return "main";
-//    }
-//
+
     // 기록페이지 re
     @GetMapping("/goRecord")
     public String goRecord(HttpServletRequest req) {
@@ -139,6 +131,7 @@ public class userController {
     @PostMapping(value="/insertEx")
     public String insertEx( HttpServletRequest req) throws Exception {
 
+        UserExercieVideos userExercieVideos = new UserExercieVideos();
         UserExercies userExercies = new UserExercies();
         HttpSession session = req.getSession(true);
         User user = (User) session.getAttribute("user");
@@ -154,7 +147,9 @@ public class userController {
 
         exinfoRepository.save(userExercies);
 
+        UserExercies exinfo = exinfoRepository.findByOne(user.getUserId(), req.getParameter("exName"));
 
+        session.setAttribute("exinfo",exinfo);
         return "redirect:/cam.do";
 
     }

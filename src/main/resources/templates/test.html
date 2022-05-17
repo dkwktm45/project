@@ -64,8 +64,9 @@
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    let exinfoList = /*[[${session.exinfo}]]*/;
-    let UserId = /*[[${session.user}]]*/;
+    let exinfoList = [[${session.exinfo}]];
+    let UserId = [[${session.user}]];
+    /*]]>*/
 
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -159,7 +160,6 @@
         $('.record_bg').css('display', 'block');
     });
 
-    /*]]>*/
 
 </script>
 <script type="text/javascript" th:inline="javascript">

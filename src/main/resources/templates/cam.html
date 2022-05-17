@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <title>Hello OpenCV.js</title>
@@ -29,19 +31,19 @@
 </head>
 <body>
 <!-- 카메라 프레임이 그려질 공간 -->
-<%
-exinfo member = (exinfo)session.getAttribute("ex_seq2");
-System.out.print(member.getUser_id());
-%>
-
 <h1> 카메라 프레임 <h1>
   <video id="videoInput" width=320 height=240 ></video>
   <button class = "stop-button" >중지</button>
 
   <!-- <img src="http://localhost:5000/video_feed"> -->
   <img id="image" width=820 height=550 src="" />
+  <script>
 
-  <script type="text/javascript">
+    let exinfo = [[${session.exinfo.exSeq}]]
+    let user = [[${session.user.userId}]]
+
+
+
     // 중지 버튼
     const stopButton = document.querySelector(".stop-button")
     const previewPlayer = document.querySelector("#videoInput")
@@ -66,23 +68,21 @@ System.out.print(member.getUser_id());
 //        console.log("An error occurred! " + err);
             });
 
+
+
     //카메라 중지버튼
     function stopRecording(){
       previewPlayer.srcObject.getTracks().forEach(track=> track.stop());
     }
     function startRecording(stream){
-      //recordedChunks ;
-      //console.log(stream);
       recorder = new MediaRecorder(stream);
-      //console.log(recorder)
-      //////////////////////////////////////////////////////////
       recorder.ondataavailable = (e) => {
         console.log("onDataAvailable")
         recordedChunks.push(e.data)
         console.log("밖에있는 cnt : "+cnt);
         const b = new Blob(recordedChunks,{ type: "video/webm"});
 
-        url = "/web/insertExURL.do?user_id=<%=member.getUser_id()%>&ex_seq=<%=member.getEx_seq()%>&cnt="+cnt;
+        url = "/insertExURL?userId="+[[${session.user.userId}]]+"&ex_seq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
 
         var oReq = new XMLHttpRequest();
         oReq.open("POST", url, true);
@@ -97,17 +97,15 @@ System.out.print(member.getUser_id());
         };
 
         oReq.send(b);
-
-
       };
       console.log(recordedChunks);
       recorder.start();
     }
 
-
+/*
     let canvasOutput = document.getElementById('canvasOutput');
 
-    /* OpencvJS 로딩 완료시 콜백함수 */
+    //OpencvJS 로딩 완료시 콜백함수
     function onOpenCvReady(){
       let height = video.height;
       let width = video.width;
@@ -130,9 +128,7 @@ System.out.print(member.getUser_id());
       // schedule first one.
       setTimeout(processVideo, 0);
     }
-    <%System.out.println(member.getEx_name());
-    String name = member.getEx_name();
-    %>
+
     <%if (name=="체스트 플라이"){%>
       console.log("체스트 플라이입니다.");
       let sendURL = "http://localhost:5000/sendFrame?id="+exerciseId;
@@ -265,12 +261,7 @@ System.out.print(member.getUser_id());
         //비동기로 가져온 값
       };
       xhr.send(data);
-    }
-
-
-
-
-
+    }*/
   </script>
 
   <!-- OpencvJS 라이브러리 가져오기 -->

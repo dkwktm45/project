@@ -42,4 +42,9 @@ public class User {
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
     @ToString.Exclude
     private final List<UserCalendar> calendarList = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "user_id", insertable = false,updatable = false)
+    @ToString.Exclude
+    private final List<UserExercieVideos> exercieVideosList = new ArrayList<>();
 }

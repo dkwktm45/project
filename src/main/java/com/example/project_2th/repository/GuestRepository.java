@@ -17,6 +17,5 @@ public interface GuestRepository extends JpaRepository<User,Long> {
     User findByUserPhoneAndUserGym(String userPhone, String userGym);
 
 
-
     User findByUserId(Long userId);
 }
