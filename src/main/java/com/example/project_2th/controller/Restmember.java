@@ -13,7 +13,11 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.project_2th.entity.User;
+import com.example.project_2th.entity.UserExercieVideos;
 import com.example.project_2th.entity.UserExercies;
+import com.example.project_2th.entity.UserPostures;
+import com.example.project_2th.repository.DeepPosturesRepository;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.GuestRepository;
 import com.example.project_2th.repository.UserVideoRepository;
@@ -35,6 +39,12 @@ public class Restmember {
 
     @Autowired
     private final ExinfoRepository exinfoRepository;
+
+    @Autowired
+    private final UserVideoRepository userVideoRepository;
+
+    @Autowired
+    private final DeepPosturesRepository deepPosturesRepository;
 
     @GetMapping(value = "/calendarView")
     public List<UserExercies> calendarView(String userId, Date exDay, HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -65,13 +75,14 @@ public class Restmember {
         System.out.println("저장할려는중");
         //System.out.println(request.getParameter("cnt"));
         String cnt = req.getParameter("cnt");
-        String user_id = req.getParameter("userId");
+        Long user_id = Long.valueOf(req.getParameter("userId"));
+        Long ex_seq = Long.valueOf(req.getParameter("exSeq"));
 
-        int ex_seq = Integer.parseInt(req.getParameter("exSeq"));
+        User user = guestRepository.findByUserId(user_id);
+        UserExercies userExercies = exinfoRepository.findByExSeq(ex_seq);
 
-        //System.out.println(ex_seq);
-        //System.out.println(user_id);
         ServletInputStream input = req.getInputStream();
+
 
 
         double randomValue = Math.random();
@@ -91,10 +102,61 @@ public class Restmember {
         out.close();
 
         System.out.println("저장 끝");
+
+        // video 파일 저장
+        UserExercieVideos userExercieVideos = new UserExercieVideos();
+        userExercieVideos.setUser(user);
+        userExercieVideos.setFileName(file_name);
+        userExercieVideos.setUserExercies(userExercies);
+
+        userVideoRepository.save(userExercieVideos);
+
+        // cnt 데이터 update
+        userExercies.setCnt(cnt);
+        exinfoRepository.save(userExercies);
+
         //exinfoRepository.inertCNT(cnt , ex_seq);
-        //UserVideoRepository.insertURL(user_id,ex_seq,file_name);
-        return "main.do";
+        return "main";
     }
+
+
+    @RequestMapping(value="/insertBadImage.do", method= {RequestMethod.GET, RequestMethod.POST})
+    public void insertBadImage(HttpServletRequest request) throws Exception {
+
+        //String fileName = file.getOriginalFilename();
+        //System.out.print(request.getParameter("data"));
+        System.out.println(request.getParameter("ai_comment"));
+
+        String ai_comment =  request.getParameter("ai_comment");
+
+        Long ex_seq = Long.valueOf(request.getParameter("ex_seq"));
+
+        UserExercies userExercies = exinfoRepository.findByExSeq(ex_seq);
+
+        UserExercieVideos result = userVideoRepository.findByUserExercies(userExercies);
+        //ServletInputStream input = request.getInputStream();
+
+
+        double randomValue = Math.random();
+        String pose_result = Double.toString((randomValue*100)+1);
+        FileOutputStream out = new FileOutputStream(new File("C:\\user\\badImage\\"+pose_result+".jpg"));
+
+        byte[] charBuffer = new byte[128];
+
+        int bytesRead = 0;
+        while ((bytesRead = System.in.read()) != -1) {
+            //System.out.println("저장중");
+            out.write(bytesRead);
+        }
+
+        UserPostures userPostures = new UserPostures();
+        userPostures.setPose_result(pose_result);
+        userPostures.setAi_comment(ai_comment);
+        userPostures.setUserExercieVideos(result);
+
+        deepPosturesRepository.save(userPostures);
+    }
+
 }
 
 

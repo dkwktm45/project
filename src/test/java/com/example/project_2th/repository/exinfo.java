@@ -71,6 +71,4 @@ public class exinfo{
         exinfoRepository.save(result);
     }
 
-    @Test
-    public void
 }

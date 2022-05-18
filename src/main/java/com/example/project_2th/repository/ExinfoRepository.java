@@ -20,6 +20,8 @@ public interface ExinfoRepository extends JpaRepository<UserExercies,Long> {
             @Param("userId") Long userId,
             @Param("exName") String exName);
 
+    UserExercies findByExSeq(Long ex_seq);
+
     //void inertCNT(String cnt, int ex_seq);
 
 }

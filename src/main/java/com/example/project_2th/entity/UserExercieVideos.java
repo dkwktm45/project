@@ -15,17 +15,22 @@ import java.util.List;
 public class UserExercieVideos {
     @Id
     @GeneratedValue
-    private Long video_seq;
+    private Long videoSeq;
 
-    private String file_name;
-    private String user_name;
-    private String video_date;
+    private String fileName;
+    private String videoDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "user_exercies_videos")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ex_seq")
     private UserExercies userExercies;
+
+    @OneToMany
+    @JoinColumn(name = "video_seq", insertable = false,updatable = false)
+    @ToString.Exclude
+    private List<UserPostures> userPostures;
 
 }

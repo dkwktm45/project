@@ -70,13 +70,7 @@ public class userController {
         return "record";
     }
 
-//
-//    @RequestMapping("/join.do")
-//    public String join() {
-//        return "join";
-//    }
-//
-//
+
 
 
     @GetMapping("/login")
@@ -84,20 +78,33 @@ public class userController {
         return "login";
     }
 
-    // login -> main
+    // login -> main or admin
     @PostMapping(value="/loginInsert")
     public String memberLogin(@ModelAttribute User user, HttpSession session) throws Exception {
         log.info("id : {},gym : {}", user.getUserPhone() , user.getUserGym());
 
         User loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
 
-        if (loginUser != null) {
-            log.info("로그인 성공");
-            session.setAttribute("user",loginUser);
-            return "main";
+        if (loginUser == null) {
+            log.info("로그인 실패");
+            return "redirect:/login";
+        }else{
+            if (loginUser.getManagerYn() == 1){
+                System.out.println("admin 로그인 성공");
+                session.setAttribute("user",loginUser);
+                return "redirect:/admin";
+
+            }else{
+                System.out.println("user 로그인 성공");
+                session.setAttribute("user",loginUser);
+                return "redirect:/main";
+            }
         }
-        log.info("로그인 실패?");
-        return "redirect:/login";
+    }
+
+    @GetMapping("/admin")
+    public String admin(){
+        return "admin";
     }
 
     @GetMapping("/main")

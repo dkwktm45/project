@@ -39,10 +39,8 @@
   <img id="image" width=820 height=550 src="" />
   <script>
 
-    let exinfo = [[${session.exinfo.exSeq}]]
-    let user = [[${session.user.userId}]]
 
-
+    var name = "[[${session.exinfo.exName}]]";
 
     // 중지 버튼
     const stopButton = document.querySelector(".stop-button")
@@ -90,7 +88,7 @@
           // Uploaded.
           if (oReq.status == 200){
             let result = oReq.response;
-            location.href="/web/"+result;
+            location.href="/"+result;
           }else {
             alert("error"+ this.status);
           }
@@ -102,7 +100,7 @@
       recorder.start();
     }
 
-/*
+
     let canvasOutput = document.getElementById('canvasOutput');
 
     //OpencvJS 로딩 완료시 콜백함수
@@ -129,14 +127,16 @@
       setTimeout(processVideo, 0);
     }
 
-    <%if (name=="체스트 플라이"){%>
+    var sendURL;
+
+    if (name=="체스트 플라이") {
       console.log("체스트 플라이입니다.");
-      let sendURL = "http://localhost:5000/sendFrame?id="+exerciseId;
-      <%}else if(name=="시티드 로우"){%>
-      let sendURL = "http://localhost:5000/sendFrame2?id="+exerciseId;
-      <%}else{%>
-      let sendURL = "http://localhost:5000/sendFrame3?id="+exerciseId;
-      <%}%>
+      sendURL = "http://localhost:5000/sendFrame?id="+exerciseId;
+    } else if(name=="시티드 로우"){
+      sendURL = "http://localhost:5000/sendFrame2?id="+exerciseId;
+    } else{
+      sendURL = "http://localhost:5000/sendFrame3?id="+exerciseId;
+    }
 
     var cnt;
 
@@ -180,10 +180,10 @@
           var oReq = new XMLHttpRequest();
           var url
           if (feedback_l==null){
-            url = "/web/insertBadImage.do?ex_seq=<%=member.getEx_seq()%>&ai_comment="+feedback_l;
+            url = "/web/insertBadImage.do?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_l;
           }else if(feedback_r==null){
             feedback_r ="test"
-            url = "/web/insertBadImage.do?ex_seq=<%=member.getEx_seq()%>&ai_comment="+feedback_r;
+            url = "/web/insertBadImage.do?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_r;
           }
           console.log(url)
           oReq.open("POST", url, true);
@@ -200,6 +200,9 @@
           };
           oReq.send(image_data);
         }
+
+
+        // 강제 종료 버튼
         stopButton.onclick = function(){
           console.log("클릭성공");
           recorder.ondataavailable = (e) => {
@@ -209,7 +212,7 @@
             const b = new Blob(recordedChunks,{ type: "video/webm"});
             console.log(b);
 
-            url = "/web/insertExURL.do?user_id=<%=member.getUser_id()%>&ex_seq=<%=member.getEx_seq()%>&cnt="+cnt;
+            url = "/insertExURL?userId="+[[${session.user.userId}]]+"&ex_seq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
 
             var oReq = new XMLHttpRequest();
             oReq.open("POST", url, true);
@@ -217,19 +220,17 @@
               // Uploaded.
               if (oReq.status == 200){
                 let result = oReq.response;
-                location.href="/web/"+result;
+                location.href="/"+result;
               }else {
                 alert("error"+ this.status);
               }
             };
             oReq.send(b);
-
-
           };
           stopRecording();
         }
-
-        if (cnt==(<%=member.getEx_count()%>*<%=member.getUser_set()%>)){
+        // 만약 갯수를 채운다면 즉시 중지 된다.
+        if (cnt==([[${session.exinfo.exCount}]]*[[${session.exinfo.userSet}]])){
           console.log("성공!!");
 
           recorder.ondataavailable = (e) => {
@@ -261,7 +262,7 @@
         //비동기로 가져온 값
       };
       xhr.send(data);
-    }*/
+    }
   </script>
 
   <!-- OpencvJS 라이브러리 가져오기 -->

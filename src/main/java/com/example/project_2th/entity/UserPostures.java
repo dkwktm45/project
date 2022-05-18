@@ -11,20 +11,19 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "deep_postures")
-public class DeepPostures {
+@Table(name = "user_postures")
+public class UserPostures {
 
     @Id
     @GeneratedValue
-    private Long deep_seq;
-
-
+    private Long postureSeq;
 
     private int video_time;
     private String pose_result;
     private String ai_comment;
 
     @ManyToOne
-    @ToString.Exclude
-    private UserExercieVideos video_seq;
+    @JoinColumn(name = "video_seq")
+    private UserExercieVideos userExercieVideos;
+
 }

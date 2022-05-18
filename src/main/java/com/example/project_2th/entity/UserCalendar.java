@@ -24,4 +24,5 @@ public class UserCalendar {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 }
