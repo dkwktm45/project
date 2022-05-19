@@ -1,6 +1,7 @@
 package com.example.project_2th.repository;
 
 import com.example.project_2th.entity.User;
+import com.example.project_2th.entity.UserExercieVideos;
 import com.example.project_2th.entity.UserExercies;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import groovy.util.logging.Slf4j;
@@ -25,13 +26,16 @@ import java.util.List;
 public class exinfo{
 
     @Autowired
-    GuestRepository guestRepository;
+    private GuestRepository guestRepository;
 
     @Autowired
-    UserCalendarRepositroy userCalendarRepositroy;
+    private ExinfoRepository exinfoRepository;
 
     @Autowired
-    ExinfoRepository exinfoRepository;
+    private UserVideoRepository userVideoRepository;
+
+    @Autowired
+    private DeepPosturesRepository deepPosturesRepository;
     @Test
     @Transactional
     public void insertEx(){
@@ -69,6 +73,29 @@ public class exinfo{
 
         result.setCnt("10");
         exinfoRepository.save(result);
+    }
+
+    @DisplayName("기존 유저의 운동 정보에서 Cnt 값을 수정 and videofile 저장")
+    @Test
+    public void updateCntAndvideo() throws IOException, ParseException {
+        User user = guestRepository.findByUserId(1L);
+        UserExercies userExercies = exinfoRepository.findByExSeq(67L);
+
+        double randomValue = Math.random();
+        String file_name = Double.toString((randomValue * 100) + 1);
+
+        String cnt = "0";
+        // video 파일 저장
+        UserExercieVideos userExercieVideos = new UserExercieVideos();
+        userExercieVideos.setUser(user);
+        userExercieVideos.setFileName(file_name);
+        userExercieVideos.setUserExercies(userExercies);
+        userExercies.setCnt(cnt);
+
+        userVideoRepository.save(userExercieVideos);
+        // cnt 데이터 update
+        exinfoRepository.save(userExercies);
+
     }
 
 }

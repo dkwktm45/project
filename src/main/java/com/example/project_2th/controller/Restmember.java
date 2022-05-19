@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import com.example.project_2th.entity.User;
 import com.example.project_2th.entity.UserExercieVideos;
@@ -24,10 +25,7 @@ import com.example.project_2th.repository.UserVideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -70,8 +68,9 @@ public class Restmember {
         return exinfoList;
 
     }
-    @GetMapping(value = "insertExURL")
-    public String inertURL(HttpServletRequest req)throws Exception {
+    @Transactional
+    @PostMapping(value = "insertExURL")
+    public String insertExURL(HttpServletRequest req)throws Exception {
         System.out.println("저장할려는중");
         //System.out.println(request.getParameter("cnt"));
         String cnt = req.getParameter("cnt");
@@ -115,7 +114,6 @@ public class Restmember {
         userExercies.setCnt(cnt);
         exinfoRepository.save(userExercies);
 
-        //exinfoRepository.inertCNT(cnt , ex_seq);
         return "main";
     }
 

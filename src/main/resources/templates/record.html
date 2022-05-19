@@ -174,9 +174,6 @@
     </div>
     <table align="center" class=bottom1>
     </table>
-
-    <!--          <table align="center" id=bottom2>
-             </table> -->
 </div>
 <div class="main_map">
 
@@ -193,7 +190,7 @@
     <script>
         function test(){
             $.ajax({
-                url :"/web/memberExinfo.do?user_id=<%=member.getUser_id()%>",
+                url :"memberExinfo?user_id=" + [[${session.user.userId}]],
                 method:"GET",
                 dataType: 'json',
                 success: function(data2) {
@@ -209,7 +206,7 @@
         function insertdate(){
             var DATE = document.querySelector('input[type="date"]').value;
             $.ajax({
-                url : "/web/dateVideo.do?user_id=<%=member.getUser_id()%>&video_date="+DATE,
+                url : "dateVideo?user_id="+[[${session.user.userId}]]+"&video_date="+DATE,
                 method :"GET",
                 dataType : "text",
                 async:false,
@@ -261,16 +258,14 @@
             </div>
         </div>
         <div id="container">
-            <c:forEach var= 'vo' items = "${memberVideo}" varStatus="status" >
-                <div id = "div_d${status.index}" class="div_p${status.index}">
+            <div th:each="video,i : ${session.videoList}">
+                <div th:id="div_d${i.index}" th:class="div_p${i.index}">
                     <div class="item">
-
-                        <video src="/cam/${vo.file_name}.webm" class="${vo.video_seq}" id="record_video${status.index}"></video>
-                        <div class="vdate">${vo.video_date}</div>
-
+                        <video th:src="/video/${video.fileName}.webm" th:id = "record_video${i.index}" th:class="${video.videoSeq}"></video>
+                        <div class="vdate" th:text="${video.videoDate}"></div>
                     </div>
                 </div>
-            </c:forEach>
+            </div>
         </div>
 
     </div>

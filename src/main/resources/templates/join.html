@@ -16,15 +16,12 @@
       document.querySelector("#modal_btn").addEventListener("click", show1);
       document.querySelector(".black_bg").addEventListener("click", close1);
     }
-
     function gomember(){
       location.href =  "/web/admin_member.do";
     }
-
     function gojoin(){
       location.href =  "/web/join.do";
     }
-
     function gorecord(){
       location.href =  "/web/admin.do";
     }
@@ -88,30 +85,19 @@
   <div class="middle">
     <table class="joinTable">
       <tr>
-        <!-- <td id="name"><a> 성함 </a></td> -->
         <td> <input name = "user_name" id="user_name" type="text" placeholder="이름"> </td>
       </tr>
       <tr>
-        <!-- <td id="birth"> <a> 생년월일 </a> </td> -->
         <td> <input name = "user_birthdate"id="user_birthdate" type="text" placeholder="생년월일"> </td>
       </tr>
       <tr>
-        <!-- <td id="birth"> <a> 생년월일 </a> </td> -->
         <td> <input name = "user_phone"id="user_birthdate" type="text" placeholder="핸드폰 번호"> </td>
       </tr>
       <tr>
-        <!-- <td id="date"> <a> 등록일 </a> </td> -->
         <td> <input name="user_expire_date" id="user_joindate" type="text" placeholder="개월 수"> </td>
       </tr>
       <tr>
-        <!-- <td id="gym"> <a> 지점명 </a> </td> -->
         <td>
-          <!--            <select id=user_gym>
-                         <option id=b> 지점명</option>
-                         <option id=b value ="강남점" >강남점</option>
-                         <option id=b value ="해운대점" >해운대점</option>
-                         <option id=b value ="광주남구" >광주남구</option>
-                      </select> -->
           <div class="select" data-role="selectBox" name="exercise" id="user_gym" onclick = "test()">
                      <span date-value="optValue" class="selected-option">
                         <!-- 선택된 옵션 값이 출력되는 부분 -->

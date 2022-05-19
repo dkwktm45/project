@@ -60,6 +60,11 @@ public class userController {
     @GetMapping("/goRecord")
     public String goRecord(HttpServletRequest req) {
         HttpSession session = req.getSession(true);
+        User user = (User) session.getAttribute("user");
+        Long id = user.getUserId();
+        List<UserExercieVideos> videoList = guestRepository.findByUserId(id).getExercieVideosList();
+
+        session.setAttribute("videoList",videoList);
 
         return "redirect:/record";
     }
@@ -69,8 +74,6 @@ public class userController {
     public String record() {
         return "record";
     }
-
-
 
 
     @GetMapping("/login")
