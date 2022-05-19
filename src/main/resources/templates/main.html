@@ -16,7 +16,6 @@
 </head>
 <body>
 <th:block th:replace="sidebar/modal :: sideModal">
-
     <th:block layout:fragment="css"></th:block>
     <th:block layout:fragment="script"></th:block>
 </th:block>
@@ -92,7 +91,7 @@
             <input type="number" name="ex_count" id="ex_num2" placeholder="0"><b>회</b>
             <input type = "hidden" value = "덤벨 솔더프레스" name ="ex_name">
             <input type = "hidden" value = "어깨" name ="ex_kinds">
-            <input type = "hidden" value = "<%=member.getUser_id() %>" name ="user_id">
+            <input type = "hidden" name ="user_id">
             <input type = "submit" id="start" value = "제출">
         </form>
     </div>
