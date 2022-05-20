@@ -18,7 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.io.DataInput;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -83,11 +85,13 @@ public class userController {
 
     // login -> main or admin
     @PostMapping(value="/loginInsert")
-    public String memberLogin(@ModelAttribute User user, HttpSession session) throws Exception {
+    public String memberLogin(@ModelAttribute User user, HttpServletResponse response, HttpSession session) throws Exception {
         log.info("id : {},gym : {}", user.getUserPhone() , user.getUserGym());
 
         User loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
-
+        response.setHeader("Set-Cookie", "Test1=TestCookieValue1;   Secure; SameSite=None");
+        response.addHeader("Set-Cookie", "Test2=TestCookieValue2;  Secure;  SameSite=None");
+        response.addHeader("Set-Cookie", "Test3=TestCookieValue3;   Secure; SameSite=None");
         if (loginUser == null) {
             log.info("로그인 실패");
             return "redirect:/login";
@@ -160,6 +164,7 @@ public class userController {
         UserExercies exinfo = exinfoRepository.findByOne(user.getUserId(), req.getParameter("exName"));
 
         session.setAttribute("exinfo",exinfo);
+
         return "redirect:/cam.do";
 
     }

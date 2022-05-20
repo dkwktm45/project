@@ -1,6 +1,7 @@
 package com.example.project_2th.repository;
 
 import com.example.project_2th.entity.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +17,6 @@ public interface GuestRepository extends JpaRepository<User,Long> {
 
     User findByUserPhoneAndUserGym(String userPhone, String userGym);
 
-
+    @EntityGraph(attributePaths = {"exercieVideosList"})
     User findByUserId(Long userId);
 }

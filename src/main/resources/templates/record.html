@@ -167,8 +167,8 @@
 
     <div class="record_middle" style="width:100%; height:950px;" align="center">
         <div id="record_middle_content">
-            <video class="videotag" src="/cam/??.webm" id="video" controls>
-                <source src="/cam/??.webm"/>
+            <video class="videotag" src="/video/??.webm" id="video" controls>
+                <source src="/video/??.webm"/>
             </video>
         </div>
     </div>
@@ -259,9 +259,9 @@
         </div>
         <div id="container">
             <div th:each="video,i : ${session.videoList}">
-                <div th:id="div_d${i.index}" th:class="div_p${i.index}">
+                <div th:id="'div_d'+${i.index}" th:class="'div_p'+${i.index}">
                     <div class="item">
-                        <video th:src="/video/${video.fileName}.webm" th:id = "record_video${i.index}" th:class="${video.videoSeq}"></video>
+                        <video th:src="'/video/'+${video.fileName}+'.webm'" th:id = "'record_video'+${i.index}" th:class="${video.videoSeq}"></video>
                         <div class="vdate" th:text="${video.videoDate}"></div>
                     </div>
                 </div>

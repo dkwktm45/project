@@ -1,7 +1,6 @@
 package com.example.project_2th.config;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -13,4 +12,5 @@ public class MvcConfiguration implements WebMvcConfigurer {
         registry.addResourceHandler("/video/**")
                 .addResourceLocations("file:///C:/user/projectVideo/");
     }
+
 }
