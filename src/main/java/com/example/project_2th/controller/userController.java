@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import java.io.DataInput;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -40,23 +41,23 @@ public class userController {
     @Autowired
     private final UserVideoRepository userVideoRepository;
 //
-//    @Autowired
-//    private mainMapper mapper;
-//
-//    @RequestMapping("/admin.do")
-//    public String admin(HttpServletRequest req) {
-//
-//    }
-//
-//    @RequestMapping("/admin_member.do")
-//    public String admin_member(Model session) {
-//
-//    }
-//
-//    @RequestMapping("/extensionMember.do")
-//    public String extensionMember(guest memberVO,Model session) {
-//
-//    }
+////    @Autowired
+////    private mainMapper mapper;
+////
+////    @RequestMapping("/admin.do")
+////    public String admin(HttpServletRequest req) {
+////
+////    }
+////
+////    @RequestMapping("/admin_member.do")
+////    public String admin_member(Model session) {
+////
+////    }
+////
+////    @RequestMapping("/extensionMember.do")
+////    public String extensionMember(guest memberVO,Model session) {
+////
+////    }
 
     // 기록페이지 re
     @GetMapping("/goRecord")
@@ -65,7 +66,11 @@ public class userController {
         User user = (User) session.getAttribute("user");
         Long id = user.getUserId();
         List<UserExercieVideos> videoList = guestRepository.findByUserId(id).getExercieVideosList();
-
+        List<UserExercies> userExerciesList = new ArrayList<>();
+        for(int i = 0; i<videoList.size(); i++){
+            userExerciesList.add(videoList.get(i).getUserExercies());
+        }
+        session.setAttribute("exinfoList",userExerciesList);
         session.setAttribute("videoList",videoList);
 
         return "redirect:/record";

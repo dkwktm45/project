@@ -3,6 +3,7 @@ package com.example.project_2th.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -31,6 +32,10 @@ public class UserExercieVideos {
     @OneToMany
     @JoinColumn(name = "video_seq", insertable = false,updatable = false)
     @ToString.Exclude
-    private List<UserPostures> userPostures;
+    private List<UserPostures> userPostures= new ArrayList<>();
 
+    //getter 재정의를 통한 null 처리
+    public List<UserPostures> getUserPostures(){
+        return this.userPostures == null ? new ArrayList<>() : this.userPostures;
+    }
 }

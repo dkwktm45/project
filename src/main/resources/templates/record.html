@@ -11,6 +11,7 @@
     <link href='css/record.css' rel='stylesheet' />
     <script src='js/record.js'></script>
     <script>
+        const log = console.log;
         window.onload = function() {
             function onClick7() {
                 var changeSrc= $(this).attr('src');
@@ -21,24 +22,15 @@
                 document.querySelector('.record_bg').style.display ='block';
 
                 $.ajax({
-                    url : "/web/insertPose.do?video_seq="+video_seq,
+                    url : "/insertPose?videoSeq="+video_seq,
+                    contentType: "application/json; charset=UTF-8",
                     type : "GET",
-                    dataType : "json",
                     success : function(result){
                         var html1;
                         var html2;
+                        log(result);
+/*
 
-                        if(result.length !=""){
-                            $.each(result,(index,obj)=>{
-                                /*                  html1+="<tr>";
-                                                 html1+="<td>"; */
-                                /* html1+="<img src='image/"+obj.post_result+".png'>"; */
-                                /*                  html1+="<img class='gdImg' src='image/팔.png'>";
-                                                 html1+="</td>";
-                                                 html2+="</tr>"
-                                                 html2+="<tr>"
-                                                 html2+="<td>"+obj.ai_comment+"</td>";
-                                                 html2+="</tr>" */
                                 if(index == 0 ){
                                     html1+="<div class='jase'>자세교정</div>";
                                 }
@@ -58,7 +50,7 @@
                         }
 
                         $(".bottom1").html(html1);
-
+            */
                     }
                 });
             }
@@ -176,8 +168,6 @@
     </table>
 </div>
 <div class="main_map">
-
-
     <div class="main_top" style = "text-align : center;">
         <div class="top_left">
             <h1 style = "font-size:80px;">The Ai Fitness</h1>

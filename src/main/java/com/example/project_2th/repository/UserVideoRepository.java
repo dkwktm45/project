@@ -9,4 +9,6 @@ import java.util.List;
 public interface UserVideoRepository extends JpaRepository<UserExercieVideos,Long> {
 
     UserExercieVideos findByUserExercies(UserExercies exinfo);
+
+    UserExercieVideos findByVideoSeq(Long id);
 }

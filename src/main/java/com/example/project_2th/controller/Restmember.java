@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -25,6 +27,8 @@ import com.example.project_2th.repository.UserVideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -53,7 +57,7 @@ public class Restmember {
 
         List<UserExercies> exinfoList = null;
         Date day = null;
-        for(int i = 0; i < result.size(); i++){
+        for (int i = 0; i < result.size(); i++) {
             day = result.get(i).getExDay();
             if (day.equals(exDay)) {
                 System.out.println(day);
@@ -68,9 +72,10 @@ public class Restmember {
         return exinfoList;
 
     }
+
     @Transactional
     @PostMapping(value = "insertExURL")
-    public String insertExURL(HttpServletRequest req)throws Exception {
+    public String insertExURL(HttpServletRequest req) throws Exception {
         System.out.println("저장할려는중");
         //System.out.println(request.getParameter("cnt"));
         String cnt = req.getParameter("cnt");
@@ -81,7 +86,6 @@ public class Restmember {
         UserExercies userExercies = exinfoRepository.findByExSeq(ex_seq);
 
         ServletInputStream input = req.getInputStream();
-
 
 
         double randomValue = Math.random();
@@ -117,15 +121,34 @@ public class Restmember {
         return "main";
     }
 
+    @GetMapping(value = "/insertPose")
+    @ResponseBody
+    @Transactional
+    public Map<String, Object> getVideoinfo(HttpServletRequest req) throws Exception {
 
-    @RequestMapping(value="/insertBadImage.do", method= {RequestMethod.GET, RequestMethod.POST})
+        try{
+            Long Longseq = Long.valueOf(req.getParameter("videoSeq"));
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("exinfo", userVideoRepository.findByVideoSeq(Longseq).getUserExercies());
+            map.put("postures", userVideoRepository.findByVideoSeq(Longseq).getUserPostures());
+            return map;
+        }catch (IllegalStateException e ){
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+
+
+    }
+
+    @RequestMapping(value = "/insertBadImage.do", method = {RequestMethod.GET, RequestMethod.POST})
     public void insertBadImage(HttpServletRequest request) throws Exception {
 
         //String fileName = file.getOriginalFilename();
         //System.out.print(request.getParameter("data"));
         System.out.println(request.getParameter("ai_comment"));
 
-        String ai_comment =  request.getParameter("ai_comment");
+        String ai_comment = request.getParameter("ai_comment");
 
         Long ex_seq = Long.valueOf(request.getParameter("ex_seq"));
 
@@ -136,8 +159,8 @@ public class Restmember {
 
 
         double randomValue = Math.random();
-        String pose_result = Double.toString((randomValue*100)+1);
-        FileOutputStream out = new FileOutputStream(new File("C:\\user\\badImage\\"+pose_result+".jpg"));
+        String pose_result = Double.toString((randomValue * 100) + 1);
+        FileOutputStream out = new FileOutputStream(new File("C:\\user\\badImage\\" + pose_result + ".jpg"));
 
         byte[] charBuffer = new byte[128];
 

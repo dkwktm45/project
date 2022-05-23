@@ -1,5 +1,6 @@
 package com.example.project_2th.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -35,6 +36,7 @@ public class User {
     private String adComment;
     private int month;
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
     @ToString.Exclude

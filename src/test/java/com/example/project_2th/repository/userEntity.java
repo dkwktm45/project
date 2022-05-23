@@ -11,10 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.transaction.Transactional;
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 @Transactional
@@ -89,7 +86,5 @@ public class userEntity {
         exinfoList = exinfoRepository.findByExDay(day);
         exinfoList.forEach(System.out::println);
     }
-
-
 
 }

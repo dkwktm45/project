@@ -1,6 +1,7 @@
 package com.example.project_2th.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
 
@@ -25,9 +26,8 @@ public class UserExercies {
     private String exCount;
     private String cnt;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-
 }

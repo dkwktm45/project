@@ -1,10 +1,12 @@
 package com.example.project_2th.entity;
 
+// lombok.* 하면 필요없는 부분들 까지 import가 된다.
 import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
-
+// entity에는 setter를 하지 않는다.
+// --> 보존되어야하기 때문에!!!
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
