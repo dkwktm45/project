@@ -42,6 +42,7 @@ public class User {
     @ToString.Exclude
     private final List<UserExercies> userExerciesList = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
     @ToString.Exclude

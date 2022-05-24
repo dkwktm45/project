@@ -1,6 +1,7 @@
 package com.example.project_2th.entity;
 
 // lombok.* 하면 필요없는 부분들 까지 import가 된다.
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class UserCalendar {
     private String userWeight;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 

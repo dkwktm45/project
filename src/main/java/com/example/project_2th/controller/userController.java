@@ -40,29 +40,11 @@ public class userController {
 
     @Autowired
     private final UserVideoRepository userVideoRepository;
-//
-////    @Autowired
-////    private mainMapper mapper;
-////
-////    @RequestMapping("/admin.do")
-////    public String admin(HttpServletRequest req) {
-////
-////    }
-////
-////    @RequestMapping("/admin_member.do")
-////    public String admin_member(Model session) {
-////
-////    }
-////
-////    @RequestMapping("/extensionMember.do")
-////    public String extensionMember(guest memberVO,Model session) {
-////
-////    }
 
     // 기록페이지 re
     @GetMapping("/goRecord")
     public String goRecord(HttpServletRequest req) {
-        HttpSession session = req.getSession(true);
+        HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
         Long id = user.getUserId();
         List<UserExercieVideos> videoList = guestRepository.findByUserId(id).getExercieVideosList();

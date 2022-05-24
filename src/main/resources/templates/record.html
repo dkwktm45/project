@@ -28,29 +28,31 @@
                     success : function(result){
                         var html1;
                         var html2;
-                        log(result);
-/*
-
+                        var exinfo = result.exinfo;
+                        var postures = result.postures;
+                        log(postures);
+                        log(exinfo);
+                        $(".ttleft").text(exinfo.exName)
+                        if(postures.length !=""){
+                        $.each(postures,(index,obj)=>{
                                 if(index == 0 ){
                                     html1+="<div class='jase'>자세교정</div>";
                                 }
                                 html1+="<tr>";
                                 html1+="<td>";
-                                html1+="<div><img class='gdImg' src='/image/"+obj.pose_result+".jpg'></div>";
+                                html1+="<div><img class='gdImg' src='/resultImage/"+obj.poseResult+".png'></div>";
                                 html1+="</td>";
-                                html1+="<td>"+obj.ai_comment+"</td>";
+                                html1+="<td>"+obj.aiComment+"</td>";
                                 html1+="</tr>"
-
-
                             })
                         }else{
                             html1+="<div class='good'>자세 교정게 없네요?!?!<br>이번 운동은 정말 잘한거 같아요!!</div>";
-                            $(".record_wrap").css("height","58%");
-                            $(".record_wrap").css("top","30%");
+                            $(".record_wrap").css("height","69%");
+                            $(".record_wrap").css("top","26%");
                         }
 
                         $(".bottom1").html(html1);
-            */
+
                     }
                 });
             }
@@ -157,7 +159,7 @@
         <hr style="border: solid 5px gray;">
     </div>
 
-    <div class="record_middle" style="width:100%; height:950px;" align="center">
+    <div class="record_middle" style="width:100%; height:32%;" align="center">
         <div id="record_middle_content">
             <video class="videotag" src="/video/??.webm" id="video" controls>
                 <source src="/video/??.webm"/>

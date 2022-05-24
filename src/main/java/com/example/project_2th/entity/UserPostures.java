@@ -1,5 +1,6 @@
 package com.example.project_2th.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,11 +19,12 @@ public class UserPostures {
     @GeneratedValue
     private Long postureSeq;
 
-    private int video_time;
-    private String pose_result;
-    private String ai_comment;
+    private int videoTime;
+    private String poseResult;
+    private String aiComment;
 
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "video_seq")
     private UserExercieVideos userExercieVideos;
 

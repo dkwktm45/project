@@ -136,9 +136,6 @@ public class Restmember {
             System.out.println(e.getMessage());
             return null;
         }
-
-
-
     }
 
     @RequestMapping(value = "/insertBadImage.do", method = {RequestMethod.GET, RequestMethod.POST})
@@ -171,8 +168,8 @@ public class Restmember {
         }
 
         UserPostures userPostures = new UserPostures();
-        userPostures.setPose_result(pose_result);
-        userPostures.setAi_comment(ai_comment);
+        userPostures.setPoseResult(pose_result);
+        userPostures.setAiComment(ai_comment);
         userPostures.setUserExercieVideos(result);
 
         deepPosturesRepository.save(userPostures);

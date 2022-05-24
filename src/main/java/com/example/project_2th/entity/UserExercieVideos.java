@@ -1,5 +1,6 @@
 package com.example.project_2th.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class UserExercieVideos {
     private String videoDate;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -30,6 +32,7 @@ public class UserExercieVideos {
     private UserExercies userExercies;
 
     @OneToMany
+    @JsonBackReference
     @JoinColumn(name = "video_seq", insertable = false,updatable = false)
     @ToString.Exclude
     private List<UserPostures> userPostures= new ArrayList<>();
