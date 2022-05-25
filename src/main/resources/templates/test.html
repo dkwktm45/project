@@ -11,21 +11,23 @@
     <div class="modal_wrap">
         <div class="modal_main">
             <div class="modal_top">
-                <div id="NSK_font" style="font-size:80px;"><b><br th:text="${session.user.getUserName()}"></div>
+                <div id="NSK_font" style="font-size:80px;"><b><br>이진영 님</b></div>
                 <div class="modal_top_left">
-                    <div><br>만기일</div>
+                    <div id="NSK_font"><br>만기일</div>
                 </div>
                 <div class="modal_top_right">
-                    <div th:text="${session.user.getUserExpireDate()}"></div>
+                    <div id="NSK_font"><br>2021-12-07<br>D-day 30일</div>
                 </div>
             </div>
             <div class="modal_mid">
                 <div class="modal_mid_mid">
-                    <div class="modal_mid_left"><img id="moicon" src="image/diary.png" onclick="go_calender()"></div>
+                    <div class="modal_mid_left"><img id="moicon" src="image/diary.png" onclick="go_calender()">
+                    </div>
                     <div class="modal_mid_right"><b id="modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
                 </div>
                 <div class="modal_mid_mid">
-                    <div class="modal_mid_left"><img id="moicon" src="image/video.png" onclick="go_record()"></div>
+                    <div class="modal_mid_left"><img id="moicon" src="image/video.png" onclick="go_record()">
+                    </div>
                     <div class="modal_mid_right"><b id="modal_mid_b" onclick="go_record()">운동 영상</b></div>
                 </div>
             </div>
@@ -57,91 +59,95 @@
 
     <div class="main_bot">
         <div class="bot_left"><img class="bimg_left" src="image/woman.png"></div>
-        <div class="bot_right"><a href="http://localhost:8081/web/main.do"><img class="bimg_right" src="image/gym2.png"></a>
-        </div>
+        <div class="bot_right"><a href="http://localhost:8081/web/main.do"><img class="bimg_right"
+                                                                                src="image/gym2.png"></a></div>
     </div>
 
 </div>
-<script th:inline="javascript">
+<script>
     /*<![CDATA[*/
-    let exinfoList = [[${session.exinfo}]];
     let UserId = [[${session.user}]];
+    console.log(UserId)
     /*]]>*/
 
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         events: [],
-
         eventClick: function (info) {
 
             var dateSettings = {"year": "numeric", "month": "2-digit", "day": "2-digit"};
             var rentdate = calendar.formatDate(info.event.start, dateSettings);
-            rentdate = rentdate.replace("/","-");
-            rentdate = rentdate.replace("/","-");
 
-            year = rentdate.substr(6,9);
-            MD = rentdate.substr(0,5);
-            var resultDay = year+"-"+MD;
-/*
+            rentdate = rentdate.replace("/", "-");
+            rentdate = rentdate.replace("/", "-");
+            year = rentdate.substr(6, 9);
+            MD = rentdate.substr(0, 5);
 
+            var resultDay = year + "-" + MD;
             $.ajax({
-                url: "/calendarView?userId=" + UserId + "&exDay=" + resultDay,
+                url: "/calendarView.do?user_id=" + info.event.id + "&ex_date=" + resultDay,
                 type: "GET",
                 dataType: "json",
                 success: function (result) {
+
                     var html1;
-                    console.log(result);
                     $.each(result, (index, obj) => {
                         html1 += "<div class = 'modal2_top'>";
                         html1 += "<div class='modal2_top_top'>";
                         html1 += "<div class = 'modal2_top_left'>";
-                        html1 += "<div id='NSK_font'><b>" + obj.exName + "</b></div></div>";
+                        html1 += "<div id='NSK_font'><b>" + obj.ex_name + "</b></div></div>";
                         html1 += "<div class = 'modal2_top_right'>";
                         html1 += "</div>";
                         html1 += "</div>";
                         html1 += "<div id='NSK_font' class='modal2_top_bot'>";
-                        for (var i = obj.userSet; i > 0; i--) {
-                            html1 += "<div class='set1'>" + (obj.userSet - (i - 1)) + "set</div><div class='set2'>" + obj.userSet + "set</div>";
-                            html1 += "<div class='reps'>" + obj.exCount + "reps</div>";
-                            html1 += "<div class='reps2'>" + obj.exCount + "reps</div>";
+                        for (var i = obj.user_set; i > 0; i--) {
+                            html1 += "<div class='set1'>" + (obj.user_set - (i - 1)) + "set</div><div class='set2'>" + obj.user_set + "set</div>";
+                            html1 += "<div class='reps'>" + obj.ex_count + "reps</div>";
+                            html1 += "<div class='reps2'>" + obj.ex_count + "reps</div>";
 
                             if (i == 1) {
                                 html1 += "<div class='border'></div>";
                             }
                         }
+
+
+                        //html1+="<div class='set1'>"+(obj.user_set-2)+"set</div><div class='set2'>"+obj.user_set+"set</div>";
+                        //html1+="<div class='set1'>"+(obj.user_set-1)+"set</div><div class='set2'>"+obj.user_set+"set</div>";
+                        //html1+="<div class='set1'>"+(obj.user_set-0)+"set</div><div class='set2'>"+obj.user_set+"set</div>";
+
+                        //html1+="<br>"+obj.ex_count+"reps<br>"+obj.ex_count+"reps</div>";
+                        //html1+="<div class='reps2'>"+obj.ex_count+"reps<br>"+obj.ex_count+"reps";
+                        //html1+="<br>"+obj.ex_count+"reps<br>"+obj.ex_count+"reps</div>";
                         html1 += "</div>";
                         html1 += "</div>";
 
                     })
 
                     $(".modal2_wrap").html(html1);
-
                 },
                 error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             });
-*/
 
 
-            //console.log(info.event.start)
+            console.log(info.event.start)
             $('.modal2_wrap').css('display', 'block');
             $('.record_bg').css('display', 'block');
 
         }
     });
     calendar.render();
-
-
-    for (var i = 0; i < exinfoList.length; i++) {
+    for (var i = 0; i < [[${session.exinfo}]].length; i++) {
 
         calendar.addEvent({
-            id: UserId,
+            id: 1,
             start: "2022-05-16",
             title: 150 + "kal"
         });
     }
+
 
     function onClick2() {
         $('.modal2_wrap').css('display', 'block');
@@ -161,9 +167,13 @@
     });
 
 
-</script>
-<script type="text/javascript" th:inline="javascript">
+    /* var className = document.getElementsByClassName('fc-event-title-container');
+    for(var i = 0; i < className.length; i++){
+       className[i].addEventListener('click', onClick2, false);
+    } */
 
+</script>
+<script>
     function clickKal() {
         console.log("test")
     }
@@ -179,7 +189,22 @@
     document.querySelector("#modal_btn").addEventListener("click", show1);
     document.querySelector(".black_bg").addEventListener("click", close1);
 
+    /* function onClick2() {
+        document.querySelector('.modal2_wrap').style.display ='block';
+        document.querySelector('.record_bg').style.display ='block';
+    };
+    function offClick2() {
+        document.querySelector('.modal2_wrap').style.display ='none';
+        document.querySelector('.record_bg').style.display ='none';
+    }
+
+    var className = document.getElementsByClassName('fc-event-title-container');
+    for(var i = 0; i < className.length; i++){
+       className[i].addEventListener('click', onClick2, false);
+    }  */
+
     document.querySelector('.record_bg').addEventListener('click', offClick2);
+
 
     function go_record() {
         location.href = "/web/record.do?user_id=<%=member.getUser_id()%>";

@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public interface GuestRepository extends JpaRepository<User,Long> {
 
@@ -17,6 +20,9 @@ public interface GuestRepository extends JpaRepository<User,Long> {
 
     User findByUserPhoneAndUserGym(String userPhone, String userGym);
 
-    @EntityGraph(attributePaths = {"exercieVideosList"})
     User findByUserId(Long userId);
+
+    @EntityGraph(attributePaths = {"calendarList"})
+    @Query(value = "select u from User u")
+    List<User> findAllByFetchJoin();
 }

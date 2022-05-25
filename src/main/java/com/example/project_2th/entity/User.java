@@ -1,5 +1,6 @@
 package com.example.project_2th.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "user")
+@ToString(exclude = {"userExerciesList","calendarList","exercieVideosList"})
 public class User {
 
     @Id
@@ -25,7 +27,6 @@ public class User {
 
     private String userName;
     private String userPhone;
-    @Column(name = "user_gym")
     private String userGym;
     private Date userExpireDate;
     private String userBirthdate;
@@ -39,17 +40,14 @@ public class User {
     @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
-    @ToString.Exclude
     private final List<UserExercies> userExerciesList = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
-    @ToString.Exclude
     private final List<UserCalendar> calendarList = new ArrayList<>();
 
     @OneToMany
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
-    @ToString.Exclude
     private final List<UserExercieVideos> exercieVideosList = new ArrayList<>();
 }

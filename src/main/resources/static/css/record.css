@@ -364,8 +364,6 @@ h2{
 .select{
     position: relative;
     margin-left: 58px;
-    border-radius: 60px;
-    /* border:1px solid salmon; */
     background-color: white;
     background-repeat: no-repeat;
     background-position: 90% center;
@@ -377,10 +375,9 @@ h2{
 /* 옵션 영역 스타일 */
 .select ul{
     position: absolute;
-    top: 30px;
+    top: 58px;
     left: 0;
     width: 100%;
-    border:1px solid salmon;
     border-radius: 5px;
     background-color: white;
     cursor: pointer;

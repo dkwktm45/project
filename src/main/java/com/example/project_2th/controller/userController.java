@@ -14,13 +14,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import java.io.DataInput;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -41,6 +42,9 @@ public class userController {
     @Autowired
     private final UserVideoRepository userVideoRepository;
 
+    @Autowired
+    private final EntityManager em;
+
     // 기록페이지 re
     @GetMapping("/goRecord")
     public String goRecord(HttpServletRequest req) {
@@ -49,11 +53,11 @@ public class userController {
         Long id = user.getUserId();
         List<UserExercieVideos> videoList = guestRepository.findByUserId(id).getExercieVideosList();
         List<UserExercies> userExerciesList = new ArrayList<>();
-        for(int i = 0; i<videoList.size(); i++){
+        for (int i = 0; i < videoList.size(); i++) {
             userExerciesList.add(videoList.get(i).getUserExercies());
         }
-        session.setAttribute("exinfoList",userExerciesList);
-        session.setAttribute("videoList",videoList);
+        session.setAttribute("exinfoList", userExerciesList);
+        session.setAttribute("videoList", videoList);
 
         return "redirect:/record";
     }
@@ -71,38 +75,37 @@ public class userController {
     }
 
     // login -> main or admin
-    @PostMapping(value="/loginInsert")
-    public String memberLogin(@ModelAttribute User user, HttpServletResponse response, HttpSession session) throws Exception {
-        log.info("id : {},gym : {}", user.getUserPhone() , user.getUserGym());
+    @PostMapping(value = "/loginInsert")
+    public String memberLogin(@ModelAttribute User user, HttpServletRequest request) throws Exception {
+        log.info("id : {},gym : {}", user.getUserPhone(), user.getUserGym());
+        HttpSession session = request.getSession(true);
 
-        User loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
-        response.setHeader("Set-Cookie", "Test1=TestCookieValue1;   Secure; SameSite=None");
-        response.addHeader("Set-Cookie", "Test2=TestCookieValue2;  Secure;  SameSite=None");
-        response.addHeader("Set-Cookie", "Test3=TestCookieValue3;   Secure; SameSite=None");
+        User loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(), user.getUserGym());
+
         if (loginUser == null) {
             log.info("로그인 실패");
             return "redirect:/login";
-        }else{
-            if (loginUser.getManagerYn() == 1){
+        } else {
+            if (loginUser.getManagerYn() == 1) {
                 System.out.println("admin 로그인 성공");
-                session.setAttribute("user",loginUser);
+                session.setAttribute("user", loginUser);
                 return "redirect:/admin";
 
-            }else{
+            } else {
                 System.out.println("user 로그인 성공");
-                session.setAttribute("user",loginUser);
+                session.setAttribute("user", loginUser);
                 return "redirect:/main";
             }
         }
     }
 
     @GetMapping("/admin")
-    public String admin(){
+    public String admin() {
         return "admin";
     }
 
     @GetMapping("/main")
-    public String main(){
+    public String main() {
         return "main";
     }
 
@@ -113,24 +116,26 @@ public class userController {
     }
 
     // gocalender
-    @GetMapping(value="/infoCalender")
-    public String infoCalender(HttpServletRequest req){
 
-        HttpSession session = req.getSession(true);
+    @Transactional(readOnly = true)
+    @GetMapping(value = "/infoCalender")
+    public String infoCalender(HttpServletRequest req) {
+        HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
 
-        List<UserCalendar> exinfo = guestRepository
-                .findByUserId(user.getUserId())
-                .getCalendarList();
 
-        exinfo.forEach(System.out::println);
-        session.setAttribute("exinfo",exinfo);
+        List<User> users = guestRepository.findAllByFetchJoin();
+        List<UserCalendar> exinfo = users.get(Math.toIntExact(user.getUserId())-1).getCalendarList();
+        exinfo.getClass();
+        session.setAttribute("exinfo", exinfo);
+
+        exinfo.get(0).getExDay();
 
         return "redirect:test";
     }
 
-    @PostMapping(value="/insertEx")
-    public String insertEx( HttpServletRequest req) throws Exception {
+    @PostMapping(value = "/insertEx")
+    public String insertEx(HttpServletRequest req) throws Exception {
 
         UserExercieVideos userExercieVideos = new UserExercieVideos();
         UserExercies userExercies = new UserExercies();
@@ -150,11 +155,12 @@ public class userController {
 
         UserExercies exinfo = exinfoRepository.findByOne(user.getUserId(), req.getParameter("exName"));
 
-        session.setAttribute("exinfo",exinfo);
+        session.setAttribute("exinfo", exinfo);
 
         return "redirect:/cam.do";
 
     }
+
     @RequestMapping("/cam.do")
     public String cam() {
         return "cam";

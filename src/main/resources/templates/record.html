@@ -190,7 +190,6 @@
                         var inD = 'div_d'+index;
                         document.getElementById(inD).className = obj.ex_kinds;
                     });
-
                 }
             });
         }
@@ -340,7 +339,6 @@ const choice = document.querySelector('#choice');
 /* 셀렉트영역 클릭 시 옵션 숨기기, 보이기 */
 function selects(e){
     e.stopPropagation();
-    option.setAttribute('style',`top:${select.offsetHeight}px`)
     if(option.classList.contains('hide')){
         option.classList.remove('hide');
         option.classList.add('show');

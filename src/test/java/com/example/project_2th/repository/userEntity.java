@@ -9,9 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
 
 @SpringBootTest
 @Transactional
@@ -26,6 +29,9 @@ public class userEntity {
 
     @Autowired
     ExinfoRepository exinfoRepository;
+
+    @Autowired
+    EntityManager em;
 
     @Test
     void login(){
@@ -44,20 +50,13 @@ public class userEntity {
 
     @Test
     void calender(){
-        User user = new User();
-        user.setUserGym("해운대");
-        user.setUserPhone("49034");
 
-        guestRepository.save(user);
-
-        User userInfo = guestRepository.findByUserId(1L);
-
-        List<UserCalendar> result = guestRepository
-                .findByUserId(userInfo.getUserId())
-                .getCalendarList();
+        List<User> users = guestRepository.findAllByFetchJoin();
+        List<UserCalendar> calendars = users.get(0).getCalendarList();
 
 
-        result.forEach(System.out::println);
+        calendars.forEach(System.out::println);
+        assertNotNull("Object is null",calendars );
     }
 
     @Test

@@ -12,7 +12,6 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@ToString(callSuper = true)
 public class UserCalendar {
 
     @Id
@@ -26,7 +25,7 @@ public class UserCalendar {
 
     @ManyToOne
     @JsonBackReference
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id" ,nullable = false)
     private User user;
 
 }
