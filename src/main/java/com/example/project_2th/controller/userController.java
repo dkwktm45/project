@@ -17,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
@@ -119,17 +121,18 @@ public class userController {
 
     @Transactional(readOnly = true)
     @GetMapping(value = "/infoCalender")
-    public String infoCalender(HttpServletRequest req) {
+    public String infoCalender(HttpServletRequest req ,Model model) {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
 
 
+        ModelAndView mav = new ModelAndView();
+
         List<User> users = guestRepository.findAllByFetchJoin();
         List<UserCalendar> exinfo = users.get(Math.toIntExact(user.getUserId())-1).getCalendarList();
-        exinfo.getClass();
-        session.setAttribute("exinfo", exinfo);
 
-        exinfo.get(0).getExDay();
+
+        session.setAttribute("exinfo",exinfo);
 
         return "redirect:test";
     }

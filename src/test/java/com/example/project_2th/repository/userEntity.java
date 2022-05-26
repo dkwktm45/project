@@ -55,6 +55,7 @@ public class userEntity {
         List<UserCalendar> calendars = users.get(0).getCalendarList();
 
 
+        System.out.println(calendars.size());
         calendars.forEach(System.out::println);
         assertNotNull("Object is null",calendars );
     }

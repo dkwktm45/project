@@ -3,23 +3,18 @@ package com.example.project_2th.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
-import com.example.project_2th.entity.User;
-import com.example.project_2th.entity.UserExercieVideos;
-import com.example.project_2th.entity.UserExercies;
-import com.example.project_2th.entity.UserPostures;
+import com.example.project_2th.entity.*;
 import com.example.project_2th.repository.DeepPosturesRepository;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.GuestRepository;
@@ -27,9 +22,9 @@ import com.example.project_2th.repository.UserVideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 
 @RestController
@@ -72,7 +67,23 @@ public class Restmember {
         return exinfoList;
 
     }
+    /*
+    @GetMapping(value = "/infoCalender")
+    public List<UserCalendar> infoCalender(HttpServletRequest req , Model model) {
+        HttpSession session = req.getSession();
+        User user = (User) session.getAttribute("user");
 
+
+        ModelAndView mav = new ModelAndView();
+
+        List<User> users = guestRepository.findAllByFetchJoin();
+        List<UserCalendar> exinfo = users.get(Math.toIntExact(user.getUserId())-1).getCalendarList();
+
+
+        return exinfo;
+    }
+
+*/
     @Transactional
     @PostMapping(value = "insertExURL")
     public String insertExURL(HttpServletRequest req) throws Exception {

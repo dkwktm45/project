@@ -35,7 +35,7 @@ public class UserExercieVideos {
     @JsonBackReference
     @JoinColumn(name = "video_seq", insertable = false,updatable = false)
     @ToString.Exclude
-    private List<UserPostures> userPostures= new ArrayList<>();
+    private List<UserPostures> userPostures = new ArrayList<>();
 
     //getter 재정의를 통한 null 처리
     public List<UserPostures> getUserPostures(){
