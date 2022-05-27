@@ -18,9 +18,11 @@ import com.example.project_2th.repository.PosturesRepository;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -39,6 +41,9 @@ public class RestController {
 
     @Autowired
     private final PosturesRepository posturesRepository;
+
+    @Autowired
+    private final UserService userService;
 
     @GetMapping(value = "/calendarView")
     public List<Exercies> calendarView(String userId, Date exDay, HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -182,6 +187,7 @@ public class RestController {
 
         posturesRepository.save(postures);
     }
+
 
 }
 

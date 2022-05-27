@@ -12,6 +12,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "user_calendar")
 public class Calendar {
 
     @Id

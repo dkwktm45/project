@@ -1,5 +1,6 @@
 package com.example.project_2th.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "user")
-@ToString(exclude = {"userExerciesList","calendarList","exercieVideosList"})
+@ToString(exclude = {"exerciesList","calendarList","exercieVideosList"})
 public class User {
 
     @Id
@@ -35,7 +36,7 @@ public class User {
     private int month;
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
     private final List<Exercies> exerciesList = new ArrayList<>();
 

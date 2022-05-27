@@ -7,6 +7,8 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.service.ExerciesService;
+import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +33,10 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    private final UserRepository userRepository;
+    private final UserService userService;
+
+    @Autowired
+    private final ExerciesService exerciesService;
 
     @Autowired
     private final ExinfoRepository exinfoRepository;
@@ -46,14 +52,12 @@ public class MainController {
     public String goRecord(HttpServletRequest req) {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
-        Long id = user.getUserId();
-        List<ExerciesVideo> videoList = userRepository.findByUserId(id).getExercieVideosList();
-        List<Exercies> exerciesList = new ArrayList<>();
-        for (int i = 0; i < videoList.size(); i++) {
-            exerciesList.add(videoList.get(i).getExercies());
-        }
-        session.setAttribute("exinfoList", exerciesList);
-        session.setAttribute("videoList", videoList);
+
+        Map<String,Object> map = userService.infoRecord(user);
+
+
+        session.setAttribute("exinfoList", map.get("exinfoList"));
+        session.setAttribute("videoList", map.get("videoList"));
 
         return "redirect:/record";
     }
@@ -73,26 +77,9 @@ public class MainController {
     // login -> main or admin
     @PostMapping(value = "/loginInsert")
     public String memberLogin(@ModelAttribute User user, HttpServletRequest request) throws Exception {
-        log.info("id : {},gym : {}", user.getUserPhone(), user.getUserGym());
         HttpSession session = request.getSession(true);
-
-        User loginUser = userRepository.findByUserIdAndUserGym(user.getUserPhone(), user.getUserGym());
-
-        if (loginUser == null) {
-            log.info("로그인 실패");
-            return "redirect:/login";
-        } else {
-            if (loginUser.getManagerYn() == 1) {
-                System.out.println("admin 로그인 성공");
-                session.setAttribute("user", loginUser);
-                return "redirect:/admin";
-
-            } else {
-                System.out.println("user 로그인 성공");
-                session.setAttribute("user", loginUser);
-                return "redirect:/main";
-            }
-        }
+        User loginUser = userService.login(user.getUserPhone(), user.getUserGym());
+        return userService.filterLogin(loginUser,session);
     }
 
     @GetMapping("/admin")
@@ -112,49 +99,21 @@ public class MainController {
     }
 
     // gocalender
-
-    @Transactional(readOnly = true)
     @GetMapping(value = "/infoCalender")
     public String infoCalender(HttpServletRequest req ,Model model) {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
 
-
-        ModelAndView mav = new ModelAndView();
-
-        List<User> users = userRepository.findAllByFetchJoin();
-        List<Calendar> exinfo = users.get(Math.toIntExact(user.getUserId())-1).getCalendarList();
-
-
-        session.setAttribute("exinfo",exinfo);
+        session.setAttribute("exinfo",userService.infoCalendar(user));
 
         return "redirect:test";
     }
 
     @PostMapping(value = "/insertEx")
-    public String insertEx(HttpServletRequest req) throws Exception {
+    public String insertEx(@ModelAttribute("user_exercies") Exercies exercies) throws Exception {
+        exerciesService.exerciesInfo(exercies);
 
-        ExerciesVideo exerciesVideo = new ExerciesVideo();
-        Exercies exercies = new Exercies();
-        HttpSession session = req.getSession(true);
-        User user = (User) session.getAttribute("user");
-        System.out.println(user.getUserId());
-
-
-        exercies.setUser(user);
-        exercies.setUserSet(req.getParameter("userSet"));
-        exercies.setExCount(req.getParameter("exCount"));
-        exercies.setExName(req.getParameter("exName"));
-        exercies.setExKinds(req.getParameter("exKinds"));
-        exercies.setExDay(Date.valueOf(LocalDate.now()));
-
-        exinfoRepository.save(exercies);
-
-        Exercies exinfo = exinfoRepository.findByOne(user.getUserId(), req.getParameter("exName"));
-
-        session.setAttribute("exinfo", exinfo);
-
-        return "redirect:/cam.do";
+        return "redirect:cam.do";
 
     }
 

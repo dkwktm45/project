@@ -42,7 +42,7 @@
             <input type="number" name="exCount" id="ex_num2" placeholder="0"><b>회</b>
             <input type = "hidden" value = "체스트 플라이" name ="exName">
             <input type = "hidden" value = "가슴" name ="exKinds">
-            <input type = "hidden" th:value ="${session.user}" name ="user">
+            <input type = "hidden" th:value ="${session.user.getUserId}" name ="user">
             <input type = "submit" id="start" value = "제출">
         </form>
     </div>

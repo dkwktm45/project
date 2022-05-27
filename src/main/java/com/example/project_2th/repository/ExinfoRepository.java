@@ -11,7 +11,7 @@ import java.util.List;
 public interface ExinfoRepository extends JpaRepository<Exercies,Long> {
     List<Exercies> findByExDay(Date exDay);
 
-    @Query(value = "SELECT * FROM exercies uex " +
+    @Query(value = "SELECT * FROM user_exercies uex " +
             "where uex.user_id= (select user_id from user u " +
             "where u.user_id = :userId) and uex.ex_name = :exName order by uex.ex_day desc limit 1",nativeQuery = true)
     Exercies findByOne(
