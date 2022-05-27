@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "user_postures")
-public class UserPostures {
+public class Postures {
 
     @Id
     @GeneratedValue
@@ -26,6 +25,6 @@ public class UserPostures {
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "video_seq")
-    private UserExercieVideos userExercieVideos;
+    private ExerciesVideo exerciesVideo;
 
 }

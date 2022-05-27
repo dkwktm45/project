@@ -2,8 +2,8 @@ package com.example.project_2th.repository;
 
 
 import com.example.project_2th.entity.User;
-import com.example.project_2th.entity.UserCalendar;
-import com.example.project_2th.entity.UserExercies;
+import com.example.project_2th.entity.Calendar;
+import com.example.project_2th.entity.Exercies;
 import groovy.util.logging.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,10 @@ import static org.junit.Assert.assertNotNull;
 public class userEntity {
 
     @Autowired
-    GuestRepository guestRepository;
+    UserRepository userRepository;
 
     @Autowired
-    UserCalendarRepositroy userCalendarRepositroy;
+    CalendarRepositroy calendarRepositroy;
 
     @Autowired
     ExinfoRepository exinfoRepository;
@@ -39,9 +39,9 @@ public class userEntity {
         user.setUserGym("해운대");
         user.setUserPhone("49034");
 
-        guestRepository.save(user);
+        userRepository.save(user);
 
-        User user2 = guestRepository.findByUserPhoneAndUserGym("49034","해운대");
+        User user2 = userRepository.findByUserPhoneAndUserGym("49034","해운대");
 
         System.out.println(user2.getUserId());
 
@@ -51,8 +51,8 @@ public class userEntity {
     @Test
     void calender(){
 
-        List<User> users = guestRepository.findAllByFetchJoin();
-        List<UserCalendar> calendars = users.get(0).getCalendarList();
+        List<User> users = userRepository.findAllByFetchJoin();
+        List<Calendar> calendars = users.get(0).getCalendarList();
 
 
         System.out.println(calendars.size());
@@ -64,14 +64,14 @@ public class userEntity {
     void exinfo() {
         Date timestamp = Date.valueOf("2022-05-04");
 
-        List<UserExercies> result = guestRepository
+        List<Exercies> result = userRepository
                 .findByUserId(1L)
-                .getUserExerciesList();
+                .getExerciesList();
 
         result.forEach(System.out::println);
 
 
-        List<UserExercies> exinfoList = null;
+        List<Exercies> exinfoList = null;
         Date day = null;
         for(int i = 0; i < result.size(); i++){
             day = result.get(i).getExDay();

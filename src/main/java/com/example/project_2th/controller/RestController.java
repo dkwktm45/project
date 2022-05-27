@@ -11,46 +11,43 @@ import java.util.Map;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import com.example.project_2th.entity.*;
-import com.example.project_2th.repository.DeepPosturesRepository;
+import com.example.project_2th.repository.PosturesRepository;
 import com.example.project_2th.repository.ExinfoRepository;
-import com.example.project_2th.repository.GuestRepository;
-import com.example.project_2th.repository.UserVideoRepository;
+import com.example.project_2th.repository.UserRepository;
+import com.example.project_2th.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 
-@RestController
+@org.springframework.web.bind.annotation.RestController
 @RequiredArgsConstructor
 @Slf4j
-public class Restmember {
+public class RestController {
     @Autowired
-    private final GuestRepository guestRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     private final ExinfoRepository exinfoRepository;
 
     @Autowired
-    private final UserVideoRepository userVideoRepository;
+    private final VideoRepository videoRepository;
 
     @Autowired
-    private final DeepPosturesRepository deepPosturesRepository;
+    private final PosturesRepository posturesRepository;
 
     @GetMapping(value = "/calendarView")
-    public List<UserExercies> calendarView(String userId, Date exDay, HttpServletRequest req, HttpServletResponse res) throws Exception {
+    public List<Exercies> calendarView(String userId, Date exDay, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-        List<UserExercies> result = guestRepository
+        List<Exercies> result = userRepository
                 .findByUserId(Long.valueOf(userId))
-                .getUserExerciesList();
+                .getExerciesList();
 
-        List<UserExercies> exinfoList = null;
+        List<Exercies> exinfoList = null;
         Date day = null;
         for (int i = 0; i < result.size(); i++) {
             day = result.get(i).getExDay();
@@ -93,8 +90,8 @@ public class Restmember {
         Long user_id = Long.valueOf(req.getParameter("userId"));
         Long ex_seq = Long.valueOf(req.getParameter("exSeq"));
 
-        User user = guestRepository.findByUserId(user_id);
-        UserExercies userExercies = exinfoRepository.findByExSeq(ex_seq);
+        User user = userRepository.findByUserId(user_id);
+        Exercies exercies = exinfoRepository.findByExSeq(ex_seq);
 
         ServletInputStream input = req.getInputStream();
 
@@ -118,16 +115,16 @@ public class Restmember {
         System.out.println("저장 끝");
 
         // video 파일 저장
-        UserExercieVideos userExercieVideos = new UserExercieVideos();
-        userExercieVideos.setUser(user);
-        userExercieVideos.setFileName(file_name);
-        userExercieVideos.setUserExercies(userExercies);
+        ExerciesVideo exerciesVideo = new ExerciesVideo();
+        exerciesVideo.setUser(user);
+        exerciesVideo.setFileName(file_name);
+        exerciesVideo.setExercies(exercies);
 
-        userVideoRepository.save(userExercieVideos);
+        videoRepository.save(exerciesVideo);
 
         // cnt 데이터 update
-        userExercies.setCnt(cnt);
-        exinfoRepository.save(userExercies);
+        exercies.setCnt(cnt);
+        exinfoRepository.save(exercies);
 
         return "main";
     }
@@ -140,8 +137,8 @@ public class Restmember {
         try{
             Long Longseq = Long.valueOf(req.getParameter("videoSeq"));
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("exinfo", userVideoRepository.findByVideoSeq(Longseq).getUserExercies());
-            map.put("postures", userVideoRepository.findByVideoSeq(Longseq).getUserPostures());
+            map.put("exinfo", videoRepository.findByVideoSeq(Longseq).getExercies());
+            map.put("postures", videoRepository.findByVideoSeq(Longseq).getPostures());
             return map;
         }catch (IllegalStateException e ){
             System.out.println(e.getMessage());
@@ -160,9 +157,9 @@ public class Restmember {
 
         Long ex_seq = Long.valueOf(request.getParameter("ex_seq"));
 
-        UserExercies userExercies = exinfoRepository.findByExSeq(ex_seq);
+        Exercies exercies = exinfoRepository.findByExSeq(ex_seq);
 
-        UserExercieVideos result = userVideoRepository.findByUserExercies(userExercies);
+        ExerciesVideo result = videoRepository.findByExercies(exercies);
         //ServletInputStream input = request.getInputStream();
 
 
@@ -178,12 +175,12 @@ public class Restmember {
             out.write(bytesRead);
         }
 
-        UserPostures userPostures = new UserPostures();
-        userPostures.setPoseResult(pose_result);
-        userPostures.setAiComment(ai_comment);
-        userPostures.setUserExercieVideos(result);
+        Postures postures = new Postures();
+        postures.setPoseResult(pose_result);
+        postures.setAiComment(ai_comment);
+        postures.setExerciesVideo(result);
 
-        deepPosturesRepository.save(userPostures);
+        posturesRepository.save(postures);
     }
 
 }

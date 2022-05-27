@@ -1,10 +1,7 @@
 package com.example.project_2th.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -40,14 +37,14 @@ public class User {
     @JsonManagedReference
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
-    private final List<UserExercies> userExerciesList = new ArrayList<>();
+    private final List<Exercies> exerciesList = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
-    private final List<UserCalendar> calendarList = new ArrayList<>();
+    private final List<Calendar> calendarList = new ArrayList<>();
 
     @OneToMany
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
-    private final List<UserExercieVideos> exercieVideosList = new ArrayList<>();
+    private final List<ExerciesVideo> exercieVideosList = new ArrayList<>();
 }

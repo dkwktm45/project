@@ -12,7 +12,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class UserCalendar {
+public class Calendar {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동으로 숫자가 증가

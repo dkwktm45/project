@@ -3,7 +3,6 @@ package com.example.project_2th.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
-import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -14,7 +13,7 @@ import java.sql.Date;
 @Builder
 @Entity
 @Table(name = "user_exercies")
-public class UserExercies {
+public class Exercies {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

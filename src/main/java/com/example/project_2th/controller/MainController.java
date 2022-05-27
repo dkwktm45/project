@@ -1,30 +1,24 @@
 package com.example.project_2th.controller;
 
-import com.example.project_2th.entity.UserCalendar;
+import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.User;
-import com.example.project_2th.entity.UserExercieVideos;
-import com.example.project_2th.entity.UserExercies;
+import com.example.project_2th.entity.ExerciesVideo;
+import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.repository.ExinfoRepository;
-import com.example.project_2th.repository.GuestRepository;
-import com.example.project_2th.repository.UserVideoRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.project_2th.repository.UserRepository;
+import com.example.project_2th.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.DataInput;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,16 +27,16 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class userController {
+public class MainController {
 
     @Autowired
-    private final GuestRepository guestRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     private final ExinfoRepository exinfoRepository;
 
     @Autowired
-    private final UserVideoRepository userVideoRepository;
+    private final VideoRepository videoRepository;
 
     @Autowired
     private final EntityManager em;
@@ -53,12 +47,12 @@ public class userController {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
         Long id = user.getUserId();
-        List<UserExercieVideos> videoList = guestRepository.findByUserId(id).getExercieVideosList();
-        List<UserExercies> userExerciesList = new ArrayList<>();
+        List<ExerciesVideo> videoList = userRepository.findByUserId(id).getExercieVideosList();
+        List<Exercies> exerciesList = new ArrayList<>();
         for (int i = 0; i < videoList.size(); i++) {
-            userExerciesList.add(videoList.get(i).getUserExercies());
+            exerciesList.add(videoList.get(i).getExercies());
         }
-        session.setAttribute("exinfoList", userExerciesList);
+        session.setAttribute("exinfoList", exerciesList);
         session.setAttribute("videoList", videoList);
 
         return "redirect:/record";
@@ -82,7 +76,7 @@ public class userController {
         log.info("id : {},gym : {}", user.getUserPhone(), user.getUserGym());
         HttpSession session = request.getSession(true);
 
-        User loginUser = guestRepository.findByUserIdAndUserGym(user.getUserPhone(), user.getUserGym());
+        User loginUser = userRepository.findByUserIdAndUserGym(user.getUserPhone(), user.getUserGym());
 
         if (loginUser == null) {
             log.info("로그인 실패");
@@ -128,8 +122,8 @@ public class userController {
 
         ModelAndView mav = new ModelAndView();
 
-        List<User> users = guestRepository.findAllByFetchJoin();
-        List<UserCalendar> exinfo = users.get(Math.toIntExact(user.getUserId())-1).getCalendarList();
+        List<User> users = userRepository.findAllByFetchJoin();
+        List<Calendar> exinfo = users.get(Math.toIntExact(user.getUserId())-1).getCalendarList();
 
 
         session.setAttribute("exinfo",exinfo);
@@ -140,23 +134,23 @@ public class userController {
     @PostMapping(value = "/insertEx")
     public String insertEx(HttpServletRequest req) throws Exception {
 
-        UserExercieVideos userExercieVideos = new UserExercieVideos();
-        UserExercies userExercies = new UserExercies();
+        ExerciesVideo exerciesVideo = new ExerciesVideo();
+        Exercies exercies = new Exercies();
         HttpSession session = req.getSession(true);
         User user = (User) session.getAttribute("user");
         System.out.println(user.getUserId());
 
 
-        userExercies.setUser(user);
-        userExercies.setUserSet(req.getParameter("userSet"));
-        userExercies.setExCount(req.getParameter("exCount"));
-        userExercies.setExName(req.getParameter("exName"));
-        userExercies.setExKinds(req.getParameter("exKinds"));
-        userExercies.setExDay(Date.valueOf(LocalDate.now()));
+        exercies.setUser(user);
+        exercies.setUserSet(req.getParameter("userSet"));
+        exercies.setExCount(req.getParameter("exCount"));
+        exercies.setExName(req.getParameter("exName"));
+        exercies.setExKinds(req.getParameter("exKinds"));
+        exercies.setExDay(Date.valueOf(LocalDate.now()));
 
-        exinfoRepository.save(userExercies);
+        exinfoRepository.save(exercies);
 
-        UserExercies exinfo = exinfoRepository.findByOne(user.getUserId(), req.getParameter("exName"));
+        Exercies exinfo = exinfoRepository.findByOne(user.getUserId(), req.getParameter("exName"));
 
         session.setAttribute("exinfo", exinfo);
 
