@@ -19,6 +19,7 @@ import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
 import com.example.project_2th.service.ExerciesService;
+import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,8 @@ public class RestController {
     @Autowired
     private final ExerciesService exerciesService;
 
+    @Autowired
+    private final ExerciesVideoService exerciesVideoService;
     @Autowired
     private final UserRepository userRepository;
 
@@ -53,89 +56,25 @@ public class RestController {
     @GetMapping(value = "/calendarView")
     public List<Exercies> calendarView(@ModelAttribute Calendar calendar, HttpServletRequest req, HttpServletResponse res) throws Exception {
         List<Exercies> exinfoList = exerciesService.calendarExinfo(calendar);
-
         return exinfoList;
     }
-    /*
-    @GetMapping(value = "/infoCalender")
-    public List<UserCalendar> infoCalender(HttpServletRequest req , Model model) {
-        HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
-
-
-        ModelAndView mav = new ModelAndView();
-
-        List<User> users = guestRepository.findAllByFetchJoin();
-        List<UserCalendar> exinfo = users.get(Math.toIntExact(user.getUserId())-1).getCalendarList();
-
-
-        return exinfo;
-    }
-
-*/
-    @Transactional
     @PostMapping(value = "insertExURL")
     public String insertExURL(HttpServletRequest req) throws Exception {
-        System.out.println("저장할려는중");
-        //System.out.println(request.getParameter("cnt"));
         String cnt = req.getParameter("cnt");
         Long user_id = Long.valueOf(req.getParameter("userId"));
         Long ex_seq = Long.valueOf(req.getParameter("exSeq"));
+        ServletInputStream inputStream = req.getInputStream();
 
-        User user = userRepository.findByUserId(user_id);
-        Exercies exercies = exinfoRepository.findByExSeq(ex_seq);
-
-        ServletInputStream input = req.getInputStream();
-
-
-        double randomValue = Math.random();
-        String file_name = Double.toString((randomValue * 100) + 1);
-        FileOutputStream out = new FileOutputStream(new File("C:\\user\\projectVideo\\" + file_name + ".webm"));
-
-
-        byte[] charBuffer = new byte[128];
-
-        int bytesRead = -1;
-        while ((bytesRead = input.read(charBuffer)) > 0) {
-            //System.out.println("저장중");
-            out.write(charBuffer, 0, bytesRead);
-        }
-
-        input.close();
-        out.close();
-
-        System.out.println("저장 끝");
-
-        // video 파일 저장
-        ExerciesVideo exerciesVideo = new ExerciesVideo();
-        exerciesVideo.setUser(user);
-        exerciesVideo.setFileName(file_name);
-        exerciesVideo.setExercies(exercies);
-
-        videoRepository.save(exerciesVideo);
-
-        // cnt 데이터 update
-        exercies.setCnt(cnt);
-        exinfoRepository.save(exercies);
+        exerciesVideoService.videoSave(cnt,user_id,ex_seq,inputStream);
 
         return "main";
     }
 
     @GetMapping(value = "/insertPose")
-    @ResponseBody
-    @Transactional
     public Map<String, Object> getVideoinfo(HttpServletRequest req) throws Exception {
+        Long videoSeq = Long.valueOf(req.getParameter("videoSeq"));
 
-        try{
-            Long Longseq = Long.valueOf(req.getParameter("videoSeq"));
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("exinfo", videoRepository.findByVideoSeq(Longseq).getExercies());
-            map.put("postures", videoRepository.findByVideoSeq(Longseq).getPostures());
-            return map;
-        }catch (IllegalStateException e ){
-            System.out.println(e.getMessage());
-            return null;
-        }
+        return exerciesVideoService.selectVideoInfo(videoSeq);
     }
 
     @RequestMapping(value = "/insertBadImage.do", method = {RequestMethod.GET, RequestMethod.POST})

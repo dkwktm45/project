@@ -24,10 +24,8 @@ import java.util.List;
 @Slf4j
 public class ExerciesService {
 
-    @Autowired
     private final ExinfoRepository exinfoRepository;
 
-    @Autowired
     private final UserRepository userRepository;
 
     public Exercies exerciesInfo(Exercies exercies){

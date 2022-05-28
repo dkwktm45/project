@@ -68,7 +68,7 @@
     const log = console.log;
     /*<![CDATA[*/
     var exinfoList =/*[[${session.exinfo}]]*/;
-    var user =/*[[${session.user}]]*/;
+    var userinfo =/*[[${session.user}]]*/;
 
 
     /*]]*/
@@ -91,7 +91,7 @@
             $.ajax({
                 url: "/calendarView",
                 type: "POST",
-                data: {userId : user.userId, exDay : resultDay},
+                data: {user : userinfo, exDay : resultDay},
                 dataType: "json",
                 success: function (result) {
                     var html1;
@@ -139,7 +139,7 @@
     for (var i = 0; i < exinfoList.length; i++) {
 
         calendar.addEvent({
-            id: user.userId,
+            id: userinfo.userId,
             start: exinfoList[i].exDay,
             title: 150 + "kal"
         });

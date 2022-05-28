@@ -37,10 +37,8 @@
 
   <!-- <img src="http://localhost:8080/video_feed"> -->
   <img id="image" width=820 height=550 src="" />
-  <script>
+  <script type="text/javascript" >
 
-
-    var name = "[[${session.exinfo.exName}]]";
 
     // 중지 버튼
     const stopButton = document.querySelector(".stop-button")
@@ -78,11 +76,14 @@
         recordedChunks.push(e.data)
         console.log("밖에있는 cnt : "+cnt);
         const b = new Blob(recordedChunks,{ type: "video/webm"});
-
+        var data = new FormData();
+        data.append('user', userinfo);
+        data.append('pwd', 'password');
         url = "/insertExURL?userId="+[[${session.user.userId}]]+"&ex_seq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
 
         var oReq = new XMLHttpRequest();
         oReq.open("POST", url, true);
+        oreq.send(data)
         oReq.onload = function (oEvent) {
           // Uploaded.
           if (oReq.status == 200){
