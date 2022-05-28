@@ -38,14 +38,6 @@ public class MainController {
     @Autowired
     private final ExerciesService exerciesService;
 
-    @Autowired
-    private final ExinfoRepository exinfoRepository;
-
-    @Autowired
-    private final VideoRepository videoRepository;
-
-    @Autowired
-    private final EntityManager em;
 
     // 기록페이지 re
     @GetMapping("/goRecord")

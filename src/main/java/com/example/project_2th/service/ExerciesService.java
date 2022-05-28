@@ -25,10 +25,10 @@ import java.util.List;
 public class ExerciesService {
 
     @Autowired
-    private ExinfoRepository exinfoRepository;
+    private final ExinfoRepository exinfoRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public Exercies exerciesInfo(Exercies exercies){
 
@@ -39,22 +39,7 @@ public class ExerciesService {
     }
 
     public List<Exercies> calendarExinfo(Calendar calendar){
-
-        List<Exercies> result = userRepository
-                .findByUserId(calendar.getUser().getUserId())
-                .getExerciesList();
-
-        Date day = null;
-        for (int i = 0; i < result.size(); i++) {
-            day = result.get(i).getExDay();
-            if (day.equals(calendar.getExDay())) {
-                System.out.println(day);
-                day = calendar.getExDay();
-                break;
-            }
-        }
-
-        List<Exercies> exinfoList = exinfoRepository.findByExDay(day);
+        List<Exercies> exinfoList = exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay());
         return exinfoList;
     }
 }

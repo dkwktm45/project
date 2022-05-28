@@ -60,31 +60,5 @@ public class userEntity {
         assertNotNull("Object is null",calendars );
     }
 
-    @Test
-    void exinfo() {
-        Date timestamp = Date.valueOf("2022-05-04");
-
-        List<Exercies> result = userRepository
-                .findByUserId(1L)
-                .getExerciesList();
-
-        result.forEach(System.out::println);
-
-
-        List<Exercies> exinfoList = null;
-        Date day = null;
-        for(int i = 0; i < result.size(); i++){
-            day = result.get(i).getExDay();
-            System.out.println(day);
-            if (day.equals(timestamp)) {
-                System.out.println(day);
-                day = timestamp;
-                break;
-            }
-        }
-
-        exinfoList = exinfoRepository.findByExDay(day);
-        exinfoList.forEach(System.out::println);
-    }
 
 }

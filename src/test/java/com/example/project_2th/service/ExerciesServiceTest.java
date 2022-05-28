@@ -33,6 +33,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -85,20 +86,14 @@ public class ExerciesServiceTest {
     @DisplayName("운동의 대한 정보를 가져온다.")
     void test3() {
         User user = userService.login("4903", "해운대");
-        String myString = "20210101";
-        SimpleDateFormat dtFormat = new SimpleDateFormat("yyyyMMdd");
-        Date myDate = null;
-        try {
-            myDate = (Date) dtFormat.parse(myString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(myDate);/*
+        String myString = "2022-05-16";
+        Date date = Date.valueOf(myString);
 
         Calendar calendar = new Calendar();
         calendar.setUser(user);
-        calendar.setExDay();
-*/
+        calendar.setExDay(date);
+
+        List<Exercies> exercies =  exerciesService.calendarExinfo(calendar);
+        System.out.println(exercies);
     }
 }

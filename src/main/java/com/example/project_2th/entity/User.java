@@ -50,4 +50,5 @@ public class User {
     @OneToMany
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
     private final List<ExerciesVideo> exercieVideosList = new ArrayList<>();
+
 }
