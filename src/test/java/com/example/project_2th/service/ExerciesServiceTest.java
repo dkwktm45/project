@@ -1,11 +1,13 @@
 package com.example.project_2th.service;
 
 import com.example.project_2th.controller.MainController;
+import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
 import groovy.util.logging.Slf4j;
+import org.assertj.core.util.DateUtil;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,6 +30,8 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
@@ -74,5 +78,27 @@ public class ExerciesServiceTest {
         System.out.println(exinfo);
 
         em.close();
+    }
+
+    @Transactional
+    @Test
+    @DisplayName("운동의 대한 정보를 가져온다.")
+    void test3() {
+        User user = userService.login("4903", "해운대");
+        String myString = "20210101";
+        SimpleDateFormat dtFormat = new SimpleDateFormat("yyyyMMdd");
+        Date myDate = null;
+        try {
+            myDate = (Date) dtFormat.parse(myString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(myDate);/*
+
+        Calendar calendar = new Calendar();
+        calendar.setUser(user);
+        calendar.setExDay();
+*/
     }
 }

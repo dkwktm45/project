@@ -18,6 +18,7 @@ import com.example.project_2th.repository.PosturesRepository;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class RestController {
+
+    @Autowired
+    private final ExerciesService exerciesService;
+
     @Autowired
     private final UserRepository userRepository;
 
@@ -46,28 +51,10 @@ public class RestController {
     private final UserService userService;
 
     @GetMapping(value = "/calendarView")
-    public List<Exercies> calendarView(String userId, Date exDay, HttpServletRequest req, HttpServletResponse res) throws Exception {
-
-        List<Exercies> result = userRepository
-                .findByUserId(Long.valueOf(userId))
-                .getExerciesList();
-
-        List<Exercies> exinfoList = null;
-        Date day = null;
-        for (int i = 0; i < result.size(); i++) {
-            day = result.get(i).getExDay();
-            if (day.equals(exDay)) {
-                System.out.println(day);
-                day = exDay;
-                break;
-            }
-        }
-
-        exinfoList = exinfoRepository.findByExDay(day);
-
+    public List<Exercies> calendarView(@ModelAttribute Calendar calendar, HttpServletRequest req, HttpServletResponse res) throws Exception {
+        List<Exercies> exinfoList = exerciesService.calendarExinfo(calendar);
 
         return exinfoList;
-
     }
     /*
     @GetMapping(value = "/infoCalender")

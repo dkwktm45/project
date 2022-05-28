@@ -65,6 +65,7 @@
 
 </div>
 <script type="text/javascript" th:inline="javascript">
+    const log = console.log;
     /*<![CDATA[*/
     var exinfoList =/*[[${session.exinfo}]]*/;
     var user =/*[[${session.user}]]*/;
@@ -75,57 +76,51 @@
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         events: [],
+
         eventClick: function (info) {
 
             var dateSettings = {"year": "numeric", "month": "2-digit", "day": "2-digit"};
             var rentdate = calendar.formatDate(info.event.start, dateSettings);
+            rentdate = rentdate.replace("/","-");
+            rentdate = rentdate.replace("/","-");
 
-            rentdate = rentdate.replace("/", "-");
-            rentdate = rentdate.replace("/", "-");
-            year = rentdate.substr(6, 9);
-            MD = rentdate.substr(0, 5);
+            year = rentdate.substr(6,9);
+            MD = rentdate.substr(0,5);
+            var resultDay = year+"-"+MD;
 
-            var resultDay = year + "-" + MD;
             $.ajax({
-                url: "/calendarView.do?user_id=" + info.event.id + "&ex_date=" + resultDay,
-                type: "GET",
+                url: "/calendarView",
+                type: "POST",
+                data: {userId : user.userId, exDay : resultDay},
                 dataType: "json",
                 success: function (result) {
-
                     var html1;
+                    console.log(result);
                     $.each(result, (index, obj) => {
                         html1 += "<div class = 'modal2_top'>";
                         html1 += "<div class='modal2_top_top'>";
                         html1 += "<div class = 'modal2_top_left'>";
-                        html1 += "<div id='NSK_font'><b>" + obj.ex_name + "</b></div></div>";
+                        html1 += "<div id='NSK_font'><b>" + obj.exName + "</b></div></div>";
                         html1 += "<div class = 'modal2_top_right'>";
                         html1 += "</div>";
                         html1 += "</div>";
                         html1 += "<div id='NSK_font' class='modal2_top_bot'>";
-                        for (var i = obj.user_set; i > 0; i--) {
-                            html1 += "<div class='set1'>" + (obj.user_set - (i - 1)) + "set</div><div class='set2'>" + obj.user_set + "set</div>";
-                            html1 += "<div class='reps'>" + obj.ex_count + "reps</div>";
-                            html1 += "<div class='reps2'>" + obj.ex_count + "reps</div>";
+                        for (var i = obj.userSet; i > 0; i--) {
+                            html1 += "<div class='set1'>" + (obj.userSet - (i - 1)) + "set</div><div class='set2'>" + obj.userSet + "set</div>";
+                            html1 += "<div class='reps'>" + obj.exCount + "reps</div>";
+                            html1 += "<div class='reps2'>" + obj.exCount + "reps</div>";
 
                             if (i == 1) {
                                 html1 += "<div class='border'></div>";
                             }
                         }
-
-
-                        //html1+="<div class='set1'>"+(obj.user_set-2)+"set</div><div class='set2'>"+obj.user_set+"set</div>";
-                        //html1+="<div class='set1'>"+(obj.user_set-1)+"set</div><div class='set2'>"+obj.user_set+"set</div>";
-                        //html1+="<div class='set1'>"+(obj.user_set-0)+"set</div><div class='set2'>"+obj.user_set+"set</div>";
-
-                        //html1+="<br>"+obj.ex_count+"reps<br>"+obj.ex_count+"reps</div>";
-                        //html1+="<div class='reps2'>"+obj.ex_count+"reps<br>"+obj.ex_count+"reps";
-                        //html1+="<br>"+obj.ex_count+"reps<br>"+obj.ex_count+"reps</div>";
                         html1 += "</div>";
                         html1 += "</div>";
 
                     })
 
                     $(".modal2_wrap").html(html1);
+
                 },
                 error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -133,7 +128,7 @@
             });
 
 
-            console.log(info.event.start)
+            //console.log(info.event.start)
             $('.modal2_wrap').css('display', 'block');
             $('.record_bg').css('display', 'block');
 
@@ -141,6 +136,14 @@
     });
     calendar.render();
 
+    for (var i = 0; i < exinfoList.length; i++) {
+
+        calendar.addEvent({
+            id: user.userId,
+            start: exinfoList[i].exDay,
+            title: 150 + "kal"
+        });
+    }
 
     function onClick2() {
         $('.modal2_wrap').css('display', 'block');

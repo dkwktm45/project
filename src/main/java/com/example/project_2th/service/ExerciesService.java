@@ -1,10 +1,12 @@
 package com.example.project_2th.service;
 
 
+import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
+import com.example.project_2th.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional
@@ -24,6 +27,8 @@ public class ExerciesService {
     @Autowired
     private ExinfoRepository exinfoRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
     public Exercies exerciesInfo(Exercies exercies){
 
@@ -31,5 +36,25 @@ public class ExerciesService {
         exinfoRepository.save(exercies);
         Exercies exinfo = exinfoRepository.findByOne(exercies.getUser().getUserId(), exercies.getExName());
         return exinfo;
+    }
+
+    public List<Exercies> calendarExinfo(Calendar calendar){
+
+        List<Exercies> result = userRepository
+                .findByUserId(calendar.getUser().getUserId())
+                .getExerciesList();
+
+        Date day = null;
+        for (int i = 0; i < result.size(); i++) {
+            day = result.get(i).getExDay();
+            if (day.equals(calendar.getExDay())) {
+                System.out.println(day);
+                day = calendar.getExDay();
+                break;
+            }
+        }
+
+        List<Exercies> exinfoList = exinfoRepository.findByExDay(day);
+        return exinfoList;
     }
 }

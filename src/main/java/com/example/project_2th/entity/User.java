@@ -1,6 +1,7 @@
 package com.example.project_2th.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "user")
+@JsonIgnoreProperties(value = {"exerciesList","calendarList","exercieVideosList"} , allowSetters = true)
 @ToString(exclude = {"exerciesList","calendarList","exercieVideosList"})
 public class User {
 
