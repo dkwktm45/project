@@ -11,24 +11,47 @@
   <div class="modal_wrap">
     <div class="modal_main">
       <div class = "modal_top">
-        <div style = "font-size:80px;"><b style="font-size: 80px;"><br th:text="${session.user?.getUserName()}"></div>
+        <div style = "font-size:80px;"><b style="font-size: 54px;">
+          <br th:if="${session.user?.getManagerYn() == 0}" th:text="${session.user?.getUserName()} + ' 님'"></div>
+          <br th:if="${session.user?.getManagerYn() == 1}" th:text="${session.user?.getUserName()}+' 트레이너님'"></div>
+      <div th:if="${session.user?.getManagerYn() == 0}">
         <div class = "modal_top_left">
-          <div>만기일</div>
-        </div>
-        <div class = "modal_top_right">
-          <div th:text="${session.user?.getUserExpireDate()}"></div>
-        </div>
-      </div>
-      <div class = "modal_mid">
-        <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick="go_calender()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
-        </div>
-        <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/video.png" onclick="go_record()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_record()">운동 영상</b></div>
+            <div>만기일</div>
+          </div>
+          <div class = "modal_top_right">
+            <div th:text="${session.user?.getUserExpireDate()}"></div>
+          </div>
         </div>
       </div>
+      <div th:if="${session.user?.getManagerYn() == 1}"></div>
+    <th:block th:if = "${session.user?.getManagerYn() == 1 }">
+      <div class = "modal_mid" >
+        <div class = "modal_mid_mid">
+          <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick = "gomember()"></div>
+          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_member()">회원 관리</b></div>
+        </div>
+        <div class = "modal_mid_mid">
+          <div class = "modal_mid_left"><img id="moicon" src="image/dumbbell.png" onclick = "gojoin()"></div>
+          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_join()">회원 가입</b></div>
+        </div>
+        <div class = "modal_mid_mid">
+          <div class = "modal_mid_left"><img id="moicon" src="image/training.png" onclick = "gorecord()"></div>
+          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_record()">회원 영상</b></div>
+        </div>
+      </div>
+    </th:block>
+    <th:block th:unless = "${session.user?.getManagerYn() == 1 }">
+        <div class = "modal_mid">
+          <div class = "modal_mid_mid">
+            <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick="go_calender()"></div>
+            <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
+          </div>
+          <div class = "modal_mid_mid">
+            <div class = "modal_mid_left"><img id="moicon" src="image/video.png" onclick="go_record()"></div>
+            <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_record()">운동 영상</b></div>
+          </div>
+        </div>
+    </th:block>
       <div class = "modal_bot">
         <div>고객센터     010-4903-4073</div>
       </div>

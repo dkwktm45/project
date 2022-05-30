@@ -1,0 +1,23 @@
+.main_top {
+    width:100%;
+    height:8%;
+    background-color : white;
+}
+
+.top_left{
+    float:left;
+    width:80%;
+    height:100%;
+}
+
+.top_right{
+    position:relative;
+    float:right;
+    width:20%;
+    height:100%;
+}
+
+#modal_btn{
+    position:relative;
+    top:20%;
+}

@@ -43,7 +43,6 @@ public class RestController {
     @Autowired
     private final PostruesService postruesService;
 
-
     @GetMapping(value = "/calendarView")
     public List<Exercies> calendarView(@ModelAttribute Calendar calendar, HttpServletRequest req, HttpServletResponse res) throws Exception {
         List<Exercies> exinfoList = exerciesService.calendarExinfo(calendar);

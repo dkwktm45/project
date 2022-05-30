@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>admin page</title>
@@ -7,10 +9,12 @@
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
   <script src="https://unpkg.com/tippy.js@6"></script>
+  <link rel="stylesheet" th:href="@{/css/side/modal.css}" >
+  <script th:src="@{/js/side/modal.js}"></script>
   <link rel="stylesheet" href="/css/admin.css">
   <script>
     window.onload = function() {
-
+/*
       <%  List<videoDT> memberVideo = (List<videoDT>) session.getAttribute("memberVideo");%>
     <%for(int i =0; i<memberVideo.size(); i++){%>
         $.ajax({
@@ -28,8 +32,9 @@
           }
         });
         <%}%>
-
+*/
       function show1 () {
+        console.log("들어옴")
         document.querySelector(".black_bg").className = "black_bg show1";
       }
       function close1 () {
@@ -94,72 +99,14 @@
       bir = document.getElementById("dates");
       bir.value = today;
 
-
-      <%  guest member = (guest) session.getAttribute("member");%>
-
     }
-
-    function go_main() { /* 아이콘 누르면 메인으로 */
-      location.href = "/web/main.do";
-    }
-    function go_calender(){
-      location.href = "/web/test.do";
-    }
-
-    function gomember(){
-      location.href =  "/web/admin_member.do";
-    }
-
-    function gojoin(){
-      location.href =  "/web/join.do";
-    }
-
-    function gorecord(){
-      location.href =  "/web/admin.do";
-    }
-
-    function go_record(){
-      location.href = "/web/record.do?user_id="+<%=member.getUser_id()%>;
-    }
-
-
-
   </script>
 
 </head>
 <body>
-<div class="black_bg">
-  <div class="modal_wrap">
-    <div class="modal_main">
-      <div class = "modal_top">
-        <div id="NSK_font" style = "font-size:80px;"><b><br>이진영 님</b></div>
-        <div class = "modal_top_left">
-          <div id="NSK_font"><br>만기일</div>
-        </div>
-        <div class = "modal_top_right">
-          <div id="NSK_font"><br>2021-12-07<br>D-day 30일</div>
-        </div>
-      </div>
-      <div class = "modal_mid">
-        <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick = "gomember()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "gomember()">회원 관리</b></div>
-        </div>
-        <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/dumbbell.png" onclick = "gojoin()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "gojoin()">회원 가입</b></div>
-        </div>
-        <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/training.png" onclick = "gorecord()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "gorecord()">회원 영상</b></div>
-        </div>
-      </div>
-      <div class = "modal_bot">
-        <div id="NSK_font">고객센터     010-4903-4073</div>
-      </div>
-    </div>
-  </div>
-</div>
+<th:block th:replace="sidebar/modal :: sideModal">
+  <th:block layout:fragment="script"></th:block>
+</th:block>
 <div class="record_bg"></div>
 <div class="record_wrap">
   <div class="record_top" style="width:100%; height:200px;">
@@ -181,17 +128,8 @@
   <div style="width:70%; height:100px;"> </div>
 </div>
 <div class="main_map">
-
-
-  <div class="main_top" style = "text-align : center;">
-    <div class="top_left">
-      <h1 style = "font-size:80px;">The Ai Fitness</h1>
-    </div>
-    <div class="top_right">
-      <img id="modal_btn" src="image/menu.png"
-           style="width: 120px; height: 120px;">
-    </div>
-  </div>
+  <th:block th:replace="top/top :: topModal">
+  </th:block>
   <script>
     function test(){
       $.ajax({
@@ -227,9 +165,6 @@
     }
 
 
-    <%-- $.ajax({
-      url : /web/dateVideo.do?user_id=<%=member.getUser_id()%>&video_date="+DATE,
-    }) --%>
   </script>
   <div class="main_mid">
     <div class="mid_top">
@@ -357,7 +292,6 @@ const choice = document.querySelector('#choice');
 /* 셀렉트영역 클릭 시 옵션 숨기기, 보이기 */
 function selects(e){
   e.stopPropagation();
-  option.setAttribute('style',`top:${select.offsetHeight}px`)
   if(option.classList.contains('hide')){
     option.classList.remove('hide');
     option.classList.add('show');
