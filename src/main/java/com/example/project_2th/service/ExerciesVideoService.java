@@ -3,8 +3,10 @@ package com.example.project_2th.service;
 
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
+import com.example.project_2th.entity.Postures;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
+import com.example.project_2th.repository.PosturesRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -37,8 +40,8 @@ public class ExerciesVideoService {
         User user = userRepository.findByUserId(user_id);
         Exercies exercies = exinfoRepository.findByExSeq(ex_seq);
 
-        double randomValue = Math.random();
-        String file_name = Double.toString((randomValue * 100) + 1);
+        UUID uuid = UUID.randomUUID();
+        String file_name = uuid.toString() + "_" +exercies.getExName();
         FileOutputStream out = new FileOutputStream(new File("C:\\user\\projectVideo\\" + file_name + ".webm"));
 
         byte[] charBuffer = new byte[128];
@@ -69,10 +72,11 @@ public class ExerciesVideoService {
 
     public Map<String, Object> selectVideoInfo(Long videoSeq){
         try{
+            ExerciesVideo videoInfo = videoRepository.findByVideoSeq(videoSeq);
             Map<String, Object> map = new HashMap<String, Object>();
-            map.put("exinfo", videoRepository.findByVideoSeq(videoSeq).getExercies());
-            System.out.println("======================================");
-            map.put("postures", videoRepository.findByVideoSeq(videoSeq).getPostures());
+            map.put("exinfo", videoInfo.getExercies());
+            map.put("postures", videoInfo.getPostures());
+
             return map;
 
         }catch (IllegalStateException e ){

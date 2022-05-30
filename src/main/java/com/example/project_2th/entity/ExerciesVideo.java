@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Builder
-@ToString(callSuper = true)
+@ToString(exclude = {"user","exercies","postures"})
 @Table(name = "user_exercies_videos")
 public class ExerciesVideo {
     @Id
@@ -23,7 +23,7 @@ public class ExerciesVideo {
     private String fileName;
     private String videoDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
@@ -36,7 +36,6 @@ public class ExerciesVideo {
     @OneToMany
     @JsonBackReference
     @JoinColumn(name = "video_seq", insertable = false,updatable = false)
-    @ToString.Exclude
     private List<Postures> postures = new ArrayList<>();
 
     //getter 재정의를 통한 null 처리

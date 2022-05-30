@@ -20,6 +20,7 @@ import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
+import com.example.project_2th.service.PostruesService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,20 +39,10 @@ public class RestController {
 
     @Autowired
     private final ExerciesVideoService exerciesVideoService;
-    @Autowired
-    private final UserRepository userRepository;
 
     @Autowired
-    private final ExinfoRepository exinfoRepository;
+    private final PostruesService postruesService;
 
-    @Autowired
-    private final VideoRepository videoRepository;
-
-    @Autowired
-    private final PosturesRepository posturesRepository;
-
-    @Autowired
-    private final UserService userService;
 
     @GetMapping(value = "/calendarView")
     public List<Exercies> calendarView(@ModelAttribute Calendar calendar, HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -80,38 +71,14 @@ public class RestController {
     @RequestMapping(value = "/insertBadImage.do", method = {RequestMethod.GET, RequestMethod.POST})
     public void insertBadImage(HttpServletRequest request) throws Exception {
 
-        //String fileName = file.getOriginalFilename();
-        //System.out.print(request.getParameter("data"));
         System.out.println(request.getParameter("ai_comment"));
 
         String ai_comment = request.getParameter("ai_comment");
 
         Long ex_seq = Long.valueOf(request.getParameter("ex_seq"));
 
-        Exercies exercies = exinfoRepository.findByExSeq(ex_seq);
+        postruesService.badeImage(ai_comment,ex_seq);
 
-        ExerciesVideo result = videoRepository.findByExercies(exercies);
-        //ServletInputStream input = request.getInputStream();
-
-
-        double randomValue = Math.random();
-        String pose_result = Double.toString((randomValue * 100) + 1);
-        FileOutputStream out = new FileOutputStream(new File("C:\\user\\badImage\\" + pose_result + ".jpg"));
-
-        byte[] charBuffer = new byte[128];
-
-        int bytesRead = 0;
-        while ((bytesRead = System.in.read()) != -1) {
-            //System.out.println("저장중");
-            out.write(bytesRead);
-        }
-
-        Postures postures = new Postures();
-        postures.setPoseResult(pose_result);
-        postures.setAiComment(ai_comment);
-        postures.setExerciesVideo(result);
-
-        posturesRepository.save(postures);
     }
 
 

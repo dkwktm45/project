@@ -26,6 +26,7 @@ public class Exercies {
     private String cnt;
 
     @JsonBackReference
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
