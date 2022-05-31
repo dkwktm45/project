@@ -55,6 +55,7 @@ public class RestController {
 
     @PostMapping(value = "insertExURL")
     public String insertExURL(HttpServletRequest req) throws Exception {
+        System.out.println("controller 진입");
         String cnt = req.getParameter("cnt");
         Long user_id = Long.valueOf(req.getParameter("userId"));
         Long ex_seq = Long.valueOf(req.getParameter("exSeq"));
@@ -88,17 +89,17 @@ public class RestController {
     //========================================================================
 
 
-    @PostMapping(value = "memberExinfo")
+    @PostMapping(value = "/memberExinfo")
     public List<Exercies> memberExinfo(HttpSession session, HttpServletRequest req) throws Exception {
-        session = req.getSession();
-        return userService.findExercies((User) session.getAttribute("user"));
+        String exKinds = req.getParameter("exKinds");
+        return exerciesService.findExercies(exKinds);
     }
 
 
-    @PostMapping(value = "dateVideo")
+    @PostMapping(value = "/dateVideo")
     public List<ExerciesVideo> dateVideo(HttpSession session, HttpServletRequest req) throws Exception {
         session = req.getSession();
-        return exerciesVideoService.dateList((User)session.getAttribute("user"),
+        return exerciesVideoService.dateList((User)session.getAttribute("userList"),
                 (Date) req.getAttribute("videoDate"));
     }
 }

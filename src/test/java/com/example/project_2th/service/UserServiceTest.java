@@ -75,7 +75,7 @@ public class UserServiceTest {
     @Test
     void test4(){
         User user = userService.login("4903","해운대");
-        userService.findExercies(user).forEach(System.out::println);
+        //userService.findExercies(user).forEach(System.out::println);
 
     }
 

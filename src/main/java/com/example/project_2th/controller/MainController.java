@@ -102,8 +102,11 @@ public class MainController {
     }
 
     @PostMapping(value = "/insertEx")
-    public String insertEx(@ModelAttribute("user_exercies") Exercies exercies) throws Exception {
-        exerciesService.exerciesInfo(exercies);
+    public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,HttpServletRequest req) throws Exception {
+        HttpSession session = req.getSession();
+
+
+        session.setAttribute("exinfo",exerciesService.exerciesInfo(exercies));
 
         return "redirect:cam.do";
 

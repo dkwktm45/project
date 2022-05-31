@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Postures {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postureSeq;
 
     private int videoTime;

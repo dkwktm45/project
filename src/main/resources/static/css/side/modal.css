@@ -52,7 +52,7 @@
 }
 .modal_top{
     width:100%;
-    height:30%;
+    height:19%;
     text-align: center;
 }
 
@@ -81,15 +81,15 @@
 
 .modal_mid{
     width:100%;
-    height:60%;
+    height:44%;
     font-size:50px;
     text-align: center;
-    /* margin-top: -60px; */
+    margin-top: 106%;
 }
 
 .modal_mid_mid{
     width: 119%;
-    height:20%;
+    height:30%;
     padding: 0px 135px 0px 0px;
 }
 

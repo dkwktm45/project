@@ -3,6 +3,8 @@ package com.example.project_2th.repository;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.Postures;
+import com.example.project_2th.entity.User;
+import com.example.project_2th.service.UserService;
 import groovy.util.logging.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -33,6 +36,9 @@ public class userVideo {
 
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    public UserService userService;
 
     @DisplayName("exinfo 정보를 통해 video_seq를 가져온다.")
     @Test
@@ -77,6 +83,36 @@ public class userVideo {
         }catch (Exception e){
             System.out.println(e.getMessage() + " : null 일 수도 있습니다.");
         }
+    }
+
+    @DisplayName("비디오 파일을 저장한다.")
+    @Test
+    @Transactional
+    public void test1(){
+        User user = userService.login("4903", "해운대");
+
+        Exercies exercies = new Exercies();
+        exercies.setExCount("12");
+        exercies.setExKinds("가슴");
+        exercies.setExName("체스트 플라이");
+        exercies.setUserSet("4");
+        exercies.setUser(user);
+        UUID uuid = UUID.randomUUID();
+        String file_name = uuid.toString() + "_" +exercies.getExName();
+
+        em.persist(exercies);
+
+        // video 파일 저장
+        ExerciesVideo exerciesVideo = new ExerciesVideo();
+        exerciesVideo.setUser(user);
+        exerciesVideo.setFileName(file_name);
+        exerciesVideo.setExercies(exercies);
+
+        em.persist(exerciesVideo);
+
+        System.out.println(exinfoRepository.findByExSeq(86L));
+        em.close();
+
     }
 
 

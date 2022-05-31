@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "user_exercies_videos")
 public class ExerciesVideo {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long videoSeq;
 
     private String fileName;

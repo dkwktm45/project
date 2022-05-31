@@ -9,20 +9,6 @@ html, body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-.modal_wrap{
-    /* display: none; */
-    width: 585px;
-    height: 1280px;
-    position: relative;
-    left: 50%;
-    /*      top:10%;
-            margin: -254px 0 0 -236px; */
-    background:#FFFFFF;
-    /*      z-index: 2; */
-    border-top-left-radius: 50px;
-    border-bottom-left-radius: 50px;
-}
-
 
 .record_bg{
     display: none;

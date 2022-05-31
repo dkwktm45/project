@@ -24,6 +24,8 @@ public interface ExinfoRepository extends JpaRepository<Exercies,Long> {
 
     Exercies findByExSeq(Long ex_seq);
 
+    List<Exercies> findByExKinds(String exKinds);
+
     //void inertCNT(String cnt, int ex_seq);
 
 }

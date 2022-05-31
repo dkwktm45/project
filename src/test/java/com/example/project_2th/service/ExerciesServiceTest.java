@@ -73,7 +73,7 @@ public class ExerciesServiceTest {
 
         ExerciesVideo exerciesVideo = new ExerciesVideo();
 
-        em.persist(exercies);
+        exinfoRepository.save(exercies);
 
         Exercies exinfo = exinfoRepository.findByOne(user.getUserId(), exercies.getExName());
         System.out.println(exinfo);

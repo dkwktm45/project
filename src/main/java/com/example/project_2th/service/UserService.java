@@ -77,10 +77,6 @@ public class UserService {
         return map;
     }
 
-    public List<Exercies> findExercies(User user){
-
-        return userRepository.findByUserId(user.getUserId()).getExerciesList();
-    }
 
 
 }

@@ -16,7 +16,7 @@ import java.sql.Date;
 public class Exercies {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exSeq;
     private Date exDay;
     private String exName;

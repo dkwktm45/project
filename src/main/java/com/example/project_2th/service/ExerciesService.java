@@ -40,4 +40,8 @@ public class ExerciesService {
     public List<Exercies> calendarExinfo(Calendar calendar){
         return exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay());
     }
+
+    public List<Exercies> findExercies(String exkinds){
+        return exinfoRepository.findByExKinds(exkinds);
+    }
 }

@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.sql.Date;
 
@@ -60,6 +62,7 @@ public class ExerciesVideoService {
         ExerciesVideo exerciesVideo = new ExerciesVideo();
         exerciesVideo.setUser(user);
         exerciesVideo.setFileName(file_name);
+        exerciesVideo.setVideoDate(Date.valueOf(LocalDate.now()));
         exerciesVideo.setExercies(exercies);
 
         videoRepository.save(exerciesVideo);

@@ -9,8 +9,6 @@
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
   <script src="https://unpkg.com/tippy.js@6"></script>
-  <link rel="stylesheet" th:href="@{/css/side/modal.css}" >
-  <script th:src="@{/js/side/modal.js}"></script>
   <link rel="stylesheet" href="/css/admin.css">
   <script>
     window.onload = function() {
@@ -131,46 +129,11 @@
   <th:block th:replace="top/top :: topModal">
   </th:block>
   <script th:inline="javascript">
-    /*<![CDATA[*/
-    var userInfo =/*[[${session.user}]]*/;
-    var userList =/*[[${session.userList}]]*/;
+    $(".hide").children("li").on("click",function(){
+      var myClass = $(this).attr("class");
+      alert(myClass);
 
-    console.log(userList.exercieVideosList);
-    /*]]*/
-    function test(){
-      $.ajax({
-        url :"/memberExinfo",
-        method:"POST",
-        dataType: 'json',
-        success: function(data2) {
-          $.each(data2, (index, obj)=>{
-            var inD = 'div_d'+index;
-            document.getElementById(inD).className = obj.ex_kinds;
-          });
-
-        }
-      });
-    }
-
-    function insertdate(){
-      var DATE = document.querySelector('input[type="date"]').value;
-      $.ajax({
-        url : "/dateVideo",
-        method :"POST",
-        data: {videoDate : DATE},
-        dataType : "text",
-        async:false,
-        success : function(result){
-          location.href = "/web/"+result;
-        },
-        error : function(data){
-          alert("error"+data);
-        }
-
-      })
-
-    }
-
+    })
 
   </script>
   <div class="main_mid">
@@ -183,7 +146,7 @@
             </input> </div></td>
           <td>
 
-            <div class="select" data-role="selectBox" name="exercise" id="exercise" onclick = "test()">
+            <div class="select" data-role="selectBox" name="exercise" id="exercise">
                      <span date-value="optValue" class="selected-option">
                         <!-- 선택된 옵션 값이 출력되는 부분 -->
                      </span>
@@ -215,8 +178,8 @@
     </div>
     <div id="container">
       <div th:each="user ,i : ${session.userList}">
-        <div th:each="video ,t: ${user.getExercieVideosList()}">
-          <div th:id = "'div_d'+${t.index+1}" th:class="'div_p'+${t.index+1}">
+        <div th:each="video ,t: ${user.getExercieVideosList()}" class="videoList">
+          <div th:id = "${video.getExercies().getExKinds()}" th:class="'div_p'+${t.index+1}">
             <div class="item">
               <video th:src="'/video/'+${video.getFileName()}+'.webm'"
                      th:class="${video.getVideoSeq()}"
@@ -318,6 +281,17 @@ function selectOpt(){
     const innerValue = opt.innerHTML;
     function changeValue(){
       values.innerHTML = innerValue;
+      var id = $(".videoList").children().attr('id');
+      console.log("------------------------------------------")
+      console.log(id);
+
+      console.log(opt.className);
+      if(id != opt.className){
+        console.log("들어옴");
+        $(".videoList").children().css("display","none");
+      }else{
+        $(".videoList").children().css("display","block");
+      }
     }
     opt.addEventListener('click',changeValue)
   });
@@ -348,24 +322,20 @@ body.addEventListener('click',hideSelect);
 
 
 
-
-</script>
-<script type="text/javascript">
-  function filter(){
-    var value, name, item, i;
-
-    value = document.getElementById("value").value.toUpperCase();
-    item = document.getElementsByClassName("item");
-    console.log(value);
-    for(i=0;i<item.length;i++){
-      name = item[i].getElementsByClassName("name");
-      if(name[0].innerHTML.toUpperCase().indexOf(value) > -1){
-        item[i].style.display = "flex";
-      }else{
-        item[i].style.display = "none";
-      }
+function filter(){
+  var value, name, item, i;
+  value = document.getElementById("value").value.toUpperCase();
+  item = document.getElementsByClassName("item");
+  for(i=0;i<item.length;i++){
+    name = item[i].getElementsByClassName("name");
+    if(name[0].innerHTML.toUpperCase().indexOf(value) > -1){
+      item[i].style.display = "flex";
+    }else{
+      item[i].style.display = "none";
     }
   }
+}
+
 </script>
 </body>
 </html>
