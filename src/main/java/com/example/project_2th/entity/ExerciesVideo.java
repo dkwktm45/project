@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class ExerciesVideo {
     private Long videoSeq;
 
     private String fileName;
-    private String videoDate;
+    private Date videoDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

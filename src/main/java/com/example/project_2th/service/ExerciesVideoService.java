@@ -20,9 +20,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.sql.Date;
 
 @Service
 @Transactional
@@ -83,5 +82,10 @@ public class ExerciesVideoService {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    public List<ExerciesVideo> dateList(User user, Date videoDate){
+        return videoRepository.findByVideoDate(user.getUserId(),
+                videoDate);
     }
 }

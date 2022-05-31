@@ -11,6 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpSession;
 
 import javax.persistence.EntityManager;
 
@@ -61,13 +63,36 @@ public class UserServiceTest {
         }
     }
 
-    @DisplayName("사용자의 기록들 불러온다.")
+    @DisplayName("사용자의 달력 기록들 불러온다.")
     @Test
     void test3(){
         User user = userService.login("4903","해운대");
 
         Map<String, Object> exinfo =userService.infoRecord(user);
         assertEquals(2,exinfo.size());
+    }
+    @DisplayName("사용자의 운동 기록들 불러온다.")
+    @Test
+    void test4(){
+        User user = userService.login("4903","해운대");
+        userService.findExercies(user).forEach(System.out::println);
+
+    }
+
+    @DisplayName("회원들의 비디오 정보들을 가져온다.")
+    @Test
+    void test5(){
+        User user = userService.login("1234","해운대");
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpSession session = (MockHttpSession) request.getSession();
+        session.setAttribute("user",user);
+        userService.filterLogin(user,session);
+        session = (MockHttpSession) request.getSession();
+
+        List<User> userList = (List<User>) session.getAttribute("userList");
+        userList.get(0).getExercieVideosList().forEach(System.out::println);
+
     }
 
 }

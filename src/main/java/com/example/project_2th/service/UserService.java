@@ -5,6 +5,7 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.UserRepository;
+import com.example.project_2th.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final VideoRepository videoRepository;
+
     public User login(String phone, String gym){
         User loginUser = userRepository.findByUserIdAndUserGym(phone,gym);
         return loginUser;
@@ -40,6 +43,9 @@ public class UserService {
         } else {
             if (loginUser.getManagerYn() == 1) {
                 System.out.println("admin 로그인 성공");
+                List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
+
+                session.setAttribute("userList",userList);
                 session.setAttribute("user", loginUser);
                 return "redirect:/admin";
 
@@ -69,6 +75,11 @@ public class UserService {
         map.put("exerciesList",exerciesList);
 
         return map;
+    }
+
+    public List<Exercies> findExercies(User user){
+
+        return userRepository.findByUserId(user.getUserId()).getExerciesList();
     }
 
 

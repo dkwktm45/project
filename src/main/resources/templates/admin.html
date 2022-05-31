@@ -130,11 +130,17 @@
 <div class="main_map">
   <th:block th:replace="top/top :: topModal">
   </th:block>
-  <script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    var userInfo =/*[[${session.user}]]*/;
+    var userList =/*[[${session.userList}]]*/;
+
+    console.log(userList.exercieVideosList);
+    /*]]*/
     function test(){
       $.ajax({
-        url :"/web/memberExinfo.do?user_id=<%=member.getUser_id()%>",
-        method:"GET",
+        url :"/memberExinfo",
+        method:"POST",
         dataType: 'json',
         success: function(data2) {
           $.each(data2, (index, obj)=>{
@@ -149,8 +155,9 @@
     function insertdate(){
       var DATE = document.querySelector('input[type="date"]').value;
       $.ajax({
-        url : "/web/dateVideo.do?user_id=<%=member.getUser_id()%>&video_date="+DATE,
-        method :"GET",
+        url : "/dateVideo",
+        method :"POST",
+        data: {videoDate : DATE},
         dataType : "text",
         async:false,
         success : function(result){
@@ -207,19 +214,21 @@
       </div>
     </div>
     <div id="container">
-      <c:forEach var= 'vo' items = "${memberVideo}" varStatus="status" >
-        <c:set var="i" value="${i+1}"/>
-        <div id = "div_d${status.index}" class="div_p${status.index}">
-          <div class="item">
-            <video src="/cam/${vo.file_name}.webm" class="${vo.video_seq}"
-                   id="record_video${status.index}"></video>
-            <div class="vida${i}">${vo.video_date}</div>
-            <div class="vise${i}">${vo.video_seq}</div>
+      <div th:each="user ,i : ${session.userList}">
+        <div th:each="video ,t: ${user.getExercieVideosList()}">
+          <div th:id = "'div_d'+${t.index+1}" th:class="'div_p'+${t.index+1}">
+            <div class="item">
+              <video th:src="'/video/'+${video.getFileName()}+'.webm'"
+                     th:class="${video.getVideoSeq()}"
+                     th:id="'record_video'+${t.index+1}">
+              </video>
+              <div th:class="'vida'+${i.index+1}" th:text="${video.getVideoDate()}"></div>
+              <div th:class="'vise'+${i.index+1}" th:text="${video.getVideoSeq()}"></div>
+            </div>
           </div>
         </div>
-      </c:forEach>
+      </div>
     </div>
-
   </div>
 
   <div class="main_bot" id="NSK_font">

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +38,6 @@ public class ExerciesService {
     }
 
     public List<Exercies> calendarExinfo(Calendar calendar){
-        List<Exercies> exinfoList = exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay());
-        return exinfoList;
+        return exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay());
     }
 }

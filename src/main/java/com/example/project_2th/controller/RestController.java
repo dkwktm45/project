@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import com.example.project_2th.entity.*;
@@ -43,11 +44,15 @@ public class RestController {
     @Autowired
     private final PostruesService postruesService;
 
+    @Autowired
+    private final UserService userService;
+
     @GetMapping(value = "/calendarView")
     public List<Exercies> calendarView(@ModelAttribute Calendar calendar, HttpServletRequest req, HttpServletResponse res) throws Exception {
         List<Exercies> exinfoList = exerciesService.calendarExinfo(calendar);
         return exinfoList;
     }
+
     @PostMapping(value = "insertExURL")
     public String insertExURL(HttpServletRequest req) throws Exception {
         String cnt = req.getParameter("cnt");
@@ -55,7 +60,7 @@ public class RestController {
         Long ex_seq = Long.valueOf(req.getParameter("exSeq"));
         ServletInputStream inputStream = req.getInputStream();
 
-        exerciesVideoService.videoSave(cnt,user_id,ex_seq,inputStream);
+        exerciesVideoService.videoSave(cnt, user_id, ex_seq, inputStream);
 
         return "main";
     }
@@ -76,13 +81,27 @@ public class RestController {
 
         Long ex_seq = Long.valueOf(request.getParameter("ex_seq"));
 
-        postruesService.badeImage(ai_comment,ex_seq);
+        postruesService.badeImage(ai_comment, ex_seq);
 
     }
 
+    //========================================================================
 
+
+    @PostMapping(value = "memberExinfo")
+    public List<Exercies> memberExinfo(HttpSession session, HttpServletRequest req) throws Exception {
+        session = req.getSession();
+        return userService.findExercies((User) session.getAttribute("user"));
+    }
+
+
+    @PostMapping(value = "dateVideo")
+    public List<ExerciesVideo> dateVideo(HttpSession session, HttpServletRequest req) throws Exception {
+        session = req.getSession();
+        return exerciesVideoService.dateList((User)session.getAttribute("user"),
+                (Date) req.getAttribute("videoDate"));
+    }
 }
-
 
 
 
