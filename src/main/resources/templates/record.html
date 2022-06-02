@@ -252,7 +252,7 @@
             <div th:each="video,i : ${session.videoList}">
                 <div th:id="'div_d'+${i.index}" th:class="'div_p'+${i.index}">
                     <div class="item">
-                        <video th:src="'/video/'+${video.fileName}+'.webm'" th:id = "'record_video'+${i.index}" th:class="${video.videoSeq}"></video>
+                        <video th:src="'/video/'+${video.getFileName()}+'.webm'" th:id = "'record_video'+${i.index}" th:class="${video.videoSeq}"></video>
                         <div class="vdate" th:text="${video.videoDate}"></div>
                     </div>
                 </div>
