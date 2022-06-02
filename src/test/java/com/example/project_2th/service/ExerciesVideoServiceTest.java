@@ -40,14 +40,5 @@ public class ExerciesVideoServiceTest {
         assertEquals(2,map.size());
     }
 
-    @DisplayName("user 정보와 date가 있은 것을 가져오시오")
-    @Transactional
-    @Test
-    void test2() throws ParseException {
-        User user =userRepository.findByUserId(1L);
-        String from = "2022-05-16";
-        List<ExerciesVideo> videoList = exerciesVideoService.dateList(user, Date.valueOf(from));
-        videoList.forEach(System.out::println);
-        assertNotNull(videoList);
-    }
+
 }

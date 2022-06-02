@@ -86,22 +86,9 @@ public class RestController {
 
     }
 
-    //========================================================================
 
 
-    @PostMapping(value = "/memberExinfo")
-    public List<Exercies> memberExinfo(HttpSession session, HttpServletRequest req) throws Exception {
-        String exKinds = req.getParameter("exKinds");
-        return exerciesService.findExercies(exKinds);
-    }
 
-
-    @PostMapping(value = "/dateVideo")
-    public List<ExerciesVideo> dateVideo(HttpSession session, HttpServletRequest req) throws Exception {
-        session = req.getSession();
-        return exerciesVideoService.dateList((User)session.getAttribute("userList"),
-                (Date) req.getAttribute("videoDate"));
-    }
 }
 
 

@@ -87,8 +87,5 @@ public class ExerciesVideoService {
         }
     }
 
-    public List<ExerciesVideo> dateList(User user, Date videoDate){
-        return videoRepository.findByVideoDate(user.getUserId(),
-                videoDate);
-    }
+
 }

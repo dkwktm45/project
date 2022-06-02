@@ -18,11 +18,7 @@ public interface VideoRepository extends JpaRepository<ExerciesVideo,Long> {
     @EntityGraph(attributePaths = {"exercies","postures"})
     ExerciesVideo findByVideoSeq(Long id);
 
-    @Query(value = "select * from user_exercies_videos vid " +
-            "where vid.user_id = (select user_id from user u "+
-            "where u.user_id = :userId) and vid.video_date = :videoDate",nativeQuery = true)
-    List<ExerciesVideo> findByVideoDate( @Param("userId") Long userId,
-                              @Param("videoDate") java.sql.Date exDay);
+
     List<ExerciesVideo> findAll();
 
 }
