@@ -63,7 +63,9 @@ html, body {
 /* #NSK_font{
 font-family: 'Noto Sans KR', sans-serif;
 } */
-
+.container{
+    float: left;
+}
 #record{
     position:relative;
     font-size:59px;
@@ -278,6 +280,7 @@ h2{
     text-align: center;
     font-size:50px;
     font-weight : bolder;
+    width: 99%;
 }
 
 .main_bot {
@@ -304,9 +307,8 @@ h2{
 .item {
     width: 450px;
     float: left;
-    margin-left: 90px;
-    margin-top: 50px;
-    margin-bottom: 0px;
+    margin-left: 4%;
+    margin-top: 26%;
 }
 
 #calendar{

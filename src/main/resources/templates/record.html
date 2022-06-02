@@ -8,24 +8,24 @@
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
-    <link href='css/record.css' rel='stylesheet' />
+    <link href='css/record.css' rel='stylesheet'/>
     <script src='js/record.js'></script>
     <script>
         const log = console.log;
-        window.onload = function() {
+        window.onload = function () {
             function onClick7() {
-                var changeSrc= $(this).attr('src');
-                $("#video").attr("src",changeSrc);
+                var changeSrc = $(this).attr('src');
+                $("#video").attr("src", changeSrc);
 
-                var video_seq= $(this).attr('class');
-                document.querySelector('.record_wrap').style.display ='block';
-                document.querySelector('.record_bg').style.display ='block';
+                var video_seq = $(this).attr('class');
+                document.querySelector('.record_wrap').style.display = 'block';
+                document.querySelector('.record_bg').style.display = 'block';
 
                 $.ajax({
-                    url : "/insertPose?videoSeq="+video_seq,
+                    url: "/insertPose?videoSeq=" + video_seq,
                     contentType: "application/json; charset=UTF-8",
-                    type : "GET",
-                    success : function(result){
+                    type: "GET",
+                    success: function (result) {
                         var html1;
                         var html2;
                         var exinfo = result.exinfo;
@@ -33,22 +33,22 @@
                         log(postures);
                         log(exinfo);
                         $(".ttleft").text(exinfo.exName)
-                        if(postures.length !=""){
-                        $.each(postures,(index,obj)=>{
-                                if(index == 0 ){
-                                    html1+="<div class='jase'>자세교정</div>";
+                        if (postures.length != "") {
+                            $.each(postures, (index, obj) => {
+                                if (index == 0) {
+                                    html1 += "<div class='jase'>자세교정</div>";
                                 }
-                                html1+="<tr>";
-                                html1+="<td>";
-                                html1+="<div><img class='gdImg' src='/resultImage/"+obj.poseResult+".png'></div>";
-                                html1+="</td>";
-                                html1+="<td>"+obj.aiComment+"</td>";
-                                html1+="</tr>"
+                                html1 += "<tr>";
+                                html1 += "<td>";
+                                html1 += "<div><img class='gdImg' src='/resultImage/" + obj.poseResult + ".png'></div>";
+                                html1 += "</td>";
+                                html1 += "<td>" + obj.aiComment + "</td>";
+                                html1 += "</tr>"
                             })
-                        }else{
-                            html1+="<div class='good'>자세 교정게 없네요?!?!<br>이번 운동은 정말 잘한거 같아요!!</div>";
-                            $(".record_wrap").css("height","69%");
-                            $(".record_wrap").css("top","26%");
+                        } else {
+                            html1 += "<div class='good'>자세 교정게 없네요?!?!<br>이번 운동은 정말 잘한거 같아요!!</div>";
+                            $(".record_wrap").css("height", "69%");
+                            $(".record_wrap").css("top", "26%");
                         }
 
                         $(".bottom1").html(html1);
@@ -58,8 +58,8 @@
             }
 
             function offClick7() {
-                document.querySelector('.record_wrap').style.display ='none';
-                document.querySelector('.record_bg').style.display ='none';
+                document.querySelector('.record_wrap').style.display = 'none';
+                document.querySelector('.record_bg').style.display = 'none';
             }
 
 
@@ -103,46 +103,47 @@
             bir.value = today;
 
 
-
         }
 
         function go_main() { /* 아이콘 누르면 메인으로 */
             location.href = "/web/main.do";
         }
-        function go_calender(){
+
+        function go_calender() {
             location.href = "/infoCalender";
         }
 
-        function go_record(){
+        function go_record() {
             location.href = "/goRecord";
         }
     </script>
     <style>
 
         [type="date"] {
-            background:#fff
-                /*   url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set
-                  /blacks/16x16/calendar_2.png) */
-            url(image/circlesm.png)
-            90% 50% no-repeat ;
+            background: #fff /*   url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set
+                  /blacks/16x16/calendar_2.png) */ url(image/circlesm.png) 90% 50% no-repeat;
         }
+
         [type="date"]::-webkit-inner-spin-button {
             display: none;
         }
+
         [type="date"]::-webkit-calendar-picker-indicator {
             opacity: 0;
         }
     </style>
 
     <script type="text/javascript">
-        function showDiary(){
+        function showDiary() {
             const element = document.getElementById('change');
-            document.getElementById("diary_btn").style.display='none';
+            document.getElementById("diary_btn").style.display = 'none';
             element.innerHTML = '<div id="calendar"><input type="date" id="dates" onchange = "insertdate()"></div>';
         }
     </script>
-    <link rel="stylesheet" th:href="@{/css/side/modal.css}" >
+    <link rel="stylesheet" th:href="@{/css/side/modal.css}">
     <script th:src="@{/js/side/modal.js}"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
 </head>
 <body>
 <th:block th:replace="sidebar/modal :: sideModal">
@@ -153,8 +154,8 @@
 <div class="record_wrap">
     <div class="record_top" style="width:100%; height:200px;">
         <div id="record_top_title">
-            <div class="ttleft"> 체스트프레스 </div>
-            <div class="ttright"><img id="out" src="image/out.png" onclick = "go_record()"></div>
+            <div class="ttleft"> 체스트프레스</div>
+            <div class="ttright"><img id="out" src="image/out.png" onclick="go_record()"></div>
         </div>
         <hr style="border: solid 5px gray;">
     </div>
@@ -170,9 +171,9 @@
     </table>
 </div>
 <div class="main_map">
-    <div class="main_top" style = "text-align : center;">
+    <div class="main_top" style="text-align : center;">
         <div class="top_left">
-            <h1 style = "font-size:80px;">The Ai Fitness</h1>
+            <h1 style="font-size:80px; margin-top: 8%;">The Ai Fitness</h1>
         </div>
         <div class="top_right">
             <img id="modal_btn" src="image/menu.png"
@@ -180,32 +181,32 @@
         </div>
     </div>
     <script>
-        function test(){
+        function test() {
             $.ajax({
-                url :"memberExinfo?user_id=" + [[${session.user.userId}]],
-                method:"GET",
+                url: "memberExinfo?user_id=" + [[${session.user.userId}]],
+                method: "GET",
                 dataType: 'json',
-                success: function(data2) {
-                    $.each(data2, (index, obj)=>{
-                        var inD = 'div_d'+index;
+                success: function (data2) {
+                    $.each(data2, (index, obj) => {
+                        var inD = 'div_d' + index;
                         document.getElementById(inD).className = obj.ex_kinds;
                     });
                 }
             });
         }
 
-        function insertdate(){
+        function insertdate() {
             var DATE = document.querySelector('input[type="date"]').value;
             $.ajax({
-                url : "dateVideo?user_id="+[[${session.user.userId}]]+"&video_date="+DATE,
-                method :"GET",
-                dataType : "text",
-                async:false,
-                success : function(result){
-                    location.href = "/web/"+result;
+                url: "dateVideo?user_id=" + [[${session.user.userId}]] + "&video_date=" + DATE,
+                method: "GET",
+                dataType: "text",
+                async: false,
+                success: function (result) {
+                    location.href = "/web/" + result;
                 },
-                error : function(data){
-                    alert("error"+data);
+                error: function (data) {
+                    alert("error" + data);
                 }
 
             })
@@ -216,21 +217,35 @@
         <div class="mid_top">
             <table style="padding-top: 40px;">
                 <tr>
-                    <td><div id="change"> <a id="record" align ="center">자세교정 녹화본</a> </div></td>
+                    <td>
+                        <div id="change"><a id="record" align="center">자세교정 녹화본</a></div>
+                    </td>
                     <td>
 
-                        <div class="select" data-role="selectBox" name="exercise" id="exercise" onclick = "test()">
+                        <div class="select" data-role="selectBox" name="exercise" id="exercise" onclick="test()">
                      <span date-value="optValue" class="selected-option">
                         <!-- 선택된 옵션 값이 출력되는 부분 -->
                      </span>
                             <!-- 옵션 영역 -->
                             <ul class="hide" id="wrap">
-                                <li class ="전체"><i><img src="image/menu.png" alt="전체"/></i><div class="sunteck">전체</div></li>
-                                <li class ="div_d"><i><img src="image/등.png"  alt="등" /></i><div class="sunteck">등</div></li>
-                                <li class ="div_p"><i><img src="image/팔.png" alt="팔" /></i><div class="sunteck">팔</div></li>
-                                <li class ="div_g"><i><img src="image/가슴.png" alt="가슴" /></i><div class="sunteck">가슴</div></li>
-                                <li class ="div_u"><i><img src="image/어깨.png" alt="어깨" /></i><div class="sunteck">어깨</div></li>
-                                <li class ="div_b"><i><img src="image/복근.png" alt="복근" /></i><div class="sunteck">복근</div></li>
+                                <li class="전체"><i><img src="image/menu.png" alt="전체"/></i>
+                                    <div class="sunteck">전체</div>
+                                </li>
+                                <li class="div_d"><i><img src="image/등.png" alt="등"/></i>
+                                    <div class="sunteck">등</div>
+                                </li>
+                                <li class="div_p"><i><img src="image/팔.png" alt="팔"/></i>
+                                    <div class="sunteck">팔</div>
+                                </li>
+                                <li class="div_g"><i><img src="image/가슴.png" alt="가슴"/></i>
+                                    <div class="sunteck">가슴</div>
+                                </li>
+                                <li class="div_u"><i><img src="image/어깨.png" alt="어깨"/></i>
+                                    <div class="sunteck">어깨</div>
+                                </li>
+                                <li class="div_b"><i><img src="image/복근.png" alt="복근"/></i>
+                                    <div class="sunteck">복근</div>
+                                </li>
                             </ul>
                         </div>
                     </td>
@@ -239,7 +254,8 @@
             <div>
                 <ul>
                     <li class="menu">
-                        <a onclick='showDiary()' value='changeDiary'><img id="diary_btn" src="image/weightDiary.png" width="100px" height="100px"></a>
+                        <a onclick='showDiary()' value='changeDiary'><img id="diary_btn" src="image/weightDiary.png"
+                                                                          width="100px" height="100px"></a>
                         <ul class="hide">
                             <div>
                             </div>
@@ -248,12 +264,15 @@
                 </ul>
             </div>
         </div>
-        <div id="container">
-            <div th:each="video,i : ${session.videoList}">
-                <div th:id="'div_d'+${i.index}" th:class="'div_p'+${i.index}">
-                    <div class="item">
-                        <video th:src="'/video/'+${video.getFileName()}+'.webm'" th:id = "'record_video'+${i.index}" th:class="${video.videoSeq}"></video>
-                        <div class="vdate" th:text="${video.videoDate}"></div>
+        <div class="container">
+            <div class="row row-cols-2">
+                <div class="col" th:each="video,i : ${session.videoList}">
+                    <div th:id="'div_d'+${i.index}" th:class="'div_p'+${i.index}">
+                        <div class="item">
+                            <video th:src="'/video/'+${video.getFileName()}+'.webm'" th:id="'record_video'+${i.index}"
+                                   th:class="${video.videoSeq}"></video>
+                            <div class="vdate" th:text="${video.videoDate}"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -262,65 +281,67 @@
     </div>
 
     <div class="main_bot" id="NSK_font">
-        <img id="gym2" align="bottom" src="image/gym2.png" width="150px" height="150px" onclick = "go_main()">
+        <img id="gym2" align="bottom" src="image/gym2.png" width="150px" height="150px" onclick="go_main()">
     </div>
 
 </div>
 <script> /* 컨테이너 */
-var container = document.querySelector( '#container' );
-var msnry = new Masonry( container, {
+var container = document.querySelector('.container');
+var msnry = new Masonry(container, {
     // options
     columnWidth: 100,
     itemSelector: '.item',
-} );
+});
 </script>
 <script th:inline="javascript"> /* 셀렉트 선택시 동영상 상자 */
-$('.전체').click(function(){
+$('.전체').click(function () {
     $('.등').show();
     $('.가슴').show();
     $('.팔').show();
     $('.어깨').show();
     $('.복근').show();
 })
-$('.div_d').click(function(){
+$('.div_d').click(function () {
     $('.등').show();
     $('.팔').hide();
     $('.가슴').hide();
     $('.어깨').hide();
     $('.복근').hide();
 })
-$('.div_p').click(function(){
+$('.div_p').click(function () {
     $('.팔').show();
     $('.등').hide();
     $('.가슴').hide();
     $('.어깨').hide();
     $('.복근').hide();
 })
-$('.div_g').click(function(){
+$('.div_g').click(function () {
     $('.가슴').show();
     $('.등').hide();
     $('.팔').hide();
     $('.어깨').hide();
     $('.복근').hide();
 })
-$('.div_u').click(function(){
+$('.div_u').click(function () {
     $('.어깨').show();
     $('.등').hide();
     $('.팔').hide();
     $('.가슴').hide();
     $('.복근').hide();
 })
-$('.duv_b').click(function(){
+$('.duv_b').click(function () {
     $('.복근').show();
     $('.등').hide();
     $('.팔').hide();
     $('.가').hide();
     $('.div_u').hide();
 })
-function show1 () {
+
+function show1() {
     document.querySelector(".black_bg").className = "black_bg show1";
 }
-function close1 () {
+
+function close1() {
     document.querySelector(".black_bg").className = "black_bg";
 }
 
@@ -329,60 +350,67 @@ document.querySelector(".black_bg").addEventListener("click", close1);
 </script>
 <script type="text/javascript">
     /* 셀렉트 */
-const body = document.querySelector('body');
-const select = document.querySelector(`[data-role="selectBox"]`);
-const values = select.querySelector(`[date-value="optValue"]`);
-const option = select.querySelector('ul');
-const opts = option.querySelectorAll('li');
-const choice = document.querySelector('#choice');
+    const body = document.querySelector('body');
+    const select = document.querySelector(`[data-role="selectBox"]`);
+    const values = select.querySelector(`[date-value="optValue"]`);
+    const option = select.querySelector('ul');
+    const opts = option.querySelectorAll('li');
+    const choice = document.querySelector('#choice');
 
-/* 셀렉트영역 클릭 시 옵션 숨기기, 보이기 */
-function selects(e){
-    e.stopPropagation();
-    if(option.classList.contains('hide')){
-        option.classList.remove('hide');
-        option.classList.add('show');
-    }else{
-        option.classList.add('hide');
-        option.classList.remove('show');
-    }
-    selectOpt();
-    choice.classList.add('hide');
-}
-
-/* 옵션선택 */
-function selectOpt(){
-    opts.forEach(opt=>{
-        const innerValue = opt.innerHTML;
-        function changeValue(){
-            values.innerHTML = innerValue;
+    /* 셀렉트영역 클릭 시 옵션 숨기기, 보이기 */
+    function selects(e) {
+        e.stopPropagation();
+        if (option.classList.contains('hide')) {
+            option.classList.remove('hide');
+            option.classList.add('show');
+        } else {
+            option.classList.add('hide');
+            option.classList.remove('show');
         }
-        opt.addEventListener('click',changeValue)
-    });
-}
-
-/* 선택시 div보이게 */
-
-
-/* 렌더링 시 옵션의 첫번째 항목 기본 선택 */
-function selectFirst(){
-    const firstValue = opts[0].innerHTML;
-    values.innerHTML = `${firstValue}`
-}
-
-
-
-/* 옵션밖의 영역(=바디) 클릭 시 옵션 숨김 */
-function hideSelect(){
-    if(option.classList.contains('show')){
-        option.classList.add('hide');
-        option.classList.remove('show');
+        selectOpt();
+        choice.classList.add('hide');
     }
-}
 
-selectFirst();
-select.addEventListener('click',selects);
-body.addEventListener('click',hideSelect);
+    /* 옵션선택 */
+    function selectOpt() {
+        opts.forEach(opt => {
+            const innerValue = opt.innerHTML;
+
+            function changeValue() {
+                values.innerHTML = innerValue;
+            }
+
+            opt.addEventListener('click', changeValue)
+        });
+    }
+
+    /* 선택시 div보이게 */
+
+
+    /* 렌더링 시 옵션의 첫번째 항목 기본 선택 */
+    function selectFirst() {
+        const firstValue = opts[0].innerHTML;
+        values.innerHTML = `${firstValue}`
+    }
+
+
+    /* 옵션밖의 영역(=바디) 클릭 시 옵션 숨김 */
+    function hideSelect() {
+        if (option.classList.contains('show')) {
+            option.classList.add('hide');
+            option.classList.remove('show');
+        }
+    }
+
+    selectFirst();
+    select.addEventListener('click', selects);
+    body.addEventListener('click', hideSelect);
+
+    jQuery( document ).ready( function() {
+        for(let i = 1; i< $(".vdate").length; i +=2) {
+            $(".item video").eq(i).css("margin-left","27%");
+            $(".vdate").eq(i).css("margin-left","27%");
+        }});
 </script>
 </body>
 </html>
