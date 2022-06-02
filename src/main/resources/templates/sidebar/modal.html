@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link>
+  <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 </head>
 <body>
 <div th:fragment="sideModal" class="black_bg">
@@ -43,12 +44,12 @@
     <th:block th:unless = "${session.user?.getManagerYn() == 1 }">
         <div class = "modal_mid">
           <div class = "modal_mid_mid">
-            <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick="go_calender()"></div>
-            <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
+            <div class = "modal_mid_left"><img th:onclick="go_calendar()" id="moicon" src="image/diary.png"></div>
+            <div class = "modal_mid_right"><b th:onclick="go_calendar()" id = "modal_mid_b" >운동 다이어리</b></div>
           </div>
           <div class = "modal_mid_mid">
-            <div class = "modal_mid_left"><img id="moicon" src="image/video.png" onclick="go_record()"></div>
-            <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="go_record()">운동 영상</b></div>
+            <div class = "modal_mid_left record"><img th:onclick="go_record()" id="moicon" src="image/video.png"></div>
+            <div class = "modal_mid_right record"><b th:onclick="go_record()" id = "modal_mid_b" >운동 영상</b></div>
           </div>
         </div>
     </th:block>
