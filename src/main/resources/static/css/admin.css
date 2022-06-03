@@ -363,12 +363,6 @@ h2{
     /* height:90%; */
 }
 
-#record_video0, #record_video1, #record_video2,
-#record_video5, #record_video4, #record_video3,
-#record_video6, #record_video7, #record_video8{
-    width: 450px;
-    height: 450px;
-}
 .main_bot {
     width:100%;
     height:20%;
@@ -395,10 +389,8 @@ h2{
 
 .item {
     width: 450px;
-    float: left;
-    margin-left: 90px;
-    margin-top: 50px;
-    margin-bottom: 0px;
+    margin-left: 7%;
+    margin-top: 15%;
     font-size:45px;
     font-weight: bold;
 }
@@ -557,67 +549,14 @@ i img{
     left: 648px;
 }
 
-.vise1{
-    position: fixed;
-    top: 850px;
-    left: 370px;
-}
-.vida1{
-    position: fixed;
-    top: 850px;
-    left: 100px;
-}
-.vise2{
-    position: fixed;
-    top: 850px;
-    right: 120px;
-}
-.vida2{
-    position: fixed;
-    top: 850px;
-    right: 290px;
-}
-.vise3{
-    position: fixed;
-    top: 1360px;
-    left: 370px;
-}
-.vida3{
-    position: fixed;
-    top: 1360px;
-    left: 100px;
-}
-.vise4{
-    position: fixed;
-    top: 1360px;
-    right: 120px;
-}
-.vida4{
-    position: fixed;
-    top: 1360px;
-    right: 290px;
-}
-.vise5{
-    position: fixed;
-    top: 1870px;
-    left: 370px;
-}
-.vida5{
-    position: fixed;
-    top: 1870px;
-    left: 100px;
-}
-.vise6{
-    position: fixed;
-    top: 1870px;
-    right: 120px;
-}
-.vida6{
-    position: fixed;
-    top: 1870px;
-    right: 290px;
-}
-
 #container{
     font-family : 'Noto Sans KR', sans-serif;
+}
+.videoDate{
+    width: 56%;
+    float: left;
+
+}
+.userName{
+    float: right;
 }

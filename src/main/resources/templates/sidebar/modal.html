@@ -28,16 +28,16 @@
     <th:block th:if = "${session.user?.getManagerYn() == 1 }">
       <div class = "modal_mid" >
         <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick = "gomember()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_member()">회원 관리</b></div>
+          <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick = "goMember()"></div>
+          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "goMember()">회원 관리</b></div>
         </div>
         <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/dumbbell.png" onclick = "gojoin()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_join()">회원 가입</b></div>
+          <div class = "modal_mid_left"><img id="moicon" src="image/dumbbell.png" onclick = "goJoin()"></div>
+          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "goJoin()">회원 가입</b></div>
         </div>
         <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/training.png" onclick = "gorecord()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "go_record()">회원 영상</b></div>
+          <div class = "modal_mid_left"><img id="moicon" src="image/training.png" onclick = "goRecord()"></div>
+          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "goMember()">회원 영상</b></div>
         </div>
       </div>
     </th:block>

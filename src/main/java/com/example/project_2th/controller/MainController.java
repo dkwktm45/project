@@ -74,11 +74,6 @@ public class MainController {
         return userService.filterLogin(loginUser,session);
     }
 
-    @GetMapping("/admin")
-    public String admin() {
-        return "admin";
-    }
-
     @GetMapping("/main")
     public String main() {
         return "main";
@@ -125,4 +120,22 @@ public class MainController {
 //
 //        return "redirect:/join.do";
 //    }
+
+
+    @GetMapping("/")
+    public String admin() {
+        return "admin";
+    }
+
+    @GetMapping("/goJoin")
+    public String join() {
+        return "join";
+    }
+
+    @GetMapping("/goAdminMember")
+    public String aminMember() {
+        return "adminMember";
+    }
+
+
 }
