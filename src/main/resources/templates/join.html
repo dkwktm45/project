@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <title>join</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/side/modal.css}" >
+  <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/join.css">
+  <script th:src="@{http://code.jquery.com/jquery-3.5.1.min.js}"></script>
+  <script th:src="@{/js/side/modal.js}"></script>
   <script>
     window.onload = function() {
       function show1 () {
@@ -30,50 +34,12 @@
 </head>
 <body bgcolor="EFEFEF">
 
-<div class="black_bg">
-  <div class="modal_wrap">
-    <div class="modal_main">
-      <div class = "modal_top">
-        <div id="NSK_font" style = "font-size:80px;"><b><br>관리자 님</b></div>
-        <div class = "modal_top_left">
-          <div id="NSK_font"><br></div>
-        </div>
-        <div class = "modal_top_right">
-          <div id="NSK_font"><br><br></div>
-        </div>
-      </div>
-      <div class = "modal_mid">
-        <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick = "gomember()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "gomember()">회원 관리</b></div>
-        </div>
-        <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/dumbbell.png" onclick = "gojoin()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "gojoin()">회원 가입</b></div>
-        </div>
-        <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/training.png" onclick="gorecord()"></div>
-          <div class = "modal_mid_right"><b id = "modal_mid_b" onclick="gorecord()">회원 영상</b></div>
-        </div>
-      </div>
-      <div class = "modal_bot">
-        <div>고객센터     010-4903-4073</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="main_top" style = "text-align : center;">
-  <div class="top_left">
-    <h1 style = "font-size:80px;">The Ai Fitness</h1>
-  </div>
-  <div class="top_right">
-
-    <img id="modal_btn" src="image/menu.png"
-         style="width: 120px; height: 120px;">
-  </div>
-</div>
-
+<th:block th:replace="sidebar/modal :: sideModal">
+  <th:block layout:fragment="css"></th:block>
+  <th:block layout:fragment="script"></th:block>
+</th:block>
+<th:block th:replace="top/top :: topModal">
+</th:block>
 <div align="center" style="width:100%; height:300px;">
 
   <input id="join" style="width:800px; height:150px;" class="button" type = "submit" value ="회원 가입">
@@ -185,4 +151,5 @@ function hideSelect(){
 selectFirst();
 select.addEventListener('click',selects);
 body.addEventListener('click',hideSelect);
-</script></html>
+</script>
+</html>

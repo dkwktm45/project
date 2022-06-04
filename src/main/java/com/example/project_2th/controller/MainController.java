@@ -122,20 +122,5 @@ public class MainController {
 //    }
 
 
-    @GetMapping("/")
-    public String admin() {
-        return "admin";
-    }
-
-    @GetMapping("/goJoin")
-    public String join() {
-        return "join";
-    }
-
-    @GetMapping("/goAdminMember")
-    public String aminMember() {
-        return "adminMember";
-    }
-
 
 }

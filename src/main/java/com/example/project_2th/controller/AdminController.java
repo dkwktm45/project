@@ -10,11 +10,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping(value = "/admin")
 public class AdminController {
+    @GetMapping({"/",""})
+    public String admin() {
+        return "admin";
+    }
 
+    @GetMapping("/goJoin")
+    public String join() {
+        return "join";
+    }
 
-
-
+    @GetMapping("/goAdminMember")
+    public String aminMember() {
+        return "adminMember";
+    }
 
 
 //
