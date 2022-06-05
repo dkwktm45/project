@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/css/admin.css">
   <!--css-->
   <link rel="stylesheet" th:href="@{/css/side/modal.css}">
+  <link rel="stylesheet" th:href="@{/css/top/top.css}">
   <link rel="stylesheet" href="/css/bootstrap.css">
 
 
@@ -40,6 +41,7 @@
 </div>
 <div class="main_map">
   <th:block th:replace="top/top :: topModal">
+    <th:block layout:fragment="css"></th:block>
   </th:block>
   <div class="main_mid">
     <div class="mid_top">

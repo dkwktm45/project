@@ -15,6 +15,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("file:///C:/user/projectVideo/");
         registry.addResourceHandler("/resultImage/**")// 자세교정 이미지
                 .addResourceLocations("file:///C:/user/badImage/");
+        registry.addResourceHandler("/image/**")
+                .addResourceLocations("classpath:static/image/");
     }
 
 }

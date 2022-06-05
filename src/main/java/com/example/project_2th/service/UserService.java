@@ -78,6 +78,10 @@ public class UserService {
         return map;
     }
 
+    public void joinMemeber(User user){
+
+    }
+
 
 
 }

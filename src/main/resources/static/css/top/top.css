@@ -4,6 +4,11 @@
     background-color : white;
 }
 
+h1{
+    position:relative;
+    left:-10%;
+    top:-5%;
+}
 .top_left{
     float:left;
     width:80%;

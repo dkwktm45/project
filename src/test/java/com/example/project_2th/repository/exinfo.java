@@ -93,4 +93,11 @@ public class exinfo{
 
     }
 
+    @DisplayName("기존 유저의 운동 정보에서 Cnt 값을 수정 and videofile 저장")
+    @Test
+    public void join(){
+        User.builder().userName("이진영").userPhone("010-4903-4073").userGym("해운대").managerYn(0)
+                .videoYn(1)
+    }
+
 }

@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Builder
 @Table(name = "user")
 @JsonIgnoreProperties(value = {"exerciesList","calendarList","exercieVideosList"} , allowSetters = true)
 @ToString(exclude = {"exerciesList","calendarList","exercieVideosList"})
@@ -29,11 +28,12 @@ public class User {
     private String userPhone;
     private String userGym;
     private Date userExpireDate;
-    private String userBirthdate;
+    private Date userBirthdate;
     private String contents;
     private String day;
     private String time;
     private int managerYn;
+    private int videoYn;
     private String adComment;
     private int month;
 
@@ -51,4 +51,15 @@ public class User {
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
     private final List<ExerciesVideo> exercieVideosList = new ArrayList<>();
 
+    @Builder
+    public User(String userName ,String userPhone,Date userExpireDate,
+                Date userBirthdate,int managerYn,int videoYn,String userGym){
+        this.userName = userName;
+        this.userPhone = userPhone;
+        this.userExpireDate = userExpireDate;
+        this.userBirthdate = userBirthdate;
+        this.managerYn = managerYn;
+        this.videoYn = videoYn;
+        this.userGym = userGym;
+    }
 }
