@@ -46,25 +46,33 @@
   <input id="join" style="width:800px; height:150px;" class="button" type = "submit" value ="회원 가입">
 
 </div>
-
-
+  <form action="/admin/joinMember" method="post">
   <div class="middle">
     <table class="joinTable">
       <tr>
-        <td> <input name = "userName" id="user_name" type="text" placeholder="이름"> </td>
+        <td> <input name = "userName" class="userExinfo" type="text" placeholder="이름"> </td>
       </tr>
       <tr>
-        <td> <input name = "userBirthdate"id="user_name" type="text" placeholder="생년월일"> </td>
+        <td> <input name = "userBirthdate" class="userExinfo birthday" type="text" placeholder="생년월일"> </td>
       </tr>
       <tr>
-        <td> <input name = "userPhone"id="user_name" type="text" placeholder="핸드폰 번호"> </td>
+        <td> <span class="hiddenSpan">Ex) 19950820 / 형식에 맞게 입력해주세요</span> </td>
       </tr>
       <tr>
-        <td> <input name="userExpireDate" id="user_name" type="text" placeholder="개월 수"> </td>
+        <td> <input name = "userPhone" class="userExinfo phone-number-check" type="text" placeholder="핸드폰 번호"> </td>
+      </tr>
+      <tr>
+        <td> <span class="hiddenSpan">Ex) 01049034073 / 형식에 맞게 입력해주세요</span> </td>
+      </tr>
+      <tr>
+        <td> <input name="userExpireDate" class="userExinfo expiry" type="text" placeholder="개월 수"> </td>
+      </tr>
+      <tr>
+        <td> <span class="hiddenSpan">Ex) 3 / 숫자만 입력해주세요</span> </td>
       </tr>
       <tr>
         <td>
-          <div class="select" data-role="selectBox" name="exercise" id="userGym" onclick = "test()">
+          <div class="select" data-role="selectBox" name="userGym" id="userGym" onclick = "test()">
                      <span date-value="optValue" class="selected-option">
                         <!-- 선택된 옵션 값이 출력되는 부분 -->
                      </span>
@@ -99,10 +107,13 @@
       </table>
     </div>
   </div>
+  </form>
 
 
 </div>
 <script type="text/javascript"> /* 셀렉트 */
+
+
 const body = document.querySelector('body');
 const select = document.querySelector(`[data-role="selectBox"]`);
 const values = select.querySelector(`[date-value="optValue"]`);
@@ -113,7 +124,6 @@ const choice = document.querySelector('#choice');
 /* 셀렉트영역 클릭 시 옵션 숨기기, 보이기 */
 function selects(e){
   e.stopPropagation();
-  option.setAttribute('style',`top:${select.offsetHeight}px`)
   if(option.classList.contains('hide')){
     option.classList.remove('hide');
     option.classList.add('show');
@@ -130,15 +140,12 @@ function selectOpt(){
   opts.forEach(opt=>{
     const innerValue = opt.innerHTML;
     function changeValue(){
-      var html = innerValue+"<input type = 'hidden' value = '"+innerValue+"' name ='user_gym'></input>"
+      var html = innerValue+"<input type = 'hidden' value = '"+innerValue+"' name ='userGym'></input>"
       values.innerHTML = html;
     }
     opt.addEventListener('click',changeValue)
   });
 }
-
-/* 선택시 div보이게 */
-
 
 /* 렌더링 시 옵션의 첫번째 항목 기본 선택 */
 function selectFirst(){
@@ -167,7 +174,139 @@ $("#button").on("click",function (){
       $(this).val(1);
     }
   })
-  $()
+
+})
+$(".expiry").on("keydown",function (e){
+  // 숫자만 입력받기
+  var trans_num = $(this).val().replace(/-/gi,'');
+  var k = e.keyCode;
+
+  if(trans_num.length >= 3 && ((k >= 48 && k <=126) || (k >= 12592 && k <= 12687 || k==32 || k==229 || (k>=45032 && k<=55203)) ))
+  {
+    e.preventDefault();
+  }
+
+}).on("blur",function (){
+  if(/^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/.test($(this).val()))
+  {
+    $(this).val()
+  }else if(/^[0-9]*$/.test($(this).val()))
+  {
+    var number = Number($(this).val());
+    if(number >=50){
+      $(".hiddenSpan:eq(2)").css("display","block");
+      $(".hiddenSpan:eq(2)").text("정확한 개월 수가 맞나요?");
+      $(this).focus();
+    }else{
+      var today = new Date();
+      var monthNumber = number + today.getMonth()+ 1;
+      var yearPlus = 0;
+      if(monthNumber >= 12 ){
+        while(monthNumber >= 12){
+          monthNumber -= 12;
+          yearPlus +=1;
+        }
+        console.log(monthNumber)
+        var year = today.getFullYear() + yearPlus;
+        var month = ('0' + (monthNumber)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+      }else{
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1 + number)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+      }
+      let numStyle =$(".hiddenSpan:eq(2)")
+      var dateString = year + '-' + month  + '-' + day;
+      (numStyle.css("display") !== "none") ? numStyle.css("display","none") : numStyle;
+      $(this).val(dateString)
+    }
+  }else if ($(this).val().length >= 11){
+    $(".hiddenSpan:eq(2)").css("display","block");
+    $(".hiddenSpan:eq(2)").text("정확하게 기재 해주세요!");
+    $(this).focus();
+
+  }
+  else
+  {
+    $(".hiddenSpan:eq(2)").css("display","block");
+    $(".hiddenSpan:eq(2)").text("숫자만을 입력해주세요!");
+    $(this).focus();
+  }
+})
+
+$(".phone-number-check").on('keydown', function(e){
+  // 숫자만 입력받기
+  var trans_num = $(this).val().replace(/-/gi,'');
+  var k = e.keyCode;
+
+  if(trans_num.length >= 11 && ((k >= 48 && k <=126) || (k >= 12592 && k <= 12687 || k==32 || k==229 || (k>=45032 && k<=55203)) ))
+  {
+    console.log("문제인 곳")
+    e.preventDefault();
+  }
+}).on('blur', function(){ // 포커스를 잃었을때 실행합니다.
+  if($(this).val() == '') return;
+  console.log("여기다!")
+  // 기존 번호에서 - 를 삭제합니다.
+  var trans_num = $(this).val().replace(/-/gi,'');
+
+  // 입력값이 있을때만 실행합니다.
+  if(trans_num != null && trans_num != '')
+  {
+    // 총 핸드폰 자리수는 11글자이거나, 10자여야 합니다.
+    if(trans_num.length==11 || trans_num.length==10)
+    {
+      // 유효성 체크
+      var regExp_ctn = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})([0-9]{3,4})([0-9]{4})$/;
+      if(regExp_ctn.test(trans_num))
+      {
+        let numStyle =$(".hiddenSpan:eq(1)")
+        // 유효성 체크에 성공하면 하이픈을 넣고 값을 바꿔줍니다.
+        trans_num = trans_num.replace(/^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?([0-9]{3,4})-?([0-9]{4})$/, "$1-$2-$3");
+        (numStyle.css("display") !== "none") ? numStyle.css("display","none") : numStyle;
+
+        $(this).val(trans_num);
+      }
+      else
+      {
+        $(".hiddenSpan:eq(1)").css("display","block");
+        $(this).focus();
+      }
+    }
+    else
+    {
+      $(".hiddenSpan:eq(1)").css("display","block");
+      $(this).focus();
+    }
+  }
+});
+
+$(".birthday").on('keydown',function (e){
+  var trans_num = $(this).val().replace(/-/gi,'');
+  var k = e.keyCode;
+
+  if(trans_num.length >= 11 && ((k >= 48 && k <=126) || (k >= 12592 && k <= 12687 || k==32 || k==229 || (k>=45032 && k<=55203)) ))
+  {
+    e.preventDefault();
+  }
+}).on("blur",function(){
+  var trans_num = $(this).val().replace(/-/gi,'');
+  var regExp_birthday = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+  if(trans_num != null && trans_num != ''){
+    if(regExp_birthday.test(trans_num))
+    {
+      console.log(trans_num)
+      let numStyle =$(".hiddenSpan:eq(0)")
+      trans_num = trans_num.replace(/^(19[0-9][0-9]|20\d{2})-?(0[0-9]|1[0-2])-?(0[1-9]|[1-2][0-9]|3[0-1])$/, "$1-$2-$3");
+      (numStyle.css("display") !== "none") ? numStyle.css("display","none") : numStyle;
+      $(this).val(trans_num);
+    }else
+    {
+      $(".hiddenSpan:eq(0)").css("display","block");
+      $(this).val("");
+      $(this).focus();
+    }
+  }
 })
 </script>
 </html>

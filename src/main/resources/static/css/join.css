@@ -77,7 +77,7 @@ html, body {
     height:130px;
 }
 
-#user_name{
+.userExinfo{
     position:relative;
     border-radius:20px 20px 20px 20px;
     font-weight:bolder;
@@ -89,10 +89,13 @@ html, body {
     border: none;
     float: left;
     margin-left: 2.5%;
-
 }
 
-
+.hiddenSpan{
+    display: none;
+    color: red;
+    font-size: 42px;
+}
 div{
     position:relative;
 }
@@ -233,8 +236,6 @@ input[type="checkbox"] {
     width: 100%;
     height: 100px;
     margin-left: 2.5%;
-    border-radius: 20px 0px 0px 20px;
-    /* border:1px solid salmon; */
     background-repeat: no-repeat;
     background-position: 96% center;
     cursor: pointer;
@@ -250,10 +251,9 @@ input[type="checkbox"] {
 /* 옵션 영역 스타일 */
 .select ul{
     position: absolute;
-    top: 30px;
+    top: 51%;
     left: 0;
     width: 100%;
-    border:1px solid salmon;
     border-radius: 5px;
     background-color: white;
     cursor: pointer;
