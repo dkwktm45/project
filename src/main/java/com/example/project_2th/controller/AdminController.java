@@ -1,8 +1,10 @@
 package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.User;
+import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequestMapping(value = "/admin")
 public class AdminController {
+
+    @Autowired
+    private final UserService userService;
+
     @GetMapping({"/",""})
     public String admin() {
         return "admin";
@@ -32,13 +38,7 @@ public class AdminController {
 
     @PostMapping("/joinMember")
     public String joinMember(@ModelAttribute User user){
-        log.info(user.getUserPhone());
-        log.info(user.getUserGym());
-        log.info(user.getUserName());
-        log.info(String.valueOf(user.getManagerYn()));
-        log.info(String.valueOf(user.getVideoYn()));
-        log.info(String.valueOf(user.getUserBirthdate()));
-        log.info(String.valueOf(user.getUserExpireDate()));
+        userService.join(user);
         return "redirect:/admin/goJoin";
     }
 //

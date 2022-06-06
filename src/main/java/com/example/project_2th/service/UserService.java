@@ -77,11 +77,7 @@ public class UserService {
 
         return map;
     }
-
-    public void joinMemeber(User user){
-
+    public void join(User user){
+        userRepository.save(user);
     }
-
-
-
 }

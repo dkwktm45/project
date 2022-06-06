@@ -23,19 +23,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-
+    private String loginNumber;
     private String userName;
     private String userPhone;
     private String userGym;
     private Date userExpireDate;
     private Date userBirthdate;
     private String contents;
-    private String day;
-    private String time;
     private int managerYn;
     private int videoYn;
-    private String adComment;
-    private int month;
+
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY)
@@ -52,8 +49,9 @@ public class User {
     private final List<ExerciesVideo> exercieVideosList = new ArrayList<>();
 
     @Builder
-    public User(String userName ,String userPhone,Date userExpireDate,
+    public User(String loginNumber,String userName ,String userPhone,Date userExpireDate,
                 Date userBirthdate,int managerYn,int videoYn,String userGym){
+        this.loginNumber = loginNumber;
         this.userName = userName;
         this.userPhone = userPhone;
         this.userExpireDate = userExpireDate;

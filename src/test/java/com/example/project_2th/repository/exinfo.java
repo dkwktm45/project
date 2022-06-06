@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -17,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 @SpringBootTest
 @Slf4j
@@ -33,6 +38,13 @@ public class exinfo{
 
     @Autowired
     private PosturesRepository posturesRepository;
+
+    @Autowired
+    private EntityManager em;
+
+    @Autowired
+    private EntityManagerFactory emf;
+
     @Test
     @Transactional
     public void insertEx(){
@@ -97,6 +109,7 @@ public class exinfo{
 
     @DisplayName("기존 유저의 운동 정보에서 Cnt 값을 수정 and videofile 저장")
     @Test
+    @Transactional
     public void join(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -104,14 +117,16 @@ public class exinfo{
         System.out.println("current: " + df.format(cal.getTime()));
 
         cal.add(Calendar.MONTH, 6);
-        cal.add(Calendar.DATE, -3);
         System.out.println("after: " + df.format(cal.getTime()));
-      /*
-        Date birthday= Date.valueOf("1995-08-20");
-        Date expirtDate = Date.valueOf("2022-12-20");
-        User.builder().userName("이진영").userPhone("010-4903-4073").userGym("해운대").managerYn(0)
-                .videoYn(1).userBirthdate(birthday).userExpireDate(expirtDate).build();*/
+        String phone = "010-4903-4073";
+        String login = phone.substring(9);
+        User user = User.builder().loginNumber(login).userName("김화순").userPhone("010-4903-4073").userGym("해운대").managerYn(0)
+                .videoYn(1).userBirthdate(java.sql.Date.valueOf(df.format(cal.getTime()))).userExpireDate(java.sql.Date.valueOf(df.format(cal.getTime()))).build();
 
+        em.persist(user);
+
+        User result = em.find(User.class,user.getUserId());
+        assertEquals(user.getUserName(),result.getUserName());
     }
 
 }

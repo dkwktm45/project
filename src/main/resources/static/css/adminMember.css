@@ -284,7 +284,7 @@ html, body {
 .bot_view{
     display:inline-block;
     text-align: center;
-    width:90%;
+    width:95%;
     height:95%;
     background-color:white;
     border-radius:100px;
@@ -298,13 +298,13 @@ html, body {
 }
 
 .bot_user_left{
-    width:70%;
+    width:65%;
     height:100%;
     float:left;
 }
 
 .bot_user_right{
-    width:30%;
+    width:33%;
     height:100%;
     float:right;
     text-align: left;
