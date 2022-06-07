@@ -38,6 +38,11 @@ public class AdminController {
 
     @PostMapping("/joinMember")
     public String joinMember(@ModelAttribute User user){
+        log.info(user.getUserName());
+        log.info(String.valueOf(user.getVideoYn()));
+        log.info(user.getUserGym());
+        log.info(String.valueOf(user.getUserBirthdate()));
+        log.info(String.valueOf(user.getUserExpireDate()));
         userService.join(user);
         return "redirect:/admin/goJoin";
     }

@@ -80,10 +80,12 @@ public class UserService {
     public void join(User user){
         String phone = user.getUserPhone();
         String login = phone.substring(9);
-        User resultUser= User.builder().loginNumber(login).build();
+        User resultUser= User.builder().loginNumber(login).userName(user.getUserName()).userPhone(user.getUserPhone())
+                .userBirthdate(user.getUserBirthdate()).userExpireDate(user.getUserExpireDate())
+                .managerYn(user.getManagerYn()).videoYn(user.getVideoYn()).userGym(user.getUserGym()).build();
 
-        validateDuplicateMember(user);
-        log.info(user.getUserName() + "회원가입 성공!");
+        validateDuplicateMember(resultUser);
+        log.info(resultUser.getUserName() + "회원가입 성공!");
         userRepository.save(resultUser);
     }
     private void validateDuplicateMember(User user) {
