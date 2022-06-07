@@ -7,11 +7,11 @@ function go_record(){
 }
 
 function goJoin(){
-    location.href = "/admin/goJoin";
+    location.href = "/admin/Join";
 }
-function go_record(){
-    location.href = "/admin";
+function goVideo(){
+    location.href = "/admin/video";
 }
 function goMember(){
-    location.href = "/admin/goAdminMember";
+    location.href = "/admin/Member";
 }

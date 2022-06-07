@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +45,7 @@ public class UserService {
         } else {
             if (loginUser.getManagerYn() == 1) {
                 System.out.println("admin 로그인 성공");
+                // 중복 구간 수정 필요!
                 List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
 
                 session.setAttribute("userList",userList);
@@ -88,10 +91,32 @@ public class UserService {
         log.info(resultUser.getUserName() + "회원가입 성공!");
         userRepository.save(resultUser);
     }
+
     private void validateDuplicateMember(User user) {
         User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
         if(!(findMember == null)){
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
+    public void reLoadMember(HttpServletRequest req,HttpSession session){
+        session =req.getSession();
+        User loginUser = (User) session.getAttribute("user");
+        List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
+        session.setAttribute("userList",userList);
+    }
+    public void updateMonth(HttpServletRequest req , HttpSession session){
+        int month= Integer.parseInt(req.getParameter("month"));
+        Long id = Long.valueOf(req.getParameter("userId"));
+        User user = userRepository.findByUserId(id);
+        Date Expired= user.getUserExpireDate();
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(Expired);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        cal.add(java.util.Calendar.MONTH, month);
+
+        user.setUserExpireDate(Date.valueOf(df.format(cal.getTime())));
+
+        userRepository.save(user);
+    }
+
 }

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -23,17 +26,24 @@ public class AdminController {
 
     @GetMapping({"/",""})
     public String admin() {
-        return "admin";
+        return "/admin";
     }
 
-    @GetMapping("/goJoin")
-    public String join() {
-        return "join";
+
+    @GetMapping("/video")
+    public String vidoeMember() {
+        return "redirect:/admin";
     }
 
-    @GetMapping("/goAdminMember")
-    public String aminMember() {
-        return "adminMember";
+    @GetMapping("/Join")
+    public String goJoin() {
+        return "/join";
+    }
+
+    @GetMapping("/Member")
+    public String aminMember(HttpServletRequest req , HttpSession session) {
+        userService.reLoadMember(req, session);
+        return "/adminMember";
     }
 
     @PostMapping("/joinMember")
@@ -45,6 +55,10 @@ public class AdminController {
         log.info(String.valueOf(user.getUserExpireDate()));
         userService.join(user);
         return "redirect:/admin/goJoin";
+    }
+    @PostMapping("/updateMonth")
+    public void updateMonth(HttpServletRequest req , HttpSession session){
+        userService.updateMonth(req,session);
     }
 //
 //
