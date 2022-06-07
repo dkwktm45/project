@@ -107,7 +107,7 @@ public class exinfo{
 
     }
 
-    @DisplayName("기존 유저의 운동 정보에서 Cnt 값을 수정 and videofile 저장")
+    @DisplayName("회원 정보 저장 Test")
     @Test
     @Transactional
     public void join(){
@@ -120,8 +120,9 @@ public class exinfo{
         System.out.println("after: " + df.format(cal.getTime()));
         String phone = "010-4903-4073";
         String login = phone.substring(9);
-        User user = User.builder().loginNumber(login).userName("김화순").userPhone("010-4903-4073").userGym("해운대").managerYn(0)
-                .videoYn(1).userBirthdate(java.sql.Date.valueOf(df.format(cal.getTime()))).userExpireDate(java.sql.Date.valueOf(df.format(cal.getTime()))).build();
+        User user = User.builder().loginNumber(login).userName("김화순").userPhone("010-4903-4073")
+                .userBirthdate(java.sql.Date.valueOf(df.format(cal.getTime()))).userExpireDate(java.sql.Date.valueOf(df.format(cal.getTime())))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
 
         em.persist(user);
 

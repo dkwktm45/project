@@ -78,6 +78,18 @@ public class UserService {
         return map;
     }
     public void join(User user){
-        userRepository.save(user);
+        String phone = user.getUserPhone();
+        String login = phone.substring(9);
+        User resultUser= User.builder().loginNumber(login).build();
+
+        validateDuplicateMember(user);
+        log.info(user.getUserName() + "회원가입 성공!");
+        userRepository.save(resultUser);
+    }
+    private void validateDuplicateMember(User user) {
+        User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
+        if(!(findMember == null)){
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }
     }
 }

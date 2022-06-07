@@ -13,9 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -94,5 +98,42 @@ public class UserServiceTest {
         userList.get(0).getExercieVideosList().forEach(System.out::println);
 
     }
+    @DisplayName("join Service")
+    @Test
+    @Transactional
+    void test6(){
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(new Date());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println("current: " + df.format(cal.getTime()));
 
+        cal.add(java.util.Calendar.MONTH, 6);
+        System.out.println("after: " + df.format(cal.getTime()));
+        User user = User.builder().userName("김화순").userPhone("010-4903-4073")
+                .userBirthdate(java.sql.Date.valueOf(df.format(cal.getTime()))).userExpireDate(java.sql.Date.valueOf(df.format(cal.getTime())))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
+        userService.join(user);
+    }
+
+    @DisplayName("join Service fail")
+    @Test
+    @Transactional
+    void test7(){
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        cal.setTime(new Date());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println("current: " + df.format(cal.getTime()));
+
+        cal.add(java.util.Calendar.MONTH, 6);
+        System.out.println("after: " + df.format(cal.getTime()));
+        User user = User.builder().userName("김화순").userPhone("010-4903-4073")
+                .userBirthdate(java.sql.Date.valueOf(df.format(cal.getTime()))).userExpireDate(java.sql.Date.valueOf(df.format(cal.getTime())))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
+        em.persist(user);
+        try{
+            userService.join(user);
+        }catch (IllegalStateException e){
+            return;
+        }
+    }
 }
