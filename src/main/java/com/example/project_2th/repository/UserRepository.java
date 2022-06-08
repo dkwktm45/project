@@ -23,6 +23,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByUserId(Long userId);
 
+    User findByUserPhone(String phone);
+
     @EntityGraph(attributePaths = {"calendarList"})
     @Query(value = "select u from User u")
     List<User> findAllByFetchJoin();
