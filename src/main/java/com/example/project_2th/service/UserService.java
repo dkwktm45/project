@@ -34,7 +34,8 @@ public class UserService {
     private final VideoRepository videoRepository;
 
     public User login(String phone, String gym){
-        User loginUser = userRepository.findByUserIdAndUserGym(phone,gym);
+        log.info(userRepository.findByUserIdAndUserGym(phone,gym).getUserGym());
+        User loginUser = userRepository.findByUserPhoneAndUserGym(phone,gym);
         return loginUser;
     }
 
@@ -93,10 +94,10 @@ public class UserService {
     }
 
     private void validateDuplicateMember(User user) {
-        User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
+        /*User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
         if(!(findMember == null)){
             throw new IllegalStateException("이미 존재하는 회원입니다.");
-        }
+        }*/
     }
     public void reLoadMember(HttpServletRequest req,HttpSession session){
         session =req.getSession();
@@ -110,6 +111,7 @@ public class UserService {
         User user = userRepository.findByUserId(id);
         user.setUserExpireDate(expiredDate);
         userRepository.save(user);
+        //return "redirect:/admin/Member";
     }
 
 }

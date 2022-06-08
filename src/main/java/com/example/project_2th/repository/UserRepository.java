@@ -27,6 +27,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query(value = "select u from User u")
     List<User> findAllByFetchJoin();
 
+    @Nullable
     @EntityGraph(attributePaths = {"exercieVideosList"})
     List<User> findByUserGymAndManagerYn(String gym, int yn);
 }

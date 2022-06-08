@@ -153,12 +153,12 @@
     console.log()
 
     $.ajax({
-      url: "/admin/updateMonth",
+      url: "/updateMonth",
       type:"POST",
-      dataType: "json",
       data: {userExpireDate : dateString,userId :$(this).closest(".bot_user_right").prev().attr("id") },
       success:function(){
         console.log("성공")
+        location.href = "/admin/Member"
       },error: function (request, status, error) {
         alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
       }

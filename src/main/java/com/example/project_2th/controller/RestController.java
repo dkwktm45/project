@@ -87,7 +87,10 @@ public class RestController {
     }
 
 
-
+    @PostMapping("/updateMonth")
+    public void updateMonth(HttpServletRequest req , HttpSession session){
+        userService.updateMonth(req);
+    }
 
 }
 

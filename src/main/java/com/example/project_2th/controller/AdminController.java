@@ -56,10 +56,7 @@ public class AdminController {
         userService.join(user);
         return "redirect:/admin/goJoin";
     }
-    @PostMapping("/updateMonth")
-    public void updateMonth(HttpServletRequest req , HttpSession session){
-        //userService.updateMonth(req);
-    }
+
 //
 //
 //

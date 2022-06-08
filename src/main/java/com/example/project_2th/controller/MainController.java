@@ -70,9 +70,9 @@ public class MainController {
     @PostMapping(value = "/loginInsert")
     public String memberLogin(@ModelAttribute User user, HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession(true);
-        log.info(user.getUserGym());
-        log.info(user.getUserPhone());
-        User loginUser = userService.login(user.getUserPhone(), user.getUserGym());
+        log.info(request.getParameter("userGym"));
+        log.info(request.getParameter("userPhone"));
+        User loginUser = userService.login(request.getParameter("userPhone"),request.getParameter("userGym") );
         return userService.filterLogin(loginUser,session);
     }
 
