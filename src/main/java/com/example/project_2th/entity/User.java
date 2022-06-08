@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -28,6 +29,8 @@ public class User {
     private String userName;
     private String userPhone;
     private String userGym;
+
+    @Setter
     private Date userExpireDate;
     private Date userBirthdate;
     private String contents;
@@ -48,4 +51,5 @@ public class User {
     @OneToMany
     @JoinColumn(name = "user_id", insertable = false,updatable = false)
     private final List<ExerciesVideo> exercieVideosList = new ArrayList<>();
+
 }

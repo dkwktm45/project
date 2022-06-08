@@ -35,9 +35,8 @@ public class userEntity {
 
     @Test
     void login(){
-        User user = new User();
-        user.setUserGym("해운대");
-        user.setUserPhone("49034");
+        User user = User.builder().userName("김화순").userGym("해운대").userPhone("010-4903-4073").loginNumber("4073").build();
+
 
         userRepository.save(user);
 
@@ -59,6 +58,4 @@ public class userEntity {
         calendars.forEach(System.out::println);
         assertNotNull("Object is null",calendars );
     }
-
-
 }

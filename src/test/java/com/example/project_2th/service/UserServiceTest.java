@@ -6,6 +6,8 @@ import com.example.project_2th.repository.CalendarRepositroy;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import groovy.util.logging.Slf4j;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.persistence.EntityManager;
 
@@ -42,10 +46,19 @@ public class UserServiceTest {
     @Autowired
     EntityManager em;
 
+    protected MockHttpSession session;
+    protected MockHttpServletRequest request;
 
+    @Before
+    public void setUp() throws Exception{
+        User user = User.builder().userId(1L).userName("김화순").userPhone("010-4903-4073")
+                .userBirthdate(java.sql.Date.valueOf("1995-08-01")).userExpireDate(java.sql.Date.valueOf("2022-10-10"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
 
-    @BeforeEach
-    void before(){
+        request = new MockHttpServletRequest();
+        request.setAttribute("userId", String.valueOf(user.getUserId()));
+        request.setAttribute("userExpireDate", String.valueOf(user.getUserExpireDate()));
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
     }
 
     @DisplayName("사용자의 정보를 하나 가져온다.")
@@ -135,5 +148,20 @@ public class UserServiceTest {
         }catch (IllegalStateException e){
             return;
         }
+    }
+
+    @DisplayName("회원의 만기일 수정")
+    @Test
+    @Transactional
+    void test8(){
+        Long id = (Long) request.getAttribute("userId");
+        Date date = (Date) request.getAttribute("userExpireDate");
+        System.out.println(id);
+        System.out.println(date);
+    }
+    @After
+    public void clear(){
+        request.clearAttributes();
+        request = null;
     }
 }

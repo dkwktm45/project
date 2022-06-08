@@ -140,11 +140,6 @@
     var month1 = Number(date.slice(5,7));
     var date = Number(date.slice(8,10));
     var month2 = Number($(this).text().slice(0,2));
-
-    console.log(year)
-    console.log(month1)
-    console.log(date)
-    console.log(month2)
     var monthNumber = month1 + month2
 
     while(monthNumber >= 12){
@@ -155,19 +150,19 @@
     var date = ('0' + date).slice(-2);
     var dateString = year + '-' + month  + '-' + date;
     console.log(dateString)
-    console.log($(this).closest(".bot_user_right").prev().attr("id"))
+    console.log()
 
-/*    $.ajax({
+    $.ajax({
       url: "/admin/updateMonth",
       type:"POST",
       dataType: "json",
-      data: {userExpireDate : dateString,user : },
+      data: {userExpireDate : dateString,userId :$(this).closest(".bot_user_right").prev().attr("id") },
       success:function(){
         console.log("성공")
       },error: function (request, status, error) {
         alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
       }
-    })*/
+    })
   })
 </script>
 </body>

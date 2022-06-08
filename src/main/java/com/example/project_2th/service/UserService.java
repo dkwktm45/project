@@ -104,18 +104,11 @@ public class UserService {
         List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
         session.setAttribute("userList",userList);
     }
-    public void updateMonth(HttpServletRequest req , HttpSession session){
-        int month= Integer.parseInt(req.getParameter("month"));
+    public void updateMonth(HttpServletRequest req){
+        Date expiredDate= Date.valueOf(req.getParameter("userExpireDate"));
         Long id = Long.valueOf(req.getParameter("userId"));
         User user = userRepository.findByUserId(id);
-        Date Expired= user.getUserExpireDate();
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.setTime(Expired);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        cal.add(java.util.Calendar.MONTH, month);
-
-        user.setUserExpireDate(Date.valueOf(df.format(cal.getTime())));
-
+        user.setUserExpireDate(expiredDate);
         userRepository.save(user);
     }
 
