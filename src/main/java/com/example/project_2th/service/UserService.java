@@ -8,6 +8,7 @@ import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,9 +30,8 @@ import java.util.Map;
 @Slf4j
 public class UserService {
 
+    @Autowired
     private final UserRepository userRepository;
-
-    private final VideoRepository videoRepository;
 
     public User login(String phone, String gym){
         log.info(userRepository.findByUserIdAndUserGym(phone,gym).getUserGym());

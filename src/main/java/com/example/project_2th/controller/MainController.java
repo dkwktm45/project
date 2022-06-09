@@ -68,7 +68,7 @@ public class MainController {
 
     // login -> main or admin
     @PostMapping(value = "/loginInsert")
-    public String memberLogin(@ModelAttribute User user, HttpServletRequest request) throws Exception {
+    public String memberLogin(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession(true);
         log.info(request.getParameter("userGym"));
         log.info(request.getParameter("userPhone"));
