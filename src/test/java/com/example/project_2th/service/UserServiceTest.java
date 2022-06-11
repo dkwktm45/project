@@ -97,7 +97,9 @@ public class UserServiceTest {
     @DisplayName("사용자의 운동 기록들 불러온다.")
     @Test
     void test4(){
-        User user = userService.login("4903","해운대");
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
         //userService.findExercies(user).forEach(System.out::println);
 
     }

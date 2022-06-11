@@ -62,7 +62,9 @@ public class ExerciesServiceTest {
     @Test
     @DisplayName("운동의 대한 정보를 가져온다.")
     void test1() {
-        User user = userService.login("4903", "해운대");
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
 
         Exercies exercies = new Exercies();
         exercies.setExCount("12");
@@ -85,7 +87,9 @@ public class ExerciesServiceTest {
     @Test
     @DisplayName("운동의 대한 정보를 가져온다.")
     void test3() {
-        User user = userService.login("4903", "해운대");
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
         String myString = "2022-05-16";
         Date date = Date.valueOf(myString);
 

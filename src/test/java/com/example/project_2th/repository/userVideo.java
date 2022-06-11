@@ -89,7 +89,9 @@ public class userVideo {
     @Test
     @Transactional
     public void test1(){
-        User user = userService.login("4903", "해운대");
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
 
         Exercies exercies = new Exercies();
         exercies.setExCount("12");

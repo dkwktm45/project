@@ -25,12 +25,12 @@ import org.springframework.util.MultiValueMap;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,10 +52,10 @@ public class MainControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
-    @Test
+    private User user;
+    @Before
     public void test3() {
-        User user = User.builder().userName("김화순").userPhone("9696")
+        user = User.builder().userName("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
     }
@@ -73,13 +73,9 @@ public class MainControllerTest {
     @DisplayName("login -> main page")
     @Test
     public void test2() throws Exception {
-        User user = User.builder().userName("김화순").userPhone("9696")
-                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
-                .managerYn(0).videoYn(1).userGym("해운대").build();
-        String redirect = "redirect:/main";
         MockHttpSession session = new MockHttpSession();
 
-        Map<String,Object> list = null;
+        Map<String,Object> list = new HashMap<>();
         list.put("user",user);
         given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym(), session)).willReturn(list);
 
@@ -93,12 +89,40 @@ public class MainControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
 
-        System.out.println(session.getAttribute("user"));
-
+        assertNotNull(session.getAttribute("user"));
         verify(userService).filterLogin(user.getUserPhone(), user.getUserGym(), session);
-
     }
 
+    @DisplayName("login -> admin page")
+    @Test
+    public void test4() throws Exception {
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(Date.valueOf("1963-07-16")).userExpireDate(Date.valueOf("2022-08-20"))
+                .managerYn(1).videoYn(1).userGym("해운대").build();
+        MockHttpSession session = new MockHttpSession();
+
+        Map<String,Object> list = new HashMap<>();
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+        userList.add(user);
+        userList.add(user);
+        list.put("user",user);
+        list.put("userList",userList);
+        given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym(), session)).willReturn(list);
+
+
+        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
+
+        info.add("userGym", "해운대");
+        info.add("userPhone", "9696");
+
+        mockMvc.perform(post("/loginInsert").params(info).session(session))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
+
+        assertNotNull(session.getAttribute("user"));
+        verify(userService).filterLogin(user.getUserPhone(), user.getUserGym(), session);
+    }
     @After
     public void clean(){
         //session.clearAttributes();

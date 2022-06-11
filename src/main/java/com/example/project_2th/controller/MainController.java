@@ -70,12 +70,18 @@ public class MainController {
     @PostMapping(value = "/loginInsert")
     public String memberLogin(HttpServletRequest request,HttpSession session ) throws Exception {
         session = request.getSession(true);
-        log.info(request.getParameter("userGym"));
-        log.info(request.getParameter("userPhone"));
-        userService.filterLogin(request.getParameter("userPhone")
+        Map<String ,Object> list = userService.filterLogin(request.getParameter("userPhone")
                 ,request.getParameter("userGym")
                 ,session);
-        return ;
+        if (list.size() ==2){
+            session.setAttribute("userList",list.get("userList"));
+            session.setAttribute("user",list.get("user"));
+            return "redirect:/admin";
+        }else if(list.size()==1){
+            session.setAttribute("user",list.get("user"));
+            return "redirect:/main";
+        }
+        return "redirect:/login";
     }
 
     @GetMapping("/main")

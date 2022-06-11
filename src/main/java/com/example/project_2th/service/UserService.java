@@ -36,7 +36,7 @@ public class UserService {
 
     public Map<String,Object> filterLogin(String phone, String gym, HttpSession session ){
         User loginUser = userRepository.findByUserPhoneAndUserGym(phone,gym);
-        Map<String,Object> list = null;
+        Map<String,Object> list = new HashMap<>();
         if (loginUser == null) {
             log.info("로그인 실패");
             return null;
@@ -46,13 +46,10 @@ public class UserService {
                 List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
                 list.put("user",loginUser);
                 list.put("userList",userList);
-                session.setAttribute("userList",userList);
-                session.setAttribute("user", loginUser);
                 return list;
             } else {
                 log.info("session : "+loginUser);
                 list.put("user",loginUser);
-                session.setAttribute("user", loginUser);
                 return list;
             }
         }
