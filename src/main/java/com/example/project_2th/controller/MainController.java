@@ -68,12 +68,14 @@ public class MainController {
 
     // login -> main or admin
     @PostMapping(value = "/loginInsert")
-    public String memberLogin(HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession(true);
+    public String memberLogin(HttpServletRequest request,HttpSession session ) throws Exception {
+        session = request.getSession(true);
         log.info(request.getParameter("userGym"));
         log.info(request.getParameter("userPhone"));
-        User loginUser = userService.login(request.getParameter("userPhone"),request.getParameter("userGym") );
-        return userService.filterLogin(loginUser,session);
+        userService.filterLogin(request.getParameter("userPhone")
+                ,request.getParameter("userGym")
+                ,session);
+        return ;
     }
 
     @GetMapping("/main")

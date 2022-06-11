@@ -33,30 +33,27 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
 
-    public User login(String phone, String gym){
-        log.info(userRepository.findByUserIdAndUserGym(phone,gym).getUserGym());
-        User loginUser = userRepository.findByUserPhoneAndUserGym(phone,gym);
-        return loginUser;
-    }
 
-    public String filterLogin(User loginUser, HttpSession session ){
+    public Map<String,Object> filterLogin(String phone, String gym, HttpSession session ){
+        User loginUser = userRepository.findByUserPhoneAndUserGym(phone,gym);
+        Map<String,Object> list = null;
         if (loginUser == null) {
             log.info("로그인 실패");
-            return "redirect:/login";
+            return null;
         } else {
             if (loginUser.getManagerYn() == 1) {
-                System.out.println("admin 로그인 성공");
                 // 중복 구간 수정 필요!
                 List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
-
+                list.put("user",loginUser);
+                list.put("userList",userList);
                 session.setAttribute("userList",userList);
                 session.setAttribute("user", loginUser);
-                return "redirect:/admin";
-
+                return list;
             } else {
-                System.out.println("user 로그인 성공");
+                log.info("session : "+loginUser);
+                list.put("user",loginUser);
                 session.setAttribute("user", loginUser);
-                return "redirect:/main";
+                return list;
             }
         }
     }

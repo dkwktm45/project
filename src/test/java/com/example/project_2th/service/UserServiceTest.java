@@ -64,14 +64,18 @@ public class UserServiceTest {
     @DisplayName("사용자의 정보를 하나 가져온다.")
     @Test
     void test1(){
-        User user = userService.login("4903","해운대");
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
         assertEquals("이진영",user.getUserName());
     }
 
     @DisplayName("캘린더정보들을 가져온다.")
     @Test
     void test2(){
-        User user = userService.login("4903","해운대");
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
         List<Calendar> exinfo =userService.infoCalendar(user);
         try{
             assertEquals(1,exinfo.size());
@@ -83,7 +87,9 @@ public class UserServiceTest {
     @DisplayName("사용자의 달력 기록들 불러온다.")
     @Test
     void test3(){
-        User user = userService.login("4903","해운대");
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
 
         Map<String, Object> exinfo =userService.infoRecord(user);
         assertEquals(2,exinfo.size());
@@ -99,12 +105,14 @@ public class UserServiceTest {
     @DisplayName("회원들의 비디오 정보들을 가져온다.")
     @Test
     void test5(){
-        User user = userService.login("1234","해운대");
+        User user = User.builder().userName("김화순").userPhone("9696")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
 
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpSession session = (MockHttpSession) request.getSession();
         session.setAttribute("user",user);
-        userService.filterLogin(user,session);
+        userService.filterLogin(user.getUserPhone(), user.getUserGym(), session);
         session = (MockHttpSession) request.getSession();
 
         List<User> userList = (List<User>) session.getAttribute("userList");

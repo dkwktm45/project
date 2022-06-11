@@ -17,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -28,13 +29,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(MainController.class)
 @RunWith(SpringRunner.class)
@@ -50,7 +52,6 @@ public class MainControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private MockHttpSession session;
 
     @Test
     public void test3() {
@@ -75,12 +76,12 @@ public class MainControllerTest {
         User user = User.builder().userName("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
-        given(this.userService.login(user.getUserPhone(),user.getUserGym())) // this.postService.getJobList 메소드를 실행하면
-                .willReturn(user); // Arrays.asList(jobs) 를 리턴해줘라.
         String redirect = "redirect:/main";
+        MockHttpSession session = new MockHttpSession();
 
-        given(this.userService.filterLogin(user, session))
-                .willReturn(redirect);
+        Map<String,Object> list = null;
+        list.put("user",user);
+        given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym(), session)).willReturn(list);
 
 
         MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
@@ -88,10 +89,14 @@ public class MainControllerTest {
         info.add("userGym", "해운대");
         info.add("userPhone", "9696");
 
-        mockMvc.perform(post("/loginInsert").params(info))
+        mockMvc.perform(post("/loginInsert").params(info).session(session))
                 .andDo(print())
-                //정상 처리 되는지 확인
-                .andExpect(status().isOk());
+                .andExpect(status().is3xxRedirection());
+
+        System.out.println(session.getAttribute("user"));
+
+        verify(userService).filterLogin(user.getUserPhone(), user.getUserGym(), session);
+
     }
 
     @After
