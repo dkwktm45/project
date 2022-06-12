@@ -1,30 +1,20 @@
 package com.example.project_2th.controller;
 
-import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.User;
-import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.repository.ExinfoRepository;
-import com.example.project_2th.repository.UserRepository;
-import com.example.project_2th.repository.VideoRepository;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -38,7 +28,7 @@ public class MainController {
     @Autowired
     private final ExerciesService exerciesService;
 
-
+    private final Logger logger = LoggerFactory.getLogger("MainController 의 로그");
     // 기록페이지 re
     @GetMapping("/goRecord")
     public String goRecord(HttpServletRequest req) {
@@ -74,13 +64,16 @@ public class MainController {
                 ,request.getParameter("userGym")
                 ,session);
         if (list.size() ==2){
+            logger.info("admin page");
             session.setAttribute("userList",list.get("userList"));
             session.setAttribute("user",list.get("user"));
             return "redirect:/admin";
         }else if(list.size()==1){
+            logger.info("user page");
             session.setAttribute("user",list.get("user"));
             return "redirect:/main";
         }
+        logger.info("로그인 실패");
         return "redirect:/login";
     }
 
@@ -109,8 +102,12 @@ public class MainController {
     @PostMapping(value = "/insertEx")
     public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
-        session.setAttribute("exinfo",exerciesService.exerciesInfo(exercies));
-
+        Exercies exinfo = exerciesService.exerciesInfo(exercies);
+        if (exinfo== null){
+            log.error("운동 정보가 담겨 있지 않습니다.");
+            return "redirect:/main";
+        }
+        session.setAttribute("exinfo",exinfo);
         return "redirect:cam.do";
 
     }
@@ -119,18 +116,5 @@ public class MainController {
     public String cam() {
         return "cam";
     }
-
-
-//
-
-//
-//    @RequestMapping(value="/insertJoin.do", method= {RequestMethod.GET, RequestMethod.POST})
-//    public String insertJoin(guest memberVO ) {
-//
-//
-//        return "redirect:/join.do";
-//    }
-
-
 
 }

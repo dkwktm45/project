@@ -1,6 +1,9 @@
 server:
   port: 8005
 spring:
+  redis:
+    host: localhost
+    port: 6379
   mvc:
     view:
       suffix: .html
