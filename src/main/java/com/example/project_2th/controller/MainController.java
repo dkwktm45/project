@@ -90,7 +90,7 @@ public class MainController {
 
     // gocalender
     @GetMapping(value = "/infoCalender")
-    public String infoCalender(HttpServletRequest req ,Model model) {
+    public String infoCalender(HttpServletRequest req) {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
 

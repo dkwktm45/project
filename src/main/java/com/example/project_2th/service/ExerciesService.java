@@ -30,11 +30,10 @@ public class ExerciesService {
     private final UserRepository userRepository;
 
     public Exercies exerciesInfo(Exercies exercies){
-
         exercies.setExDay(Date.valueOf(LocalDate.now()));
         exinfoRepository.save(exercies);
         Exercies exinfo = exinfoRepository.findByOne(exercies.getUser().getUserId(), exercies.getExName());
-        return exinfo;
+        return exercies;
     }
 
     public List<Exercies> calendarExinfo(Calendar calendar){

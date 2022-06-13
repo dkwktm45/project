@@ -69,9 +69,8 @@ public class UserService {
             exerciesList.add(videoList.get(i).getExercies());
         }
         Map<String ,Object> map = new HashMap<>();
-        System.out.println(videoList.get(0).getFileName());
         map.put("videoList",videoList);
-        map.put("exerciesList",exerciesList);
+        map.put("exinfoList",exerciesList);
 
         return map;
     }

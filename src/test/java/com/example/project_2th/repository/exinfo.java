@@ -66,7 +66,7 @@ public class exinfo{
         result.forEach(System.out::println);
     }
     @Test
-    public void insertExTest(){
+    public void loginTest(){
         User user = userRepository.findByUserId(1L);
         Exercies exercies = new Exercies();
 
