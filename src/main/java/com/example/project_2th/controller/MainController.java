@@ -28,7 +28,7 @@ public class MainController {
     @Autowired
     private final ExerciesService exerciesService;
 
-    private final Logger logger = LoggerFactory.getLogger("MainController 의 로그");
+    private final Logger logger = LoggerFactory.getLogger(MainController.class);
     // 기록페이지 re
     @GetMapping("/goRecord")
     public String goRecord(HttpServletRequest req) {

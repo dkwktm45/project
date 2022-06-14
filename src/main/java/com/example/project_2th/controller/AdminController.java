@@ -26,7 +26,7 @@ public class AdminController {
     @Autowired
     private final UserService userService;
 
-    private final Logger logger = LoggerFactory.getLogger("AdminController 의 로그");
+    private final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping({"/",""})
     public String admin() {

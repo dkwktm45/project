@@ -25,7 +25,10 @@ import com.example.project_2th.service.PostruesService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,10 +50,12 @@ public class RestController {
     @Autowired
     private final UserService userService;
 
+    private final Logger logger = LoggerFactory.getLogger(RestController.class);
+
     @GetMapping(value = "/calendarView")
-    public List<Exercies> calendarView(@ModelAttribute Calendar calendar, HttpServletRequest req, HttpServletResponse res) throws Exception {
+    public ResponseEntity<List<Exercies>> calendarView(@ModelAttribute("user_calendar") Calendar calendar) throws Exception {
         List<Exercies> exinfoList = exerciesService.calendarExinfo(calendar);
-        return exinfoList;
+        return ResponseEntity.ok().body(exinfoList);
     }
 
     @PostMapping(value = "insertExURL")
