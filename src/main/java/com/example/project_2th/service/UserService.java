@@ -92,12 +92,10 @@ public class UserService {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }*/
     }
-    public void reLoadMember(HttpServletRequest req,HttpSession session){
-        session =req.getSession();
-        User loginUser = (User) session.getAttribute("user");
-        List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
-        session.setAttribute("userList",userList);
+    public List<User> reLoadMember(User loginUser){
+        return userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
     }
+
     public void updateMonth(HttpServletRequest req){
         Date expiredDate= Date.valueOf(req.getParameter("userExpireDate"));
         Long id = Long.valueOf(req.getParameter("userId"));

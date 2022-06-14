@@ -60,6 +60,9 @@ public class MainController {
     @PostMapping(value = "/loginInsert")
     public String memberLogin(HttpServletRequest request,HttpSession session ) throws Exception {
         session = request.getSession(true);
+        String userGym = request.getParameter("userGym");
+        String userPhone = request.getParameter("userPhone");
+
         Map<String ,Object> list = userService.filterLogin(request.getParameter("userPhone")
                 ,request.getParameter("userGym")
                 ,session);
@@ -94,9 +97,9 @@ public class MainController {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
 
-        session.setAttribute("exinfo",userService.infoCalendar(user));
+        session.setAttribute("calendarInfo",userService.infoCalendar(user));
 
-        return "redirect:test";
+        return "redirect:/test";
     }
 
     @PostMapping(value = "/insertEx")

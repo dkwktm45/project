@@ -28,6 +28,7 @@ import java.util.*;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.match;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -45,8 +46,6 @@ public class MainControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     MockHttpSession session;
 
@@ -76,10 +75,12 @@ public class MainControllerTest {
         info.add("userPhone", "9696");
 
         mockMvc.perform(post("/loginInsert").params(info).session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(request().sessionAttribute("user",user))
+                .andExpect(redirectedUrl("/main"))
                 .andDo(print())
-                .andExpect(status().is3xxRedirection());
+        ;
 
-        assertNotNull(session.getAttribute("user"));
         verify(userService).filterLogin(user.getUserPhone(), user.getUserGym(), session);
     }
 
@@ -98,24 +99,16 @@ public class MainControllerTest {
         info.add("userPhone", "9696");
 
         mockMvc.perform(post("/loginInsert").params(info).session(session))
-                .andDo(print())
-                .andExpect(status().is3xxRedirection());
+                .andExpect(redirectedUrl("/admin"))
+                .andExpect(request().sessionAttribute("user",user))
+                .andExpect(request().sessionAttribute("userList",session.getAttribute("userList")))
+                .andExpect(status().is3xxRedirection())
+                .andDo(print());
 
-        assertNotNull(session.getAttribute("user"));
-        assertNotNull(session.getAttribute("userList"));
         verify(userService).filterLogin(user.getUserPhone(), user.getUserGym(), session);
     }
 
-    @DisplayName("main 페이지로 유저 정보가 담겨서 이동한다.")
-    @Test
-    public void test5() throws Exception {
-        session = new MockHttpSession();
-        session.setAttribute("user",userHelper.makeUser());
 
-        mockMvc.perform(get("/main").session(session))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
     @DisplayName("calendar 페이지로 유저에 대한 운동 정보가 담겨서 이동한다.")
     @Test
     public void test6() throws Exception {
@@ -123,8 +116,7 @@ public class MainControllerTest {
         session.setAttribute("user",userHelper.makeUser());
         user = (User) session.getAttribute("user");
 
-        Calendar calendar = Calendar.builder().user(user).userWeight("80").exDay(Date.valueOf("2022-10-11"))
-                        .timeDiff("30").build();
+        Calendar calendar = userHelper.makeCalendar();
 
         List<Calendar> calendarList = new ArrayList<>();
         calendarList.add(calendar);
@@ -134,8 +126,12 @@ public class MainControllerTest {
         given(this.userService.infoCalendar(user)).willReturn(calendarList);
 
         mockMvc.perform(get("/infoCalender").session(session))
-                .andDo(print())
-                .andExpect(status().is3xxRedirection());
+                .andExpect(redirectedUrl("/test"))
+                .andExpect(request().sessionAttribute("calendarInfo",calendarList))
+                .andExpect(status().is3xxRedirection())
+                .andDo(print());
+
+        verify(userService).infoCalendar(user);
     }
     @DisplayName("/goRecord session에는 exinfoList, videoList가 담긴채로 이동한다.")
     @Test
@@ -153,10 +149,13 @@ public class MainControllerTest {
         given(this.userService.infoRecord(user)).willReturn(map);
 
         mockMvc.perform(get("/goRecord").session(session))
-                .andDo(print())
-                .andExpect(status().is3xxRedirection());
-        exinfoList.forEach(System.out::println);
-        videoList.forEach(System.out::println);
+                .andExpect(redirectedUrl("/record"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(request().sessionAttribute("exinfoList", map.get("exinfoList")))
+                .andExpect(request().sessionAttribute("videoList", map.get("videoList")))
+                .andDo(print());
+        verify(userService).infoRecord(user);
+
     }
     @DisplayName("/insertEx 이동하면서 session exinfo 정보를 담는다.")
     @Test
@@ -173,8 +172,42 @@ public class MainControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
     }
+    @DisplayName("main 페이지로 유저 정보가 담겨서 이동한다.")
+    @Test
+    public void test5() throws Exception {
+        session = new MockHttpSession();
+        session.setAttribute("user",userHelper.makeUser());
 
+        mockMvc.perform(get("/main").session(session))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+    @DisplayName("/test 페이지로 user, calendar 정보를 담고 이동한다.")
+    @Test
+    public void test9() throws Exception {
 
+        session = new MockHttpSession();
+        session.setAttribute("user",userHelper.makeUser());
+        session.setAttribute("calendarInfo",userHelper.makeCalendar());
+
+        mockMvc.perform(get("/test").session(session))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+    @DisplayName("/record 페이지로 exinfoList, videoList 정보를 담고 이동한다.")
+    @Test
+    public void test10() throws Exception {
+        session = new MockHttpSession();
+        session.setAttribute("user",userHelper.makeUser());
+        user = (User) session.getAttribute("user");
+
+        session.setAttribute("exinfoList",userHelper.makeExinfos(user));
+        session.setAttribute("videoList",userHelper.makeVideos(user));
+
+        mockMvc.perform(get("/record").session(session))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
     @After
     public void clean(){
         session.clearAttributes();

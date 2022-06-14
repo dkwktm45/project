@@ -4,6 +4,8 @@ import com.example.project_2th.entity.User;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,8 @@ public class AdminController {
     @Autowired
     private final UserService userService;
 
+    private final Logger logger = LoggerFactory.getLogger("AdminController 의 로그");
+
     @GetMapping({"/",""})
     public String admin() {
         return "/admin";
@@ -42,72 +46,26 @@ public class AdminController {
 
     @GetMapping("/Member")
     public String aminMember(HttpServletRequest req , HttpSession session) {
-        userService.reLoadMember(req, session);
+        session =req.getSession();
+        User loginUser = (User) session.getAttribute("user");
+
+
+        session.setAttribute("userList",userService.reLoadMember(loginUser));
+
         return "/adminMember";
     }
 
     @PostMapping("/joinMember")
-    public String joinMember(@ModelAttribute User user){
-        log.info(user.getUserName());
-        log.info(String.valueOf(user.getVideoYn()));
-        log.info(user.getUserGym());
-        log.info(String.valueOf(user.getUserBirthdate()));
-        log.info(String.valueOf(user.getUserExpireDate()));
+    public String joinMember(@ModelAttribute("user") User user){
+        logger.info(user.getUserName());
+        logger.info(String.valueOf(user.getVideoYn()));
+        logger.info(user.getUserGym());
+        logger.info(String.valueOf(user.getUserBirthdate()));
+        logger.info(String.valueOf(user.getUserExpireDate()));
+        logger.info(user.getUserPhone());
+
         userService.join(user);
         return "redirect:/admin/goJoin";
     }
 
-//
-//
-//
-//    @RequestMapping(value="/insertExURL.do", method= {RequestMethod.GET, RequestMethod.POST})
-//    public String insertURL(HttpServletRequest request) throws Exception {
-//
-//
-//        return "main.do";
-//
-//    }
-//
-//    @RequestMapping(value="/insertBadImage.do", method= {RequestMethod.GET, RequestMethod.POST})
-//    public void insertBadImage(HttpServletRequest request) throws Exception {
-//
-//
-//        //return "main.do";
-//
-//    }
-//
-//    @RequestMapping(value="/memberExinfo.do", method= {RequestMethod.GET, RequestMethod.POST})
-//    public List<exinfo> memberExinfo(String user_id , HttpServletRequest req) throws Exception {
-//
-//        return memberVideo;
-//
-//    }
-//
-//    @RequestMapping(value="/memberName.do", method= {RequestMethod.GET, RequestMethod.POST}, produces = "text/html; charset=utf-8")
-//    public String memberName(int video_seq , HttpServletRequest req, HttpServletResponse res) throws Exception {
-//
-//        return memberVideo.getUser_name();
-//
-//    }
-//
-//    @RequestMapping(value="/calendarView.do" , method= {RequestMethod.GET, RequestMethod.POST})
-//    public List<exinfo> calendarView(String user_id , String ex_date , HttpServletRequest req, HttpServletResponse res) throws Exception {
-//
-//        return memberVideo;
-//
-//    }
-//
-//    @RequestMapping(value="/dateVideo.do", method= {RequestMethod.GET, RequestMethod.POST})
-//    public String dateVideo(String user_id ,String video_date, HttpServletRequest req) throws Exception {
-//
-//
-//        return "record.do";
-//    }
-//
-//    @RequestMapping(value="/insertPose.do", method= {RequestMethod.GET, RequestMethod.POST})
-//    public List<deepPostures> insertPose(Model model , int video_seq , String video_date, HttpServletRequest req) throws Exception {
-//
-//
-//        return List;
-//    }
 }
