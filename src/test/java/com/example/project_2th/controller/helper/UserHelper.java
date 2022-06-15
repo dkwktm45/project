@@ -1,9 +1,6 @@
 package com.example.project_2th.controller.helper;
 
-import com.example.project_2th.entity.Calendar;
-import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.entity.ExerciesVideo;
-import com.example.project_2th.entity.User;
+import com.example.project_2th.entity.*;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Date;
@@ -23,13 +20,29 @@ public class UserHelper {
                 .managerYn(0).videoYn(1).userGym("해운대").build();
     }
     public static Exercies makeExercies(){
-        return Exercies.builder().exName("체스트 플라이").exCount("12")
+        return Exercies.builder().exSeq(1L).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(makeUser()).cnt("10").build();
     }
     public static Calendar makeCalendar(){
         return Calendar.builder().user(makeUser()).userWeight("80").exDay(Date.valueOf("2022-10-11"))
                 .timeDiff("30").build();
     }
+    public static ExerciesVideo makeVideo(){
+        return ExerciesVideo.builder().videoSeq(1L).videoDate(Date.valueOf("2022-10-10"))
+                .user(makeUser()).fileName("test").build();
+    }
+
+    public static List<Postures> makePose(){
+        List<Postures> postures = new ArrayList<>();
+        postures.add(Postures.builder().postureSeq(1L).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+                .exerciesVideo(makeVideo()).build());
+        postures.add(Postures.builder().postureSeq(2L).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+                .exerciesVideo(makeVideo()).build());
+        postures.add(Postures.builder().postureSeq(3L).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+                .exerciesVideo(makeVideo()).build());
+        return postures;
+    }
+
     public static Map<String ,Object> mapToObject(User user){
         Map<String ,Object> objectMap = new HashMap<>();
         objectMap.put("user",user);

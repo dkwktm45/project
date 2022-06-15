@@ -207,10 +207,10 @@
           var oReq = new XMLHttpRequest();
           var url
           if (feedback_l==null){
-            url = "insertBadImage.do?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_l;
+            url = "insertBadImage?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_l;
           }else if(feedback_r==null){
             feedback_r ="test"
-            url = "insertBadImage.do?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_r;
+            url = "insertBadImage?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_r;
           }
           console.log(url)
           oReq.open("POST", url, true);

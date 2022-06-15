@@ -2,6 +2,7 @@ package com.example.project_2th.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,7 +36,7 @@ public class ExerciesVideo {
 
     @Builder.Default
     @OneToMany
-    @JsonBackReference
+    @JsonManagedReference
     @JoinColumn(name = "video_seq", insertable = false,updatable = false)
     private List<Postures> postures = new ArrayList<>();
 

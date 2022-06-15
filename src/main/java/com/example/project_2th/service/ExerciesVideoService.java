@@ -78,9 +78,7 @@ public class ExerciesVideoService {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("exinfo", videoInfo.getExercies());
             map.put("postures", videoInfo.getPostures());
-
             return map;
-
         }catch (IllegalStateException e ){
             System.out.println(e.getMessage());
             return null;
