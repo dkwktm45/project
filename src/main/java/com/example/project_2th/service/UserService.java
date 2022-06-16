@@ -1,5 +1,6 @@
 package com.example.project_2th.service;
 
+import com.example.project_2th.controller.MainController;
 import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
@@ -8,6 +9,8 @@ import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +36,9 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public Map<String,Object> filterLogin(String phone, String gym, HttpSession session ){
+    public Map<String,Object> filterLogin(String phone, String gym){
         User loginUser = userRepository.findByUserPhoneAndUserGym(phone,gym);
         Map<String,Object> list = new HashMap<>();
         if (loginUser == null) {
@@ -80,20 +84,22 @@ public class UserService {
         User resultUser= User.builder().loginNumber(login).userName(user.getUserName()).userPhone(user.getUserPhone())
                 .userBirthdate(user.getUserBirthdate()).userExpireDate(user.getUserExpireDate())
                 .managerYn(user.getManagerYn()).videoYn(user.getVideoYn()).userGym(user.getUserGym()).build();
+        logger.info("join perform : {}",resultUser);
 
         validateDuplicateMember(resultUser);
-        log.info(resultUser.getUserName() + "회원가입 성공!");
         userRepository.save(resultUser);
     }
 
     private void validateDuplicateMember(User user) {
-        /*User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
+        logger.info("user validation");
+
+        User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
         if(!(findMember == null)){
             throw new IllegalStateException("이미 존재하는 회원입니다.");
-        }*/
+        }
     }
-    public List<User> reLoadMember(User loginUser){
-        return userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
+    public List<User> reLoadMember(User user){
+        return userRepository.findByUserGymAndManagerYn(user.getUserGym(),user.getManagerYn()-1);
     }
 
     public void updateMonth(HttpServletRequest req){

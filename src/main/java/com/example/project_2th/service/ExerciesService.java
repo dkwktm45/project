@@ -25,9 +25,8 @@ import java.util.List;
 @Slf4j
 public class ExerciesService {
 
+    @Autowired
     private final ExinfoRepository exinfoRepository;
-
-    private final UserRepository userRepository;
 
     public Exercies exerciesInfo(Exercies exercies){
         exercies.setExDay(Date.valueOf(LocalDate.now()));

@@ -64,8 +64,7 @@ public class MainController {
         String userPhone = request.getParameter("userPhone");
 
         Map<String ,Object> list = userService.filterLogin(request.getParameter("userPhone")
-                ,request.getParameter("userGym")
-                ,session);
+                ,request.getParameter("userGym"));
         if (list.size() ==2){
             logger.info("admin page");
             session.setAttribute("userList",list.get("userList"));

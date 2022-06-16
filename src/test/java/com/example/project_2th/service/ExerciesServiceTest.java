@@ -1,25 +1,34 @@
 package com.example.project_2th.service;
 
 import com.example.project_2th.controller.MainController;
+import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
+import com.example.project_2th.repository.UserRepository;
 import groovy.util.logging.Slf4j;
 import org.assertj.core.util.DateUtil;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -41,63 +50,54 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@SpringBootTest
-@Slf4j
+@ExtendWith(SpringExtension.class)
+@Import({ExerciesService.class, ExinfoRepository.class})
 public class ExerciesServiceTest {
 
-    @Autowired
-    private ExerciesService exerciesService;
+    @MockBean
+    ExinfoRepository exinfoRepository;
 
-    @Autowired
-    private UserService userService;
+    @Mock
+    ExerciesService exerciesService;
 
-    @Autowired
-    private ExinfoRepository exinfoRepository;
+    @Spy
+    User user;
 
+    protected MockHttpSession session;
+    protected MockHttpServletRequest request;
+    protected UserHelper userHelper;
 
-    @Autowired
-    private EntityManager em;
-
-    @Transactional
     @Test
-    @DisplayName("운동의 대한 정보를 가져온다.")
-    void test1() {
-        User user = User.builder().userName("김화순").userPhone("9696")
-                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
-                .managerYn(0).videoYn(1).userGym("해운대").build();
+    @DisplayName("exerciesInfo service : 운동의 대한 정보를 가져온다.")
+    void exerciesInfo() {
+        Exercies exercies = userHelper.makeExercies();
 
-        Exercies exercies = new Exercies();
-        exercies.setExCount("12");
-        exercies.setExKinds("가슴");
-        exercies.setExName("체스트 플라이");
-        exercies.setUserSet("4");
-        exercies.setUser(user);
+        Mockito.when(exinfoRepository.save(exercies)).thenReturn(null);
 
-        ExerciesVideo exerciesVideo = new ExerciesVideo();
+        Mockito.when(exinfoRepository.findByOne(exercies.getUser().getUserId(),exercies.getExName())).thenReturn(exercies);
 
-        exinfoRepository.save(exercies);
+        exerciesService = new ExerciesService(exinfoRepository);
 
-        Exercies exinfo = exinfoRepository.findByOne(user.getUserId(), exercies.getExName());
-        System.out.println(exinfo);
+        Exercies exinfo = exerciesService.exerciesInfo(exercies);
 
-        em.close();
+        assertEquals(exinfo.getExCount(),exercies.getExCount());
+
+        Mockito.verify(exinfoRepository).save(exercies);
+        Mockito.verify(exinfoRepository).findByOne(exercies.getUser().getUserId(),exercies.getExName());
     }
 
-    @Transactional
     @Test
-    @DisplayName("운동의 대한 정보를 가져온다.")
-    void test3() {
-        User user = User.builder().userName("김화순").userPhone("9696")
-                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
-                .managerYn(0).videoYn(1).userGym("해운대").build();
-        String myString = "2022-05-16";
-        Date date = Date.valueOf(myString);
+    @DisplayName("calendarExinfo : 날짜에 맞는 운동 정보")
+    void calendarExinfo() {
+        Calendar calendar = userHelper.makeCalendar();
+        List<Exercies> exercies = userHelper.makeExinfos(userHelper.makeUser());
+        Mockito.when(exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay()))
+                .thenReturn(exercies);
 
-        Calendar calendar = new Calendar();
-        calendar.setUser(user);
-        calendar.setExDay(date);
+        exerciesService = new ExerciesService(exinfoRepository);
+        List<Exercies> exerciesResult =  exerciesService.calendarExinfo(calendar);
 
-        List<Exercies> exercies =  exerciesService.calendarExinfo(calendar);
-        System.out.println(exercies);
+        assertEquals(exerciesResult,exercies);
+        Mockito.verify(exinfoRepository).findExDay(calendar.getUser().getUserId(),calendar.getExDay());
     }
 }

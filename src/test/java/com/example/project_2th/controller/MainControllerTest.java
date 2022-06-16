@@ -67,7 +67,7 @@ public class MainControllerTest {
 
         Map<String,Object> list = this.userHelper.mapToObject(this.userHelper.makeUser());
         User user = (User) list.get("user");
-        given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym(), session)).willReturn(list);
+        given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym())).willReturn(list);
 
 
         MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
@@ -81,7 +81,7 @@ public class MainControllerTest {
                 .andDo(print())
         ;
 
-        verify(userService).filterLogin(user.getUserPhone(), user.getUserGym(), session);
+        verify(userService).filterLogin(user.getUserPhone(), user.getUserGym());
     }
 
     @DisplayName("form 데이터를 loginInsert로 이동(admin)")
@@ -91,7 +91,7 @@ public class MainControllerTest {
         Map<String,Object> list =userHelper.makeAdmin();
         User user = (User) list.get("user");
 
-        given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym(), session)).willReturn(list);
+        given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym())).willReturn(list);
 
         MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
 
@@ -105,7 +105,7 @@ public class MainControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
 
-        verify(userService).filterLogin(user.getUserPhone(), user.getUserGym(), session);
+        verify(userService).filterLogin(user.getUserPhone(), user.getUserGym());
     }
 
 
