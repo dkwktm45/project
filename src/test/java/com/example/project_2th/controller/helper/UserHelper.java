@@ -53,19 +53,19 @@ public class UserHelper {
         return calendarList;
     }
 
-    public static ExerciesVideo makeVideo(){
+    public ExerciesVideo makeVideo(){
         return ExerciesVideo.builder().videoSeq(1L).videoDate(Date.valueOf("2022-10-10"))
-                .user(makeUser()).fileName("test").build();
+                .exercies(makeExercies()).postures(makePose()).fileName("test").build();
     }
 
-    public static List<Postures> makePose(){
+    public List<Postures> makePose(){
         List<Postures> postures = new ArrayList<>();
         postures.add(Postures.builder().postureSeq(1L).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
-                .exerciesVideo(makeVideo()).build());
+                .build());
         postures.add(Postures.builder().postureSeq(2L).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
-                .exerciesVideo(makeVideo()).build());
+                .build());
         postures.add(Postures.builder().postureSeq(3L).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
-                .exerciesVideo(makeVideo()).build());
+                .build());
         return postures;
     }
 

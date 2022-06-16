@@ -8,6 +8,7 @@ import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
+import com.example.project_2th.repository.VideoRepository;
 import groovy.util.logging.Slf4j;
 import org.assertj.core.util.DateUtil;
 import org.junit.Before;
@@ -51,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(SpringExtension.class)
-@Import({ExerciesService.class, ExinfoRepository.class})
+@Import({ExerciesVideoService.class, ExinfoRepository.class,UserRepository.class, VideoRepository.class})
 public class ExerciesServiceTest {
 
     @MockBean

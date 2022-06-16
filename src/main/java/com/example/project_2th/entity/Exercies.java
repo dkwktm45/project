@@ -30,4 +30,7 @@ public class Exercies {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToOne(mappedBy = "user_exercies")
+    private ExerciesVideo exerciesVideo;
 }

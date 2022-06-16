@@ -11,6 +11,8 @@ import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,8 +38,10 @@ public class ExerciesVideoService {
     private final ExinfoRepository exinfoRepository;
 
     private final VideoRepository videoRepository;
+    private final Logger logger = LoggerFactory.getLogger(ExerciesVideoService.class);
 
     public void videoSave(String cnt, Long user_id,Long ex_seq, ServletInputStream input) throws IOException {
+        logger.info("videoSave perform");
         User user = userRepository.findByUserId(user_id);
         Exercies exercies = exinfoRepository.findByExSeq(ex_seq);
 
@@ -64,12 +68,16 @@ public class ExerciesVideoService {
         exerciesVideo.setFileName(file_name);
         exerciesVideo.setVideoDate(Date.valueOf(LocalDate.now()));
         exerciesVideo.setExercies(exercies);
+        logger.info("videoSave info : {}",exerciesVideo);
 
         videoRepository.save(exerciesVideo);
 
+
+        logger.info("cnt update : {}",cnt);
         // cnt 데이터 update
         exercies.setCnt(cnt);
         exinfoRepository.save(exercies);
+
     }
 
     public Map<String, Object> selectVideoInfo(Long videoSeq){
