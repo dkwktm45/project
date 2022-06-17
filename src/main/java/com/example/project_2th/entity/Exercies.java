@@ -31,6 +31,5 @@ public class Exercies {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "user_exercies")
-    private ExerciesVideo exerciesVideo;
+
 }

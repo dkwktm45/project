@@ -41,18 +41,18 @@ public class User {
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY)
     @Builder.Default
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private final List<Exercies> exerciesList = new ArrayList<>();
 
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL)
     @Builder.Default
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private final List<Calendar> calendarList = new ArrayList<>();
 
     @OneToMany
     @Builder.Default
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private final List<ExerciesVideo> exercieVideosList = new ArrayList<>();
 
 }

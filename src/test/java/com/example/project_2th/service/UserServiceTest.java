@@ -61,7 +61,7 @@ public class UserServiceTest {
         void test1(){
             user = userHelper.makeUser();
 
-            Mockito.when(userRepository.findByUserPhoneAndUserGym(
+            Mockito.when(userRepository.findByLoginNumberAndUserGym(
                     user.getUserPhone()
                     , user.getUserGym())).thenReturn(user);
 
@@ -69,7 +69,7 @@ public class UserServiceTest {
 
             Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
             assertEquals(result.get("user"),user);
-            verify(userRepository).findByUserPhoneAndUserGym( user.getUserPhone()
+            verify(userRepository).findByLoginNumberAndUserGym( user.getUserPhone()
                     , user.getUserGym());
         }
 
@@ -80,7 +80,7 @@ public class UserServiceTest {
             user = (User) adminInfo.get("user");
             List<User> users = (List<User>) adminInfo.get("userList");
 
-            Mockito.when(userRepository.findByUserPhoneAndUserGym(
+            Mockito.when(userRepository.findByLoginNumberAndUserGym(
                     user.getUserPhone()
                     , user.getUserGym())).thenReturn(user);
             Mockito.when(userRepository.findByUserGymAndManagerYn(
@@ -93,7 +93,7 @@ public class UserServiceTest {
             assertEquals(result.get("user"),user);
             assertEquals(result.get("userList"),adminInfo.get("userList"));
 
-            verify(userRepository).findByUserPhoneAndUserGym( user.getUserPhone()
+            verify(userRepository).findByLoginNumberAndUserGym( user.getUserPhone()
                     , user.getUserGym());
             verify(userRepository).findByUserGymAndManagerYn( user.getUserGym()
                     , user.getManagerYn()-1);
@@ -104,7 +104,7 @@ public class UserServiceTest {
         void test3(){
             user = userHelper.makeUser();
 
-            Mockito.when(userRepository.findByUserPhoneAndUserGym(
+            Mockito.when(userRepository.findByLoginNumberAndUserGym(
                     user.getUserPhone()
                     , user.getUserGym())).thenReturn(null);
 
@@ -112,7 +112,7 @@ public class UserServiceTest {
 
             Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
             assertNull(result);
-            verify(userRepository).findByUserPhoneAndUserGym(user.getUserPhone()
+            verify(userRepository).findByLoginNumberAndUserGym(user.getUserPhone()
                     , user.getUserGym());
         }
     }

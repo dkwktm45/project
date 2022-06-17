@@ -40,7 +40,7 @@ public class userEntity {
 
         userRepository.save(user);
 
-        User user2 = userRepository.findByUserPhoneAndUserGym("49034","해운대");
+        User user2 = userRepository.findByLoginNumberAndUserGym("49034","해운대");
 
         System.out.println(user2.getUserId());
 

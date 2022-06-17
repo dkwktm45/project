@@ -9,13 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RequiredArgsConstructor
 public class UserHelper {
 
-    private final User user;
 
     public static User makeUser(){
-        return User.builder().userId(1L).userName("김화순").userPhone("9696")
+        return User.builder().userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
     }
@@ -55,7 +53,7 @@ public class UserHelper {
 
     public ExerciesVideo makeVideo(){
         return ExerciesVideo.builder().videoSeq(1L).videoDate(Date.valueOf("2022-10-10"))
-                .exercies(makeExercies()).postures(makePose()).fileName("test").build();
+                .user(makeUser()).exercies(makeExercies()).postures(makePose()).fileName("test").build();
     }
 
     public List<Postures> makePose(){

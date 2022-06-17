@@ -85,7 +85,7 @@ public class ExerciesVideoServiceTest {
     @Test
     void selectVideoInfo() throws Exception {
 
-        this.userHelper= new UserHelper(user);
+        this.userHelper= new UserHelper();
 
         Mockito.when(videoRepository.findByVideoSeq(1L))
                 .thenReturn(this.userHelper.makeVideo());

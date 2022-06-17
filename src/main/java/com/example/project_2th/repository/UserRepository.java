@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
             @Param("user_phone") String userPhone,
             @Param("user_gym") String userGym);
 
-    User findByUserPhoneAndUserGym(String userPhone, String userGym);
+    User findByLoginNumberAndUserGym(String loginNumber, String userGym);
 
     User findByUserId(Long userId);
 
