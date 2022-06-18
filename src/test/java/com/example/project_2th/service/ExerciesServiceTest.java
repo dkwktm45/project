@@ -91,7 +91,7 @@ public class ExerciesServiceTest {
     @DisplayName("calendarExinfo : 날짜에 맞는 운동 정보")
     void calendarExinfo() {
         Calendar calendar = userHelper.makeCalendar();
-        List<Exercies> exercies = userHelper.makeExinfos(userHelper.makeUser());
+        List<Exercies> exercies = userHelper.makeExinfos();
         Mockito.when(exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay()))
                 .thenReturn(exercies);
 

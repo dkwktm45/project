@@ -139,8 +139,8 @@ public class UserServiceTest {
         user = userHelper.makeUser();
 
         Map<String,Object> map = new HashMap<>();
-        List<Exercies> exinfoList = this.userHelper.makeExinfos(user);
-        List<ExerciesVideo> videoList = this.userHelper.makeVideos(user);
+        List<Exercies> exinfoList = this.userHelper.makeExinfos();
+        List<ExerciesVideo> videoList = this.userHelper.makeVideos();
         map.put("videoList",videoList);
         map.put("exinfoList",exinfoList);
 

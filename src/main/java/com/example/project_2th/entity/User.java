@@ -45,7 +45,7 @@ public class User {
     private final List<Exercies> exerciesList = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @Builder.Default
     @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private final List<Calendar> calendarList = new ArrayList<>();

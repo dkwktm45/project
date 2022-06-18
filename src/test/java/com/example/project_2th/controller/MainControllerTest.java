@@ -141,8 +141,8 @@ public class MainControllerTest {
         user = (User) session.getAttribute("user");
 
         Map<String,Object> map = new HashMap<>();
-        List<Exercies> exinfoList = this.userHelper.makeExinfos(user);
-        List<ExerciesVideo> videoList = this.userHelper.makeVideos(user);
+        List<Exercies> exinfoList = this.userHelper.makeExinfos();
+        List<ExerciesVideo> videoList = this.userHelper.makeVideos();
         map.put("videoList",videoList);
         map.put("exinfoList",exinfoList);
 
@@ -201,8 +201,8 @@ public class MainControllerTest {
         session.setAttribute("user",userHelper.makeUser());
         user = (User) session.getAttribute("user");
 
-        session.setAttribute("exinfoList",userHelper.makeExinfos(user));
-        session.setAttribute("videoList",userHelper.makeVideos(user));
+        session.setAttribute("exinfoList",userHelper.makeExinfos());
+        session.setAttribute("videoList",userHelper.makeVideos());
 
         mockMvc.perform(get("/record").session(session))
                 .andDo(print())
