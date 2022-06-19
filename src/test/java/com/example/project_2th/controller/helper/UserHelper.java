@@ -45,7 +45,7 @@ public class UserHelper {
     }
     public Calendar makeCalendar(){
         return Calendar.builder().userWeight("80").exDay(Date.valueOf("2022-10-11"))
-                .timeDiff("30").id(makeId()).user(makeUser()).build();
+                .timeDiff("30").user(makeUser()).build();
     }
 
     public List<Calendar> makeCalendars(){

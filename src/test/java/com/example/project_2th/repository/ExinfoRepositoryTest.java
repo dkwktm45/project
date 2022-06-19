@@ -33,8 +33,7 @@ class ExinfoRepositoryTest {
     private TestEntityManager testEntityManager;
     @Autowired
     private ExinfoRepository exinfoRepository;
-    @Autowired
-    private UserRepository userRepository;
+
     protected UserHelper userHelper;
     private Logger logger = LoggerFactory.getLogger(ExinfoRepositoryTest.class);
 
