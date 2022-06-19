@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class UserHelper {
 
-
+    Long id = 0L;
     public static User makeUser(){
         return User.builder().userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
@@ -26,7 +26,7 @@ public class UserHelper {
 
     public List<User> makeUsers(){
         List<User> users = new ArrayList<>();
-        users.add(User.builder().userId(makeId()).userName("김화순").userPhone("9696")
+        users.add(User.builder().userName("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).calendarList(makeCalendars()).exercieVideosList(makeVideos()).videoYn(1).userGym("해운대").build());
 
@@ -64,11 +64,11 @@ public class UserHelper {
 
     public List<Postures> makePose(){
         List<Postures> postures = new ArrayList<>();
-        postures.add(Postures.builder().postureSeq(makeId()).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+        postures.add(Postures.builder().videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
                 .build());
-        postures.add(Postures.builder().postureSeq(makeId()).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+        postures.add(Postures.builder().videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
                 .build());
-        postures.add(Postures.builder().postureSeq(makeId()).videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+        postures.add(Postures.builder().videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
                 .build());
         return postures;
     }
@@ -120,7 +120,6 @@ public class UserHelper {
         return exercies;
     }
     public Long makeId(){
-        Long id = 0L;
         id++;
         return id;
     }

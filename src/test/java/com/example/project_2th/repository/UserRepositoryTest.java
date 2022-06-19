@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -38,10 +39,7 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
     protected UserHelper userHelper;
     private Logger logger = LoggerFactory.getLogger(UserRepositoryTest.class);
-    @BeforeEach
-    void deleteAll(){
-        userRepository.deleteAll();
-    }
+
     @DisplayName("loginNumber and gym findUser")
     @Test
     void findByLoginNumberAndUserGym() {
@@ -121,8 +119,24 @@ public class UserRepositoryTest {
         assertEquals(4,users.get(0).getCalendarList().size());
     }
 
+    @DisplayName("gym 과 관리자 여부에 따른 회원조회")
     @Test
     void findByUserGymAndManagerYn() {
+        //given
+        userHelper = new UserHelper();
+        List<User> users = new ArrayList<>();
+        users.add(userHelper.userCalendar());
+        users.add(userHelper.userCalendar());
+        users.add(userHelper.userCalendar());
+        logger.info("저장 시작");
+        testEntityManager.persist(users.get(0));
+        testEntityManager.persist(users.get(1));
+        testEntityManager.persist(users.get(2));
+        logger.info("저장 끝");
+
+        List<User> result = userRepository.findByUserGymAndManagerYn("해운대",0);
+
+        assertEquals(users.size(),result.size());
     }
 
 }

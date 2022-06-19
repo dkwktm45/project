@@ -39,7 +39,7 @@ public class User {
 
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY )
     @Builder.Default
     @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private final List<Exercies> exerciesList = new ArrayList<>();
