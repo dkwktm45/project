@@ -1,26 +1,18 @@
 package com.example.project_2th.repository;
 
-import com.example.project_2th.config.DbConnection;
-import com.example.project_2th.config.TestDatasourceConfig;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
-import com.example.project_2th.service.ExerciesVideoService;
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +20,9 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(TestDatasourceConfig.class)
 public class UserRepositoryTest {
 
     @Autowired
