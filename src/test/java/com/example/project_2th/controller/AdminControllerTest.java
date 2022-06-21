@@ -3,6 +3,7 @@ package com.example.project_2th.controller;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
@@ -87,11 +88,13 @@ public class AdminControllerTest {
     @DisplayName("회원가입")
     @Test
     public void test3() throws Exception{
+        ObjectMapper mapper = new ObjectMapper();
+        User user = userHelper.makeUser();
+        String jsonInString = mapper.writeValueAsString(user);
 
-        user = userHelper.makeUser();
         mockMvc.perform(post("/admin/joinMember")
-                        .flashAttr("user",user)
-                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+                        .content(jsonInString)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(AdminController.class))
                 .andDo(print());

@@ -60,10 +60,7 @@ public class MainController {
     @PostMapping(value = "/loginInsert")
     public String memberLogin(HttpServletRequest request,HttpSession session ) throws Exception {
         session = request.getSession(true);
-        String userGym = request.getParameter("userGym");
-        String userPhone = request.getParameter("userPhone");
-
-        Map<String ,Object> list = userService.filterLogin(request.getParameter("userPhone")
+        Map<String ,Object> list = userService.filterLogin(request.getParameter("loginNumber")
                 ,request.getParameter("userGym"));
         if (list.size() ==2){
             logger.info("admin page");

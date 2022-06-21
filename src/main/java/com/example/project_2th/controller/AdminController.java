@@ -8,14 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -48,24 +47,21 @@ public class AdminController {
     public String aminMember(HttpServletRequest req , HttpSession session) {
         session =req.getSession();
         User loginUser = (User) session.getAttribute("user");
-
-
         session.setAttribute("userList",userService.reLoadMember(loginUser));
-
         return "/adminMember";
     }
 
-    @PostMapping("/joinMember")
-    public String joinMember(@ModelAttribute("user") User user){
-        logger.info(user.getUserName());
-        logger.info(String.valueOf(user.getVideoYn()));
-        logger.info(user.getUserGym());
-        logger.info(String.valueOf(user.getUserBirthdate()));
-        logger.info(String.valueOf(user.getUserExpireDate()));
-        logger.info(user.getUserPhone());
+    @PostMapping(value = "/joinMember")
+    public String joinMember(@RequestBody User user){
+        logger.info("name : " +user.getUserName());
+        logger.info("videoYn : " +String.valueOf(user.getVideoYn()));
+        logger.info("gym : " +user.getUserGym());
+        logger.info("birthdate : " +String.valueOf(user.getUserBirthdate()));
+        logger.info("expiredDate : " +String.valueOf(user.getUserExpireDate()));
+        logger.info("phone : " +user.getUserPhone());
 
         userService.join(user);
-        return "redirect:/admin/goJoin";
+        return "redirect:/admin/Join";
     }
 
 }

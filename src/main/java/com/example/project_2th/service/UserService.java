@@ -38,8 +38,8 @@ public class UserService {
 
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public Map<String,Object> filterLogin(String phone, String gym){
-        User loginUser = userRepository.findByLoginNumberAndUserGym(phone,gym);
+    public Map<String,Object> filterLogin(String number, String gym){
+        User loginUser = userRepository.findByLoginNumberAndUserGym(number,gym);
         Map<String,Object> list = new HashMap<>();
         if (loginUser == null) {
             log.info("로그인 실패");
