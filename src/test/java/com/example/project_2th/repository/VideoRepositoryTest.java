@@ -5,6 +5,7 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.Postures;
 import com.example.project_2th.entity.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.util.List;
 
@@ -24,11 +27,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@Import(TestDatasourceConfig.class)
+@ActiveProfiles("test")
 class VideoRepositoryTest {
 
     @Autowired
-    private TestEntityManager testEntityManager;
+    private EntityManager em;
     @Autowired
     private VideoRepository videoRepository;
 
@@ -45,20 +48,20 @@ class VideoRepositoryTest {
     void setUp() {
         userHelper = new UserHelper();
         user = userHelper.userCalendar();
-        testEntityManager.persist(user);
-        user = testEntityManager.find(User.class,1L);
+        em.persist(user);
+        user = em.find(User.class,1L);
         exercies = Exercies.builder().exDay(Date.valueOf("2022-06-15")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
-        testEntityManager.persist(exercies);
+        em.persist(exercies);
     }
 
     @Test
     void findByExercies() {
         logger.info("given");
-        exercies = testEntityManager.find(Exercies.class,1L);
+        exercies = em.find(Exercies.class,1L);
         ExerciesVideo exerciesVideo = ExerciesVideo.builder().exercies(exercies).fileName("test").videoDate(Date.valueOf("2022-06-15"))
                 .user(user).build();
-        testEntityManager.persist(exerciesVideo);
+        em.persist(exerciesVideo);
 
         logger.info("when");
         ExerciesVideo result = videoRepository.findByExercies(exercies);
@@ -70,12 +73,12 @@ class VideoRepositoryTest {
     @Test
     void findByVideoSeq() {
         logger.info("given");
-        exercies = testEntityManager.find(Exercies.class,1L);
+        exercies = em.find(Exercies.class,1L);
         postures = userHelper.makePose();
 
         ExerciesVideo exerciesVideo = ExerciesVideo.builder().postures(postures).exercies(exercies).fileName("test").videoDate(Date.valueOf("2022-06-15"))
                 .user(user).build();
-        testEntityManager.persist(exerciesVideo);
+        em.persist(exerciesVideo);
 
         logger.info("when");
         ExerciesVideo result = videoRepository.findByVideoSeq(1L);
@@ -88,11 +91,11 @@ class VideoRepositoryTest {
     @Test
     void findAll() {
         logger.info("given");
-        testEntityManager.persist(ExerciesVideo.builder().fileName("test1").videoDate(Date.valueOf("2022-06-15"))
+        em.persist(ExerciesVideo.builder().fileName("test1").videoDate(Date.valueOf("2022-06-15"))
                 .build());
-        testEntityManager.persist(ExerciesVideo.builder().fileName("test2").videoDate(Date.valueOf("2022-06-15"))
+        em.persist(ExerciesVideo.builder().fileName("test2").videoDate(Date.valueOf("2022-06-15"))
                 .build());
-        testEntityManager.persist(ExerciesVideo.builder().fileName("test3").videoDate(Date.valueOf("2022-06-15"))
+        em.persist(ExerciesVideo.builder().fileName("test3").videoDate(Date.valueOf("2022-06-15"))
                 .build());
 
         logger.info("when");
@@ -100,5 +103,22 @@ class VideoRepositoryTest {
 
         logger.info("then");
         assertEquals(3,result.size());
+    }
+    @AfterEach
+    void afterUp(){
+        em.clear();
+        this.em
+                .createNativeQuery("ALTER TABLE user ALTER COLUMN `user_id` RESTART WITH 1")
+                .executeUpdate();
+        this.em
+                .createNativeQuery("ALTER TABLE user_exercies ALTER COLUMN `ex_seq` RESTART WITH 1")
+                .executeUpdate();
+        this.em
+                .createNativeQuery("ALTER TABLE user_postures ALTER COLUMN `posture_seq` RESTART WITH 1")
+                .executeUpdate();
+        this.em
+                .createNativeQuery("ALTER TABLE user_exercies_videos ALTER COLUMN `video_seq` RESTART WITH 1")
+                .executeUpdate();
+
     }
 }
