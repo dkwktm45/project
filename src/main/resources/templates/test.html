@@ -69,29 +69,25 @@
     /*<![CDATA[*/
     var exinfoList =/*[[${session.calendarInfo}]]*/;
     var userinfo =/*[[${session.user}]]*/;
-
-
     /*]]*/
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         events: [],
+        eventClick: function (info){
+            var dateSettings = { "year": "numeric", "month": "2-digit", "day": "2-digit"};
+            var rentdate = calendar.formatDate(info.event.start,  dateSettings);
 
-        eventClick: function (info) {
-
-            var dateSettings = {"year": "numeric", "month": "2-digit", "day": "2-digit"};
-            var rentdate = calendar.formatDate(info.event.start, dateSettings);
             rentdate = rentdate.replace("/","-");
             rentdate = rentdate.replace("/","-");
-
             year = rentdate.substr(6,9);
             MD = rentdate.substr(0,5);
             var resultDay = year+"-"+MD;
-
+            const json = JSON.stringify(userinfo);
             $.ajax({
                 url: "/calendarView",
                 type: "POST",
-                data: {user : userinfo, exDay : resultDay},
+                data: {"user" : userinfo, "exDay" : resultDay},
                 dataType: "json",
                 success: function (result) {
                     var html1;
@@ -136,11 +132,10 @@
     });
     calendar.render();
 
-    for (var i = 0; i < exinfoList.length; i++) {
-
+    for (const exinfo of exinfoList) {
         calendar.addEvent({
             id: userinfo.userId,
-            start: exinfoList[i].exDay,
+            start: exinfo.exDay,
             title: 150 + "kal"
         });
     }

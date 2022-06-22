@@ -3,6 +3,7 @@ package com.example.project_2th.entity;
 // lombok.* 하면 필요없는 부분들 까지 import가 된다.
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;

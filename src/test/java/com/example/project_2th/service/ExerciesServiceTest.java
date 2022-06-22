@@ -17,9 +17,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -51,22 +53,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@ExtendWith(SpringExtension.class)
-@Import({ExerciesVideoService.class, ExinfoRepository.class,UserRepository.class, VideoRepository.class})
+@ExtendWith(MockitoExtension.class)
 public class ExerciesServiceTest {
 
-    @MockBean
+    @Mock
     ExinfoRepository exinfoRepository;
 
-    @Mock
+    @InjectMocks
     ExerciesService exerciesService;
 
-    @Spy
-    User user;
 
     protected MockHttpSession session;
     protected MockHttpServletRequest request;
-    protected UserHelper userHelper;
+    protected UserHelper userHelper = new UserHelper();
 
     @Test
     @DisplayName("exerciesInfo service : 운동의 대한 정보를 가져온다.")
