@@ -135,11 +135,11 @@
 <script defer src="/js/bootstrap.js"></script>
 <script th:inline="javascript">
 
-    $("#modal_btn").on("click",function (){
-        $(".black_bg").attr("class","black_bg show1")
+    $("#modal_btn").on("click", function () {
+        $(".black_bg").attr("class", "black_bg show1")
     })
-    $(".black_bg").on("click",function (){
-        $(".black_bg").attr("class","black_bg")
+    $(".black_bg").on("click", function () {
+        $(".black_bg").attr("class", "black_bg")
     })
 
     /* 셀렉트 */
@@ -164,24 +164,26 @@
         choice.classList.add('hide');
     }
 
-    function selectOpt(){
-        opts.forEach(opt=>{
+    function selectOpt() {
+        opts.forEach(opt => {
             const innerValue = opt.innerHTML;
-            function changeValue(){
+
+            function changeValue() {
                 values.innerHTML = innerValue;
                 var id = $(".videoList").children().attr('class');
                 console.log("------------------------------------------")
                 console.log(id);
 
                 console.log(opt.className);
-                if(id != opt.className){
+                if (id != opt.className) {
                     console.log("들어옴");
-                    $(".videoList").children().css("display","none");
-                }else{
-                    $(".videoList").children().css("display","block");
+                    $(".videoList").children().css("display", "none");
+                } else {
+                    $(".videoList").children().css("display", "block");
                 }
             }
-            opt.addEventListener('click',changeValue)
+
+            opt.addEventListener('click', changeValue)
         });
     }
 
@@ -206,36 +208,35 @@
     selectFirst();
     select.addEventListener('click', selects);
     body.addEventListener('click', hideSelect);
+
     function insertdate() {
         var date = document.querySelector('input[type="date"]').value;
-        for(let i = 0; i< $(".vdate").length; i++) {
+        for (let i = 0; i < $(".vdate").length; i++) {
 
-            if($(".vdate").eq(i).text() ==date){
+            if ($(".vdate").eq(i).text() == date) {
                 console.log($(".vdate").eq(i).text())
-                videoLength == videoLength-1;
-                $(".videoList").eq(i).css("display","block")
-            }else{
-                $(".videoList").eq(i).css("display","none")
-            };
+                videoLength == videoLength - 1;
+                $(".videoList").eq(i).css("display", "block")
+            } else {
+                $(".videoList").eq(i).css("display", "none")
+            }
+            ;
         }
     }
 
     var videoLength = $(".videoList").length;
 
-    for(let i = 1; i< videoLength; i +=2) {
-        $(".item video").eq(i).css("margin-left","27%");
-        $(".vdate").eq(i).css("margin-left","27%");
+    for (let i = 1; i < videoLength; i += 2) {
+        $(".item video").eq(i).css("margin-left", "27%");
+        $(".vdate").eq(i).css("margin-left", "27%");
     }
     var container = document.querySelector('.container');
-    var msnry = new Masonry(container, {
-        // options
-        columnWidth: 100,
-        itemSelector: '.item',
-    });
-    function onClick7() {
-        var changeSrc = $(this).attr('src');
-        $("#video").attr("src", changeSrc);
 
+
+    $("video").on("click",function (){
+        var changeSrc = $(this).attr('src');
+        $("#video").attr("src",changeSrc);
+        console.log(changeSrc);
         var video_seq = $(this).attr('class');
         document.querySelector('.record_wrap').style.display = 'block';
         document.querySelector('.record_bg').style.display = 'block';
@@ -246,11 +247,10 @@
             type: "GET",
             success: function (result) {
                 var html1;
-                var html2;
                 var exinfo = result.exinfo;
                 var postures = result.postures;
-                log(postures);
-                log(exinfo);
+                console.log(postures);
+                console.log(exinfo);
                 $(".ttleft").text(exinfo.exName)
                 if (postures.length != "") {
                     $.each(postures, (index, obj) => {
@@ -274,59 +274,18 @@
 
             }
         });
-    }
 
-
-    function offClick7() {
-        document.querySelector('.record_wrap').style.display = 'none';
-        document.querySelector('.record_bg').style.display = 'none';
-    }
-
-
-    document.getElementById('record_video0').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video1').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video2').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video3').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video4').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video5').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video6').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video7').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video8').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    document.getElementById('record_video9').addEventListener('click', onClick7);
-    document.querySelector('.record_bg').addEventListener('click', offClick7);
-
-    /* 달력 기본날짜 오늘날짜로 */
-    today = new Date();
-
-    console.log("today.toISOString() >>>" + today.toISOString());
-    today = today.toISOString().slice(0, 10);
-    console.log("today >>>> " + today);
-    bir = document.getElementById("dates");
-    bir.value = today;
-
+    })
+    $(".record_bg").click(function(e){
+        document.querySelector('.record_wrap').style.display ='none';
+        document.querySelector('.record_bg').style.display ='none';
+    });
     function showDiary() {
         const element = document.getElementById('change');
         document.getElementById("diary_btn").style.display = 'none';
         element.innerHTML = '<div id="calendar"><input type="date" id="dates" onchange = "insertdate()"></div>';
     }
+
     $('.전체').click(function () {
         $('.등').show();
         $('.가슴').show();
