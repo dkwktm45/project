@@ -22,161 +22,12 @@
     <th:block layout:fragment="css"></th:block>
     <th:block layout:fragment="script"></th:block>
 </th:block>
-<div class="record_bg"></div>
-<div class="record_wrap">
-    <div class="record_top" style="width: 100%; height: 200px;">
-        <div id="record_top_title">
-            <a> 체스트 플라이 </a> <img id="out" src="image/out.png"
-                                  onclick="go_main()">
-        </div>
-    </div>
-
-    <div class="record_middle" style="width: 100%; height: 1000px;"
-         align="center">
-        <div id="record_middle_content">
-            <iframe id="video" src="https://www.youtube.com/embed/ppPQgmgpafM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="record_down" style="width: 100%; height: 150px; margin : -30px 0px 0px 0px;">
-        <form action="/insertEx" method ="post">
-            <input type="number" name="userSet" id="set2" placeholder="0"><b>Set</b>
-            <b>/</b>
-            <input type="number" name="exCount" id="ex_num2" placeholder="0"><b>회</b>
-            <input type = "hidden" value = "체스트 플라이" name ="exName">
-            <input type = "hidden" value = "가슴" name ="exKinds">
-            <input type = "hidden" th:value ="${session.user.getUserId}" name ="user">
-            <input type = "submit" id="start" value = "제출">
-        </form>
-    </div>
-    <div class="test">
-        <summary id="summary" style="margin: 69px 0px 0px 292px;">운동방법</summary>
-        <div style = "border-top: 9px solid gray;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.2;"></div>
-        <p>
-        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">머신에 앉아 등과 엉덩이를 붙이고 허리를 아치형으로 약 10cm정도 띄워줍니다</li>
-        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">팔꿈치를 패드에 고정시키고 90도로 만들어 가슴 중앙 부분과 수평이 되게 해줍니다</li>
-        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">겨드랑이에 힘을 준다는 느낌으로 패드를 가운데로 모아줍니다</li>
-        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">천천히 자극을 느끼며 시작 자세로 돌아갑니다</li>
-        </p>
-    </div>
-    <div class="test">
-        <summary id="summary"style="margin: 58px 0px 0px 292px; color: red;">주의사항</summary>
-        <div style = "border-top: 9px solid red;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.1;"></div>
-        <p id="lineHeight">
-        <li style="padding-left: 1em; text-indent: -1.4em;">다리를 단단히 고정시켜 상체의 흔들림을 최소화합니다</li>
-        <li style="padding-left: 1em; text-indent: -1.4em;">본인에게 적당한 중량을 선택해야합니다</li>
-        <li style="padding-left: 1em; text-indent: -1.4em;">여성분들은 15~20회 남성분들은 10~15회정도 가능한 중량이 가장 적당합니다</li>
-        <li style="padding-left: 1em; text-indent: -1.4em;">시선은 항상 정면을 바라봐야합니다</li>
-        <li style="padding-left: 1em; text-indent: -1.4em;">팔의 힘이 들어간다면 중량을 낮춰서 운동해야합니다</li>
-        </p>
-    </div>
-</div>
-
-<div class="record_bg2"></div>
-<div class="record_wrap2">
-    <div class="record_top" style="width: 78%; height: 200px;">
-        <div id="record_top_title">
-            <a> 덤벨 숄더프레스 </a> <img id="out2" src="image/out.png"
-                                   onclick="go_main()">
-        </div>
-    </div>
-
-    <div class="record_middle" style="width: 100%; height: 1000px;"
-         align="center">
-        <div id="record_middle_content">
-            <iframe width="788" height="443" src="https://www.youtube.com/embed/Ia9DYFMkMmU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen id="video"></iframe>
-        </div>
-    </div>
-    <div class="record_down" style="width: 100%; height: 150px;">
-        <form action="/web/insertEx.do" method ="post">
-            <input type="number" name="user_set" id="set2" placeholder="0"><b>Set</b>
-            <b>/</b>
-            <input type="number" name="ex_count" id="ex_num2" placeholder="0"><b>회</b>
-            <input type = "hidden" value = "덤벨 솔더프레스" name ="ex_name">
-            <input type = "hidden" value = "어깨" name ="ex_kinds">
-            <input type = "hidden" name ="user_id">
-            <input type = "submit" id="start" value = "제출">
-        </form>
-    </div>
-    <div class="test">
-        <summary id="summary" style="margin: 69px 0px 0px 292px;">운동방법</summary>
-        <div style = "border-top: 9px solid gray;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.1;"></div>
-        <p>
-        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">가슴을 열어준 다음 덤벨을 들어 귀쪽에 위치시켜줍니다.</li>
-        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">팔꿈치를 피면서 덤벨을 머리 위로 들어줍니다.</li>
-        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">머리 위로 올린 덤벨을 다시 처음 위치로 천천히 내려줍니다.</li>
-        </p>
-    </div>
-    <div class="test">
-        <summary id="summary"style="margin: 58px 0px 0px 292px; color: red;">주의사항</summary>
-        <div style = "border-top: 9px solid red;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.2;"></div>
-        <p id="lineHeight">
-        <li style="padding-left: 1em; text-indent: -1.4em;">덤벨숄더프레스를 진행할 때 허리가 꺾이지 않도록 항상 적당한 복압을 주고 실시합니다.</li>
-        <li style="padding-left: 1em; text-indent: -1.4em;">덤벨이 너무 옆으로 빠지게 되는 경우 부상을 입을 수 있습니다.</li>
-        <li style="padding-left: 1em; text-indent: -1.4em;">내릴 땐 천천히 전면 삼각근의 텐션을 유지하면서 내려줍니다.</li>
-        <li style="padding-left: 1em; text-indent: -1.4em;">어깨가 말려있는 라운드 숄더이신분들은 벤치 각도를 살짝 낮추어 덤벨숄더프레스를 진행해 주시는 것이 좋습니다.</li>
-        <li style="padding-left: 1em; text-indent: -1.4em;">덤벨을 내릴 때 너무 많이 내리게 되면 전면 삼각근의 텐션이 풀리게 됩니다. 적당한 선까지 덤벨을 내려줍니다.</li>
-        </p>
-    </div>
-</div>
-
-<div class="record_bg3"></div>
-<div class="record_wrap3">
-    <div class="record_top" style="width: 100%; height: 200px;">
-        <div id="record_top_title">
-            <a> 시티드 로우 </a> <img id="out2" src="image/out.png"
-                                 onclick="go_main()">
-        </div>
-    </div>
-
-    <div class="record_middle" style="width: 100%; height: 1000px;"
-         align="center">
-        <div id="record_middle_content">
-            <iframe width="788" height="394" src="https://www.youtube.com/embed/pkKfWeQ9APQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen id="video"></iframe>
-        </div>
-    </div>
-    <form action="/web/insertEx.do" method ="post">
-        <div class="record_down" style="width: 100%; height: 150px;">
-            <input type="number" name="user_set" id="set2" placeholder="0"><b>Set</b>
-            <b>/</b>
-            <input type="number" name="ex_count" id="ex_num2" placeholder="0"><b>회</b>
-            <input type = "hidden" value = "시티드 로우" name ="ex_name">
-            <input type = "hidden" value = "등" name ="ex_kinds">
-            <input type = "hidden" value = "<%=member.getUser_id() %>" name ="user_id">
-            <input type = "submit" id="start" value = "제출">
-    </form>
-</div>
-<div class="test">
-    <summary id="summary" style="margin: 69px 0px 0px 292px;">운동방법</summary>
-    <div style = "border-top: 9px solid gray;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.1;"></div>
-    <p>
-    <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">먼저 케이블에 착석하고 발을 받침대에 나두고 다리는 약간 구부린 상태를 유지합니다</li>
-    <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">그리고 케이블을 잡고 허리를 곧게 핍니다</li>
-    <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">케이블을 당기는데 팔꿈치는 너무 벌리지 않게 합니다</li>
-    <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">당길 때 가슴을 앞으로 내밀고 견갑은 모아주고 등을 수축시킵니다</li>
-    <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">그리고 등을 이완할 때는 가슴을 앞으로 내민 상태에서 허리만 앞으로 숙이고 등은 긴장을 유지합니다</li>
-    </p>
-</div>
-<div class="test">
-    <summary id="summary"style="margin: 58px 0px 0px 292px; color: red;">주의사항</summary>
-    <div style = "border-top: 9px solid red;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.2;"></div>
-    <p id="lineHeight">
-    <li style="padding-left: 1em; text-indent: -1.4em;">케이블을 당길 때 견갑을 모으게 되는데 이때 견갑을 모은다고 했는데 어깨를 올리지 않습니다</li>
-    <li style="padding-left: 1em; text-indent: -1.4em;">케이블을 잡아당길 때(수축시킬때)에는 빠르게 당기지만 이완할 때는 천천히(네거티브) 동작을 수행하도록 합니다</li>
-    <li style="padding-left: 1em; text-indent: -1.4em;">케이블을 잡아 당길때 D형 바는 배꼽~명치 사이에 위치하도록 신경 써가며 수행합니다</li>
-    <li style="padding-left: 1em; text-indent: -1.4em;">그리고 케이블을 당기다 보면 몸이 뒤로 젖혀지는데 이때 몸을 너무 많이 뒤로 가지 않도록 주의합니다</li>
-    <li style="padding-left: 1em; text-indent: -1.4em;">시티드 로우가 등받이가 없는 운동이기에 코어 근육이나 등이 받쳐주지 않는다면 무게를 너무 무겁게 하지 않습니다</li>
-    </p>
-</div>
-</div>
-
-
 <div class="main_map">
     <th:block th:replace="top/top :: topModal">
     </th:block>
     <div class="main_mid">
         <div class="mid_top">
-            <div class="div_g1">
+            <div class="div_g kinds">
                 <table>
                     <tr>
                         <td><img src = "image/가슴.png"
@@ -185,7 +36,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="div_u1">
+            <div class="div_u kinds">
                 <table>
                     <tr>
                         <td><img src = "image/어깨.png"
@@ -194,7 +45,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="div_d1">
+            <div class="div_d kinds">
                 <table>
                     <tr>
                         <td><img src = "image/등.png"
@@ -203,7 +54,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="div_p1">
+            <div class="div_p kinds">
                 <table>
                     <tr>
                         <td><img src = "image/팔.png"
@@ -213,11 +64,12 @@
                 </table>
             </div>
         </div>
+
         <div class="mid_bot">
+            <th:block th:replace="exerciseTypePage/arm :: armFragement"></th:block>
             <th:block th:replace="exerciseTypePage/chest :: chestFragment" ></th:block>
             <th:block th:replace="exerciseTypePage/shoulder :: shoulderFragment"></th:block>
             <th:block th:replace="exerciseTypePage/back :: backFragement"></th:block>
-            <th:block th:replace="exerciseTypePage/arm :: armFragement"></th:block>
         </div>
         <div class="container">
             <th:block th:replace="footer/footer :: footer" ></th:block>
@@ -235,106 +87,40 @@
 
         document.querySelector("#modal_btn").addEventListener("click", show1);
         document.querySelector(".black_bg").addEventListener("click", close1);
-
-
-
-        function onClick1() {
-            document.querySelector('.record_wrap').style.display ='block';
-            document.querySelector('.record_bg').style.display ='block';
-        }
-        function offClick1() {
-            document.querySelector('.record_wrap').style.display ='none';
-            document.querySelector('.record_bg').style.display ='none';
-        }
-
-        function onClick2() {
-            document.querySelector('.record_wrap2').style.display ='block';
-            document.querySelector('.record_bg').style.display ='block';
-        }
-        function offClick2() {
-            document.querySelector('.record_wrap2').style.display ='none';
-            document.querySelector('.record_bg').style.display ='none';
-        }
-
-
-        function onClick3() {
-            document.querySelector('.record_wrap3').style.display ='block';
-            document.querySelector('.record_bg').style.display ='block';
-        }
-        function offClick3() {
-            document.querySelector('.record_wrap3').style.display ='none';
-            document.querySelector('.record_bg').style.display ='none';
-        }
-
-        document.getElementById('mbimg').addEventListener('click', onClick1);
-        document.querySelector('.record_bg').addEventListener('click', offClick1);
-
-        document.getElementById('mbimg2').addEventListener('click', onClick1);
-        document.querySelector('.record_bg').addEventListener('click', offClick1);
-
-        document.getElementById('mbimg3').addEventListener('click', onClick2);
-        document.querySelector('.record_bg').addEventListener('click', offClick2);
-
-        document.getElementById('mbimg4').addEventListener('click', onClick3);
-        document.querySelector('.record_bg').addEventListener('click', offClick2);
-
-        function g_click(){
-            document.querySelector('.div_g1').style.display ='block';
-            document.querySelector('.div_u1').style.display ='none';
-            document.querySelector('.div_d1').style.display ='none';
-            document.querySelector('.div_p1').style.display ='none';
-            document.querySelector('.div_g2').style.display ='block';
-            document.querySelector('.div_u2').style.display ='none';
-            document.querySelector('.div_d2').style.display ='none';
-            document.querySelector('.div_p2').style.display ='none';
-        }
-        function u_click(){
-            document.querySelector('.div_g1').style.display ='none';
-            document.querySelector('.div_u1').style.display ='block';
-            document.querySelector('.div_d1').style.display ='none';
-            document.querySelector('.div_p1').style.display ='none';
-            document.querySelector('.div_g2').style.display ='none';
-            document.querySelector('.div_u2').style.display ='block';
-            document.querySelector('.div_d2').style.display ='none';
-            document.querySelector('.div_p2').style.display ='none';
-        }
-        function d_click(){
-            document.querySelector('.div_g1').style.display ='none';
-            document.querySelector('.div_u1').style.display ='none';
-            document.querySelector('.div_d1').style.display ='block';
-            document.querySelector('.div_p1').style.display ='none';
-            document.querySelector('.div_g2').style.display ='none';
-            document.querySelector('.div_u2').style.display ='none';
-            document.querySelector('.div_d2').style.display ='block';
-            document.querySelector('.div_p2').style.display ='none';
-        }
-        function p_click(){
-            document.querySelector('.div_g1').style.display ='none';
-            document.querySelector('.div_u1').style.display ='none';
-            document.querySelector('.div_d1').style.display ='none';
-            document.querySelector('.div_p1').style.display ='block';
-            document.querySelector('.div_g2').style.display ='none';
-            document.querySelector('.div_u2').style.display ='none';
-            document.querySelector('.div_d2').style.display ='none';
-            document.querySelector('.div_p2').style.display ='block';
-        }
-        document.getElementById('가슴').addEventListener('click', g_click);
-        document.getElementById('어깨').addEventListener('click', u_click);
-        document.getElementById('등').addEventListener('click', d_click);
-        document.getElementById('팔').addEventListener('click', p_click);
     }
+    jQuery(function(){
+        $(".imgInfo").on("click",function(){
+            var info = $(this).parents(".mid_bot_table").next();
+            info.css("display","block")
+            info.next().css("display","block")
+        })
+        $(".record_bg").on("click", function () {
+            var info = $(this);
+            info.css("display","none")
+            info.next().css("display","none")
+        })
+        $(".bicon").on("click",function (){
+            var option = $(this).attr('id');
+            $(".kinds").each(function(){
+                var kind = $(this).attr("class").substr(0, 5)
+                if(option == kind){
+                    $(this).css("display","block")
+                    $(".mid_bot").children("."+kind).css("display","block")
+                }else{
+                    $(this).css("display","none")
+                    $(".mid_bot").children("."+kind).css("display","none")
+                }
+            });
+        })
+    });
 
     function go_cam(exinfo,kind){
         console.log(exinfo)
 //            location.href = "/web/insertEx.do?ex_name="+exinfo+"&ex_kinds="+kind+"&user_id="+<%=member.getUser_id()%>;
     }
-
     function go_warmingup(){
         location.href = "/web/warmingup.do";
     }
-
-
-
     function go_main(){
         location.href = "/web/main.do";
     }

@@ -6,11 +6,11 @@
     <title>Shoulder</title>
 </head>
 <body>
-<div th:fragment="shoulderFragment" class="div_u2">
+<div th:fragment="shoulderFragment" class="div_u">
     <table class="mid_bot_table" id="NSK_font">
         <tr>
             <td>
-                <img id="mbimg3" class="mbimg" src="image/덤벨 솔더프레스.png" >
+                <img class="mbimg imgInfo" src="image/덤벨 솔더프레스.png" >
             </td>
             <td>
                 <img class="mbimg" src="image/레터럴레이즈.png">
@@ -47,6 +47,54 @@
             <td  class="tate">벤트오버 레터럴 레이즈</td>
         </tr>
     </table>
+    <div class="record_bg"></div>
+    <div class="record_wrap">
+        <div class="record_top" style="width: 78%; height: 200px;">
+            <div id="record_top_title">
+                <a> 덤벨 숄더프레스 </a> <img id="out2" src="image/out.png"
+                                       onclick="go_main()">
+            </div>
+        </div>
+
+        <div class="record_middle" style="width: 100%; height: 1000px;"
+             align="center">
+            <div id="record_middle_content">
+                <iframe width="788" height="443" src="https://www.youtube.com/embed/Ia9DYFMkMmU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen id="video"></iframe>
+            </div>
+        </div>
+        <div class="record_down" style="width: 100%; height: 150px;">
+            <form action="/web/insertEx.do" method ="post">
+                <input type="number" name="userSet" id="set2" placeholder="0"><b>Set</b>
+                <b>/</b>
+                <input type="number" name="exCount" id="ex_num2" placeholder="0"><b>회</b>
+                <input type = "hidden" value = "shoulderPress" name ="exName">
+                <input type = "hidden" value = "div_u" name ="exKinds">
+                <input type = "hidden" th:value ="${session.user.getUserId}" name ="user">
+                <input type = "submit" id="start" value = "제출">
+            </form>
+        </div>
+        <div class="test">
+            <summary id="summary" style="margin: 69px 0px 0px 292px;">운동방법</summary>
+            <div style = "border-top: 9px solid gray;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.1;"></div>
+            <p>
+            <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">가슴을 열어준 다음 덤벨을 들어 귀쪽에 위치시켜줍니다.</li>
+            <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">팔꿈치를 피면서 덤벨을 머리 위로 들어줍니다.</li>
+            <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">머리 위로 올린 덤벨을 다시 처음 위치로 천천히 내려줍니다.</li>
+            </p>
+        </div>
+        <div class="test">
+            <summary id="summary"style="margin: 58px 0px 0px 292px; color: red;">주의사항</summary>
+            <div style = "border-top: 9px solid red;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.2;"></div>
+            <p id="lineHeight">
+            <li style="padding-left: 1em; text-indent: -1.4em;">덤벨숄더프레스를 진행할 때 허리가 꺾이지 않도록 항상 적당한 복압을 주고 실시합니다.</li>
+            <li style="padding-left: 1em; text-indent: -1.4em;">덤벨이 너무 옆으로 빠지게 되는 경우 부상을 입을 수 있습니다.</li>
+            <li style="padding-left: 1em; text-indent: -1.4em;">내릴 땐 천천히 전면 삼각근의 텐션을 유지하면서 내려줍니다.</li>
+            <li style="padding-left: 1em; text-indent: -1.4em;">어깨가 말려있는 라운드 숄더이신분들은 벤치 각도를 살짝 낮추어 덤벨숄더프레스를 진행해 주시는 것이 좋습니다.</li>
+            <li style="padding-left: 1em; text-indent: -1.4em;">덤벨을 내릴 때 너무 많이 내리게 되면 전면 삼각근의 텐션이 풀리게 됩니다. 적당한 선까지 덤벨을 내려줍니다.</li>
+            </p>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>

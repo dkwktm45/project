@@ -5,11 +5,11 @@
     <title>back</title>
 </head>
 <body>
-<div th:fragment="backFragement" class="div_d2">
+<div th:fragment="backFragement" class="div_d">
     <table class="mid_bot_table" id="NSK_font">
         <tr>
             <td>
-                <img id="mbimg" class="mbimg" src="image/렛풀다운.png" >
+                <img class="mbimg imgInfo" src="image/렛풀다운.png" >
             </td>
             <td>
                 <img id="mbimg4" class="mbimg" src="image/시티드로우.png">
@@ -46,6 +46,55 @@
             <td class="tate">와이드 풀다운 프론트</td>
         </tr>
     </table>
+
+    <div class="record_bg"></div>
+    <div class="record_wrap">
+        <div class="record_top" style="width: 100%; height: 200px;">
+            <div id="record_top_title">
+                <a> 시티드 로우 </a> <img id="out2" src="image/out.png"
+                                     onclick="go_main()">
+            </div>
+        </div>
+
+        <div class="record_middle" style="width: 100%; height: 1000px;"
+             align="center">
+            <div id="record_middle_content">
+                <iframe width="788" height="394" src="https://www.youtube.com/embed/pkKfWeQ9APQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen id="video"></iframe>
+            </div>
+        </div>
+        <form action="/web/insertEx.do" method ="post">
+            <div class="record_down" style="width: 100%; height: 150px;">
+                <input type="number" name="userSet" id="set2" placeholder="0"><b>Set</b>
+                <b>/</b>
+                <input type="number" name="exCount" id="ex_num2" placeholder="0"><b>회</b>
+                <input type = "hidden" value = "pullDown" name ="exName">
+                <input type = "hidden" value = "div_d" name ="exKinds">
+                <input type = "hidden" th:value ="${session.user.getUserId}" name ="user_id">
+                <input type = "submit" id="start" value = "제출">
+        </form>
+    </div>
+    <div class="test">
+        <summary id="summary" style="margin: 69px 0px 0px 292px;">운동방법</summary>
+        <div style = "border-top: 9px solid gray;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.1;"></div>
+        <p>
+        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">먼저 케이블에 착석하고 발을 받침대에 나두고 다리는 약간 구부린 상태를 유지합니다</li>
+        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">그리고 케이블을 잡고 허리를 곧게 핍니다</li>
+        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">케이블을 당기는데 팔꿈치는 너무 벌리지 않게 합니다</li>
+        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">당길 때 가슴을 앞으로 내밀고 견갑은 모아주고 등을 수축시킵니다</li>
+        <li id="lineHeight" style="padding-left: 1em; text-indent: -1.4em;">그리고 등을 이완할 때는 가슴을 앞으로 내민 상태에서 허리만 앞으로 숙이고 등은 긴장을 유지합니다</li>
+        </p>
+    </div>
+    <div class="test">
+        <summary id="summary"style="margin: 58px 0px 0px 292px; color: red;">주의사항</summary>
+        <div style = "border-top: 9px solid red;width: 1100px;margin: 0px 0px 45px -55px;opacity: 0.2;"></div>
+        <p id="lineHeight">
+        <li style="padding-left: 1em; text-indent: -1.4em;">케이블을 당길 때 견갑을 모으게 되는데 이때 견갑을 모은다고 했는데 어깨를 올리지 않습니다</li>
+        <li style="padding-left: 1em; text-indent: -1.4em;">케이블을 잡아당길 때(수축시킬때)에는 빠르게 당기지만 이완할 때는 천천히(네거티브) 동작을 수행하도록 합니다</li>
+        <li style="padding-left: 1em; text-indent: -1.4em;">케이블을 잡아 당길때 D형 바는 배꼽~명치 사이에 위치하도록 신경 써가며 수행합니다</li>
+        <li style="padding-left: 1em; text-indent: -1.4em;">그리고 케이블을 당기다 보면 몸이 뒤로 젖혀지는데 이때 몸을 너무 많이 뒤로 가지 않도록 주의합니다</li>
+        <li style="padding-left: 1em; text-indent: -1.4em;">시티드 로우가 등받이가 없는 운동이기에 코어 근육이나 등이 받쳐주지 않는다면 무게를 너무 무겁게 하지 않습니다</li>
+        </p>
+    </div>
 </div>
 </body>
 </html>

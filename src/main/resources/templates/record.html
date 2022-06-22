@@ -148,7 +148,6 @@
     const values = select.querySelector(`[date-value="optValue"]`);
     const option = select.querySelector('ul');
     const opts = option.querySelectorAll('li');
-    const choice = document.querySelector('#choice');
 
     /* 셀렉트영역 클릭 시 옵션 숨기기, 보이기 */
     function selects(e) {
@@ -161,7 +160,6 @@
             option.classList.remove('show');
         }
         selectOpt();
-        choice.classList.add('hide');
     }
 
     function selectOpt() {
@@ -171,10 +169,6 @@
             function changeValue() {
                 values.innerHTML = innerValue;
                 var id = $(".videoList").children().attr('class');
-                console.log("------------------------------------------")
-                console.log(id);
-
-                console.log(opt.className);
                 if (id != opt.className) {
                     console.log("들어옴");
                     $(".videoList").children().css("display", "none");
@@ -195,6 +189,7 @@
         const firstValue = opts[0].innerHTML;
         values.innerHTML = `${firstValue}`
     }
+    selectFirst();
 
 
     /* 옵션밖의 영역(=바디) 클릭 시 옵션 숨김 */
@@ -205,7 +200,6 @@
         }
     }
 
-    selectFirst();
     select.addEventListener('click', selects);
     body.addEventListener('click', hideSelect);
 
@@ -285,49 +279,6 @@
         document.getElementById("diary_btn").style.display = 'none';
         element.innerHTML = '<div id="calendar"><input type="date" id="dates" onchange = "insertdate()"></div>';
     }
-
-    $('.전체').click(function () {
-        $('.등').show();
-        $('.가슴').show();
-        $('.팔').show();
-        $('.어깨').show();
-        $('.복근').show();
-    })
-    $('.div_d').click(function () {
-        $('.등').show();
-        $('.팔').hide();
-        $('.가슴').hide();
-        $('.어깨').hide();
-        $('.복근').hide();
-    })
-    $('.div_p').click(function () {
-        $('.팔').show();
-        $('.등').hide();
-        $('.가슴').hide();
-        $('.어깨').hide();
-        $('.복근').hide();
-    })
-    $('.div_g').click(function () {
-        $('.가슴').show();
-        $('.등').hide();
-        $('.팔').hide();
-        $('.어깨').hide();
-        $('.복근').hide();
-    })
-    $('.div_u').click(function () {
-        $('.어깨').show();
-        $('.등').hide();
-        $('.팔').hide();
-        $('.가슴').hide();
-        $('.복근').hide();
-    })
-    $('.duv_b').click(function () {
-        $('.복근').show();
-        $('.등').hide();
-        $('.팔').hide();
-        $('.가').hide();
-        $('.div_u').hide();
-    })
 
 
 </script>

@@ -262,7 +262,7 @@ b{
     /* font-family: 'Noto Sans KR', sans-serif; */
 }
 
-.div_p1, .div_u1, .div_d1, .div_p2, .div_u2, .div_d2{
+.div_p, .div_u, .div_d, .div_p2, .div_u2, .div_d2{
     display:none;
 }
 .tate{
