@@ -54,7 +54,7 @@ public class RestController {
     private final Logger logger = LoggerFactory.getLogger(RestController.class);
 
     @PostMapping(value = "/calendarView")
-    public ResponseEntity<List<Exercies>> calendarView(@ModelAttribute Calendar calendar) throws Exception {
+    public ResponseEntity<List<Exercies>> calendarView(@RequestBody  Calendar calendar) throws Exception {
         logger.info("calendarView perfom");
         logger.info("user : " + calendar.getUser());
         logger.info("day : " + calendar.getExDay());

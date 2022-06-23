@@ -87,8 +87,9 @@
             $.ajax({
                 url: "/calendarView",
                 type: "POST",
-                data: {"user" : userinfo, "exDay" : resultDay},
-                dataType: "json",
+                data: JSON.stringify({"user" : userinfo, "exDay" : resultDay}),
+                dataType: "JSON",
+                contentType:"application/json; charset=UTF-8",
                 success: function (result) {
                     var html1;
                     console.log(result);

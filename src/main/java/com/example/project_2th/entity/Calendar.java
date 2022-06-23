@@ -9,7 +9,8 @@ import javax.persistence.*;
 import java.sql.Date;
 // entity에는 setter를 하지 않는다.
 // --> 보존되어야하기 때문에!!!
-@Data
+
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
