@@ -21,12 +21,10 @@ public class ExceptionController {
     @ResponseBody
     public ErrorResponse inVaildRequestHandler(MethodArgumentNotValidException e){
         ErrorResponse response = new ErrorResponse("400","잘못된 요청입니다.");
-
         for(FieldError fieldError:e.getFieldErrors()){
             response.addVaildation(fieldError.getField(),fieldError.getDefaultMessage());
         }
         return response;
-
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -40,8 +38,10 @@ public class ExceptionController {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handle404(NoHandlerFoundException e){
-        return "error404_page";
+    @ResponseBody
+    public ErrorResponse handle404(NoHandlerFoundException e){
+        ErrorResponse errorResponse = new ErrorResponse("404", "페이지를 찾을 수 없습니다.");
+        return errorResponse;
     }
 
 }

@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByUserId(Long userId);
 
-    User findByUserPhone(String phone);
+    User findByLoginNumber(String loginNumber);
 
     @EntityGraph(attributePaths = {"calendarList"})
     @Query(value = "select u from User u")

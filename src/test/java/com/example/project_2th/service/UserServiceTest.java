@@ -161,11 +161,11 @@ public class UserServiceTest {
         @DisplayName("join success")
         @Test
         void test4(){
-            user = User.builder().userName("김태롱").userPhone("010-6457-2354")
+            user = User.builder().name("김태롱").userPhone("010-6457-2354")
                     .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
-            User loginUser = User.builder().loginNumber("2354").userName("김태롱").userPhone("010-6457-2354")
+            User loginUser = User.builder().loginNumber("2354").name("김태롱").userPhone("010-6457-2354")
                     .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
@@ -184,11 +184,11 @@ public class UserServiceTest {
         @DisplayName("join fail")
         @Test
         void test5(){
-            user = User.builder().userName("김태롱").userPhone("010-6457-2354")
+            user = User.builder().name("김태롱").userPhone("010-6457-2354")
                     .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
-            User loginUser = User.builder().loginNumber("2354").userName("김태롱").userPhone("010-6457-2354")
+            User loginUser = User.builder().loginNumber("2354").name("김태롱").userPhone("010-6457-2354")
                     .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
@@ -233,7 +233,7 @@ public class UserServiceTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addParameter("userExpireDate","2022-10-22");
         request.addParameter("userId", String.valueOf(1L));
-        user = User.builder().userId(1L).userName("김화순").userPhone("9696")
+        user = User.builder().userId(1L).name("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-10-22"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
         Mockito.when(userRepository.findByUserId(user.getUserId())).thenReturn(userHelper.makeUser());

@@ -81,7 +81,7 @@ public class UserService {
     public void join(User user){
         String phone = user.getUserPhone();
         String login = phone.substring(9);
-        User resultUser= User.builder().loginNumber(login).userName(user.getUserName()).userPhone(user.getUserPhone())
+        User resultUser= User.builder().loginNumber(login).name(user.getName()).userPhone(user.getUserPhone())
                 .userBirthdate(user.getUserBirthdate()).userExpireDate(user.getUserExpireDate())
                 .managerYn(user.getManagerYn()).videoYn(user.getVideoYn()).userGym(user.getUserGym()).build();
         logger.info("join perform : {}",resultUser);

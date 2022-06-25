@@ -13,8 +13,8 @@
     <div class="modal_main">
       <div class = "modal_top">
         <div style = "font-size:80px;"><b style="font-size: 54px;">
-          <br th:if="${session.user?.getManagerYn() == 0}" th:text="${session.user?.getUserName()} + ' 님'"></div>
-          <br th:if="${session.user?.getManagerYn() == 1}" th:text="${session.user?.getUserName()}+' 트레이너님'"></div>
+          <br th:if="${session.user?.getManagerYn() == 0}" th:text="${session.user?.getName()} + ' 님'"></div>
+          <br th:if="${session.user?.getManagerYn() == 1}" th:text="${session.user?.getName()}+' 트레이너님'"></div>
       <div th:if="${session.user?.getManagerYn() == 0}">
         <div class = "modal_top_left">
             <div>만기일</div>
