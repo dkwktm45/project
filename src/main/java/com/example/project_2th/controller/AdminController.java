@@ -50,7 +50,7 @@ public class AdminController {
 
     @PostMapping(value = "/joinMember")
     public String joinMember(@RequestBody User user){
-        logger.info("name : " +user.getName());
+        logger.info("name : " +user.getUserName());
         logger.info("videoYn : " +String.valueOf(user.getVideoYn()));
         logger.info("gym : " +user.getUserGym());
         logger.info("birthdate : " +String.valueOf(user.getUserBirthdate()));

@@ -13,8 +13,8 @@
     <div class="modal_main">
       <div class = "modal_top">
         <div style = "font-size:80px;"><b style="font-size: 54px;">
-          <br th:if="${session.user?.getManagerYn() == 0}" th:text="${session.user?.getName()} + ' 님'"></div>
-          <br th:if="${session.user?.getManagerYn() == 1}" th:text="${session.user?.getName()}+' 트레이너님'"></div>
+          <br th:if="${session.user?.getManagerYn() == 0}" th:text="${session.user?.getUserName()} + ' 님'"></div>
+          <br th:if="${session.user?.getManagerYn() == 1}" th:text="${session.user?.getUserName()}+' 트레이너님'"></div>
       <div th:if="${session.user?.getManagerYn() == 0}">
         <div class = "modal_top_left">
             <div>만기일</div>
@@ -28,15 +28,15 @@
     <th:block th:if = "${session.user?.getManagerYn() == 1 }">
       <div class = "modal_mid" >
         <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/diary.png" onclick = "goMember()"></div>
+          <div class = "modal_mid_left"><img id="moicon" src="/static/image/diary.png" onclick = "goMember()"></div>
           <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "goMember()">회원 관리</b></div>
         </div>
         <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/dumbbell.png" onclick = "goJoin()"></div>
+          <div class = "modal_mid_left"><img id="moicon" src="/static/image/dumbbell.png" onclick = "goJoin()"></div>
           <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "goJoin()">회원 가입</b></div>
         </div>
         <div class = "modal_mid_mid">
-          <div class = "modal_mid_left"><img id="moicon" src="image/training.png" onclick = "goVideo()"></div>
+          <div class = "modal_mid_left"><img id="moicon" src="/static/image/training.png" onclick = "goVideo()"></div>
           <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "goVideo()">회원 영상</b></div>
         </div>
       </div>
@@ -44,11 +44,11 @@
     <th:block th:unless = "${session.user?.getManagerYn() == 1 }">
         <div class = "modal_mid">
           <div class = "modal_mid_mid">
-            <div class = "modal_mid_left"><img th:onclick="go_calendar()" id="moicon" src="image/diary.png"></div>
+            <div class = "modal_mid_left"><img th:onclick="go_calendar()" id="moicon" src="/static/image/diary.png"></div>
             <div class = "modal_mid_right"><b th:onclick="go_calendar()" id = "modal_mid_b" >운동 다이어리</b></div>
           </div>
           <div class = "modal_mid_mid">
-            <div class = "modal_mid_left record"><img th:onclick="go_record()" id="moicon" src="image/video.png"></div>
+            <div class = "modal_mid_left record"><img th:onclick="go_record()" id="moicon" src="/static/image/video.png"></div>
             <div class = "modal_mid_right record"><b th:onclick="go_record()" id = "modal_mid_b" >운동 영상</b></div>
           </div>
         </div>

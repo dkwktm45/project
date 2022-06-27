@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>join</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" th:href="@{/css/side/modal.css}" >
-  <link rel="stylesheet" th:href="@{/css/top/top.css}">
-  <link rel="stylesheet" href="/css/join.css">
+  <link rel="stylesheet" th:href="@{/static/css/side/modal.css}" >
+  <link rel="stylesheet" th:href="@{/static/css/top/top.css}">
+  <link rel="stylesheet" href="/static/css/join.css">
   <script th:src="@{http://code.jquery.com/jquery-3.5.1.min.js}"></script>
-  <script th:src="@{/js/side/modal.js}"></script>
+  <script th:src="@{/static/js/side/modal.js}"></script>
   <script>
     window.onload = function() {
       function show1 () {
@@ -314,7 +314,6 @@ $(".birthday").on('keydown',function (e){
   if(trans_num != null && trans_num != ''){
     if(regExp_birthday.test(trans_num))
     {
-      console.log(trans_num)
       let numStyle =$(".hiddenSpan:eq(0)")
       trans_num = trans_num.replace(/^(19[0-9][0-9]|20\d{2})-?(0[0-9]|1[0-2])-?(0[1-9]|[1-2][0-9]|3[0-1])$/, "$1-$2-$3");
       (numStyle.css("display") !== "none") ? numStyle.css("display","none") : numStyle;

@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.lang.Nullable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 
 import javax.persistence.*;
@@ -25,7 +23,7 @@ import java.util.Set;
 @Builder
 @JsonIgnoreProperties(value = {"exerciesList","calendarList","exercieVideosList"} , allowSetters = true)
 @ToString(exclude = {"exerciesList","calendarList","exercieVideosList"})
-public class User implements UserDetails {
+public class User{
 
     private static final long serialVersionUID = 1L;
 
@@ -34,7 +32,7 @@ public class User implements UserDetails {
     private Long userId;
 
     private String loginNumber;
-    private String name;
+    private String userName;
     private String userPhone;
     private String userGym;
 
@@ -48,8 +46,6 @@ public class User implements UserDetails {
     private int videoYn;
 
 
-    @Enumerated(EnumType.STRING)
-    private Authority authority;
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY )
@@ -69,40 +65,4 @@ public class User implements UserDetails {
     private final List<ExerciesVideo> exercieVideosList = new ArrayList<>();
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add(()->authority.getAuthority());
-        return collection;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.loginNumber;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.userGym;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
-    }
 }

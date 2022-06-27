@@ -22,8 +22,8 @@
         }
     </style>
     <!--css-->
-    <link rel="stylesheet" th:href="@{/css/side/modal.css}">
-    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" th:href="@{/static/css/side/modal.css}">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
     <link href='css/record.css' rel='stylesheet'/>
 
 </head>
@@ -37,7 +37,7 @@
     <div class="record_top" style="width:100%; height:200px;">
         <div id="record_top_title">
             <div class="ttleft"> 체스트프레스</div>
-            <div class="ttright"><img id="out" src="image/out.png" onclick="go_record()"></div>
+            <div class="ttright"><img id="out" src="/static/image/out.png" onclick="go_record()"></div>
         </div>
         <hr style="border: solid 5px gray;">
     </div>
@@ -70,22 +70,22 @@
                      </span>
                             <!-- 옵션 영역 -->
                             <ul class="hide" id="wrap">
-                                <li class="전체"><i><img src="image/menu.png" alt="전체"/></i>
+                                <li class="전체"><i><img src="/static/image/menu.png" alt="전체"/></i>
                                     <div class="sunteck">전체</div>
                                 </li>
-                                <li class="div_d"><i><img src="image/등.png" alt="등"/></i>
+                                <li class="div_d"><i><img src="/static/image/등.png" alt="등"/></i>
                                     <div class="sunteck">등</div>
                                 </li>
-                                <li class="div_p"><i><img src="image/팔.png" alt="팔"/></i>
+                                <li class="div_p"><i><img src="/static/image/팔.png" alt="팔"/></i>
                                     <div class="sunteck">팔</div>
                                 </li>
-                                <li class="div_g"><i><img src="image/가슴.png" alt="가슴"/></i>
+                                <li class="div_g"><i><img src="/static/image/가슴.png" alt="가슴"/></i>
                                     <div class="sunteck">가슴</div>
                                 </li>
-                                <li class="div_u"><i><img src="image/어깨.png" alt="어깨"/></i>
+                                <li class="div_u"><i><img src="/static/image/어깨.png" alt="어깨"/></i>
                                     <div class="sunteck">어깨</div>
                                 </li>
-                                <li class="div_b"><i><img src="image/복근.png" alt="복근"/></i>
+                                <li class="div_b"><i><img src="/static/image/복근.png" alt="복근"/></i>
                                     <div class="sunteck">복근</div>
                                 </li>
                             </ul>
@@ -96,7 +96,7 @@
             <div>
                 <ul>
                     <li class="menu">
-                        <a onclick='showDiary()' value='changeDiary'><img id="diary_btn" src="image/weightDiary.png"
+                        <a onclick='showDiary()' value='changeDiary'><img id="diary_btn" src="/static/image/weightDiary.png"
                                                                           width="100px" height="100px"></a>
                         <ul class="hide">
                             <div>
@@ -123,16 +123,16 @@
     </div>
 
     <div class="main_bot" id="NSK_font">
-        <img id="gym2" align="bottom" src="image/gym2.png" width="150px" height="150px" onclick="go_main()">
+        <img id="gym2" align="bottom" src="/static/image/gym2.png" width="150px" height="150px" onclick="go_main()">
     </div>
 
 </div>
 <!--js-->
 <script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script defer th:src="@{/js/side/modal.js}"></script>
+<script defer th:src="@{/static/js/side/modal.js}"></script>
 <script defer src='js/record.js'></script>
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script defer src="/js/bootstrap.js"></script>
+<script defer src="/static/js/bootstrap.js"></script>
 <script th:inline="javascript">
 
     $("#modal_btn").on("click", function () {

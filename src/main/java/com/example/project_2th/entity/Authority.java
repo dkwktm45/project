@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +11,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import java.util.Objects;
 
-public enum Authority implements GrantedAuthority{
+public enum Authority {
 
     USER("ROLE_USER", "유저권한"),
     ADMIN("ROLE_ADMIN", "어드민권한");
@@ -25,13 +24,5 @@ public enum Authority implements GrantedAuthority{
         this.description = description;
     }
 
-    @Override
-    public String getAuthority() {
-        return authority;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 
 }

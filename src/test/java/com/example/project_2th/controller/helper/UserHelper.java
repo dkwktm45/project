@@ -13,28 +13,28 @@ public class UserHelper {
 
     Long id = 0L;
     public static User makeUser(){
-        return User.builder().name("김화순").loginNumber("1234").userPhone("010-2345-1234")
+        return User.builder().userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
     }
 
     public User userCalendar(){
-        return User.builder().exercieVideosList(makeVideos()).exerciesList(makeExinfos()).calendarList(makeCalendars()).name("김화순").loginNumber("1234").userPhone("010-2345-1234")
+        return User.builder().exercieVideosList(makeVideos()).exerciesList(makeExinfos()).calendarList(makeCalendars()).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
     }
 
     public List<User> makeUsers(){
         List<User> users = new ArrayList<>();
-        users.add(User.builder().name("김화순").userPhone("9696")
+        users.add(User.builder().userName("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).calendarList(makeCalendars()).exercieVideosList(makeVideos()).videoYn(1).userGym("해운대").build());
 
-        users.add(User.builder().userId(makeId()).name("김화순").userPhone("9696")
+        users.add(User.builder().userId(makeId()).userName("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).calendarList(makeCalendars()).videoYn(1).userGym("해운대").build());
 
-        users.add(User.builder().userId(makeId()).name("김화순").userPhone("9696")
+        users.add(User.builder().userId(makeId()).userName("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(0).calendarList(makeCalendars()).videoYn(1).userGym("해운대").build());
         return users;
@@ -80,7 +80,7 @@ public class UserHelper {
     }
 
     public static Map<String , Object> makeAdmin(){
-        User user =  User.builder().name("김화순").userPhone("9696")
+        User user =  User.builder().userName("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(1).videoYn(1).userGym("해운대").build();
 
