@@ -15,3 +15,14 @@ function goVideo(){
 function goMember(){
     location.href = "/admin/Member";
 }
+window.onload = function() {
+    function show1 () {
+        document.querySelector(".black_bg").className = "black_bg show1";
+    }
+    function close1 () {
+        document.querySelector(".black_bg").className = "black_bg";
+    }
+
+    document.querySelector("#modal_btn").addEventListener("click", show1);
+    document.querySelector(".black_bg").addEventListener("click", close1);
+}

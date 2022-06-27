@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/static/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script th:src="@{http://code.jquery.com/jquery-3.5.1.min.js}"></script>
 
@@ -77,17 +77,7 @@
     </div>
 </div>
 <script th:inline="javascript">
-    window.onload = function() {
-        function show1 () {
-            document.querySelector(".black_bg").className = "black_bg show1";
-        }
-        function close1 () {
-            document.querySelector(".black_bg").className = "black_bg";
-        }
 
-        document.querySelector("#modal_btn").addEventListener("click", show1);
-        document.querySelector(".black_bg").addEventListener("click", close1);
-    }
     jQuery(function(){
         $(".imgInfo").on("click",function(){
             var info = $(this).parents(".mid_bot_table").next();
@@ -114,13 +104,7 @@
         })
     });
 
-    function go_cam(exinfo,kind){
-        console.log(exinfo)
-//            location.href = "/web/insertEx.do?ex_name="+exinfo+"&ex_kinds="+kind+"&user_id="+<%=member.getUser_id()%>;
-    }
-    function go_warmingup(){
-        location.href = "/web/warmingup.do";
-    }
+
     function go_main(){
         location.href = "/web/main.do";
     }

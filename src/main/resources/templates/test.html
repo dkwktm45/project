@@ -2,9 +2,11 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset='utf-8'/>
-    <script src="js/calendar.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/static/js/calendar.js"></script>
     <link rel="stylesheet" href="/static/css/test.css">
+    <link rel="stylesheet" th:href="@{/static/css/side/modal.css}" >
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script th:src="@{/static/js/side/modal.js}"></script>
 </head>
 <body>
 <div class="black_bg">
@@ -16,19 +18,19 @@
                     <div id="NSK_font"><br>만기일</div>
                 </div>
                 <div class="modal_top_right">
-                    <div id="NSK_font"><br>2021-12-07<br>D-day 30일</div>
+                    <div th:text="${session.user?.getUserExpireDate()}"></div>
                 </div>
             </div>
             <div class="modal_mid">
                 <div class="modal_mid_mid">
-                    <div class="modal_mid_left"><img id="moicon" src="/static/image/diary.png" onclick="go_calender()">
+                    <div class="modal_mid_left"><img id="moicon" src="/static/image/diary.png" th:onclick="go_calendar()">
                     </div>
-                    <div class="modal_mid_right"><b id="modal_mid_b" onclick="go_calender()">운동 다이어리</b></div>
+                    <div class="modal_mid_right"><b id="modal_mid_b" th:onclick="go_calendar()">운동 다이어리</b></div>
                 </div>
                 <div class="modal_mid_mid">
-                    <div class="modal_mid_left"><img id="moicon" src="/static/image/video.png" onclick="go_record()">
+                    <div class="modal_mid_left"><img id="moicon" src="/static/image/video.png" th:onclick="go_record()" >
                     </div>
-                    <div class="modal_mid_right"><b id="modal_mid_b" onclick="go_record()">운동 영상</b></div>
+                    <div class="modal_mid_right"><b id="modal_mid_b" th:onclick="go_record()" >운동 영상</b></div>
                 </div>
             </div>
             <div class="modal_bot">
@@ -141,70 +143,23 @@
         });
     }
 
-    function onClick2() {
-        $('.modal2_wrap').css('display', 'block');
-        $('.record_bg').css('display', 'block');
-    }
 
-    function offClick2() {
-        $('.modal2_wrap').css('display', 'none');
-        $('.record_bg').css('display', 'none');
-    }
+
 
 
     $('.fc-event-title-container').on('click', function () {
-        console.log(1);
         $('.modal2_wrap').css('display', 'block');
         $('.record_bg').css('display', 'block');
     });
 
-
+    $('.record_bg').on('click', function () {
+        $('.modal2_wrap').css('display', 'none');
+        $('.record_bg').css('display', 'none');
+    });
     /* var className = document.getElementsByClassName('fc-event-title-container');
     for(var i = 0; i < className.length; i++){
        className[i].addEventListener('click', onClick2, false);
     } */
-
-</script>
-<script>
-    function clickKal() {
-        console.log("test")
-    }
-
-    function show1() {
-        document.querySelector(".black_bg").className = "black_bg show1";
-    }
-
-    function close1() {
-        document.querySelector(".black_bg").className = "black_bg";
-    }
-
-    document.querySelector("#modal_btn").addEventListener("click", show1);
-    document.querySelector(".black_bg").addEventListener("click", close1);
-
-    /* function onClick2() {
-        document.querySelector('.modal2_wrap').style.display ='block';
-        document.querySelector('.record_bg').style.display ='block';
-    };
-    function offClick2() {
-        document.querySelector('.modal2_wrap').style.display ='none';
-        document.querySelector('.record_bg').style.display ='none';
-    }
-
-    var className = document.getElementsByClassName('fc-event-title-container');
-    for(var i = 0; i < className.length; i++){
-       className[i].addEventListener('click', onClick2, false);
-    }  */
-
-    document.querySelector('.record_bg').addEventListener('click', offClick2);
-
-
-    function go_record() {
-        location.href = "/web/record.do?user_id=<%=member.getUser_id()%>";
-    }
-
-    function go_calender() {
-        location.href = "/web/test.do";
-    }
 
 </script>
 </body>

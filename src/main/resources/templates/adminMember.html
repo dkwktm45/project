@@ -6,41 +6,8 @@
   <link rel="stylesheet" href="/static/css/adminMember.css">
   <link rel="stylesheet" th:href="@{/static/css/side/modal.css}">
   <link rel="stylesheet" href="/static/css/bootstrap.css">
+  <script th:src="@{/static/js/side/modal.js}"></script>
 
-  <script>
-    window.onload = function() {
-
-      function show1 () {
-        document.querySelector(".black_bg").className = "black_bg show1";
-      }
-      function close1 () {
-        document.querySelector(".black_bg").className = "black_bg";
-      }
-
-      document.querySelector("#modal_btn").addEventListener("click", show1);
-      document.querySelector(".black_bg").addEventListener("click", close1);
-
-
-    }
-
-
-    function insertMonth(month){
-      location.href =  "/web/extensionMember.do?user_id="+user_id+"&month="+month;
-
-    }
-
-    function gomember(){
-      location.href =  "/web/admin_member.do";
-    }
-
-    function gojoin(){
-      location.href =  "/web/join.do";
-    }
-
-    function gorecord(){
-      location.href =  "/web/admin.do";
-    }
-  </script>
 </head>
 <body>
 

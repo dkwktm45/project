@@ -13,6 +13,7 @@ body{
   height: 100%;
 }
 
+
 .fc-event-title-container{
   z-index:2;
 }

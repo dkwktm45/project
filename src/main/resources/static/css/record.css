@@ -44,7 +44,6 @@ html, body {
 .top_left{
     float:left;
     width:80%;
-    height:100%;
 }
 
 #modal_btn{
@@ -53,10 +52,9 @@ html, body {
 }
 
 .top_right{
-    position:relative;
     float:right;
     width:20%;
-    height:100%;
+    height:40%;
 }
 
 
@@ -228,8 +226,9 @@ b{
 
 h1{
     position:relative;
-    left:-10%;
-    top: -5%;
+    left:-13%;
+    top: 20%;
+
 }
 
 h2{
