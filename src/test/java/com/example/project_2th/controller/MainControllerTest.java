@@ -9,6 +9,7 @@ import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.verify;
 import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.match;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -49,7 +51,7 @@ public class MainControllerTest {
 
     MockHttpSession session;
 
-    protected UserHelper userHelper;
+    protected UserHelper userHelper = new UserHelper();
     protected User user;
     @Test
     @DisplayName("로그인 페이지")
@@ -67,21 +69,24 @@ public class MainControllerTest {
 
         Map<String,Object> list = this.userHelper.mapToObject(this.userHelper.makeUser());
         User user = (User) list.get("user");
-        given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym())).willReturn(list);
+
+        given(this.userService.filterLogin(user.getLoginNumber(), user.getUserGym())).willReturn(list);
+        given(this.userService.collectPage(list,session)).willReturn("redirect:/main");
 
 
         MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
-        info.add("userGym", "해운대");
-        info.add("userPhone", "9696");
+        info.add("userGym", user.getUserGym());
+        info.add("loginNumber", user.getLoginNumber());
+
 
         mockMvc.perform(post("/loginInsert").params(info).session(session))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(request().sessionAttribute("user",user))
+                .andExpect(request().sessionAttributeDoesNotExist())
                 .andExpect(redirectedUrl("/main"))
-                .andDo(print())
-        ;
+                .andDo(print());
 
-        verify(userService).filterLogin(user.getUserPhone(), user.getUserGym());
+        verify(userService).collectPage(list,session);
+        verify(userService).filterLogin(user.getLoginNumber(), user.getUserGym());
     }
 
     @DisplayName("form 데이터를 loginInsert로 이동(admin)")
@@ -91,21 +96,22 @@ public class MainControllerTest {
         Map<String,Object> list =userHelper.makeAdmin();
         User user = (User) list.get("user");
 
-        given(this.userService.filterLogin(user.getUserPhone(), user.getUserGym())).willReturn(list);
+        given(this.userService.filterLogin(user.getLoginNumber(), user.getUserGym())).willReturn(list);
+        given(this.userService.collectPage(list,session)).willReturn("redirect:/admin");
 
         MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
 
-        info.add("userGym", "해운대");
-        info.add("userPhone", "9696");
+        info.add("userGym", user.getUserGym());
+        info.add("loginNumber", user.getLoginNumber());
 
         mockMvc.perform(post("/loginInsert").params(info).session(session))
                 .andExpect(redirectedUrl("/admin"))
-                .andExpect(request().sessionAttribute("user",user))
-                .andExpect(request().sessionAttribute("userList",session.getAttribute("userList")))
+                .andExpect(request().sessionAttributeDoesNotExist())
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
 
-        verify(userService).filterLogin(user.getUserPhone(), user.getUserGym());
+        verify(userService).collectPage(list,session);
+        verify(userService).filterLogin(user.getLoginNumber(), user.getUserGym());
     }
 
 
@@ -172,41 +178,47 @@ public class MainControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
     }
-    @DisplayName("main 페이지로 유저 정보가 담겨서 이동한다.")
-    @Test
-    public void test5() throws Exception {
-        session = new MockHttpSession();
-        session.setAttribute("user",userHelper.makeUser());
 
-        mockMvc.perform(get("/main").session(session))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-    @DisplayName("/test 페이지로 user, calendar 정보를 담고 이동한다.")
-    @Test
-    public void test9() throws Exception {
+    @Nested
+    @DisplayName("main redirect")
+    class t1est11{
 
-        session = new MockHttpSession();
-        session.setAttribute("user",userHelper.makeUser());
-        session.setAttribute("calendarInfo",userHelper.makeCalendar());
+        @DisplayName("main 페이지로 유저 정보가 담겨서 이동한다.")
+        @Test
+        public void test5() throws Exception {
+            session = new MockHttpSession();
+            session.setAttribute("user",userHelper.makeUser());
 
-        mockMvc.perform(get("/test").session(session))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-    @DisplayName("/record 페이지로 exinfoList, videoList 정보를 담고 이동한다.")
-    @Test
-    public void test10() throws Exception {
-        session = new MockHttpSession();
-        session.setAttribute("user",userHelper.makeUser());
-        user = (User) session.getAttribute("user");
+            mockMvc.perform(get("/main").session(session))
+                    .andDo(print())
+                    .andExpect(status().isOk());
+        }
+        @DisplayName("/test 페이지로 user, calendar 정보를 담고 이동한다.")
+        @Test
+        public void test9() throws Exception {
 
-        session.setAttribute("exinfoList",userHelper.makeExinfos());
-        session.setAttribute("videoList",userHelper.makeVideos());
+            session = new MockHttpSession();
+            session.setAttribute("user",userHelper.makeUser());
+            session.setAttribute("calendarInfo",userHelper.makeCalendar());
 
-        mockMvc.perform(get("/record").session(session))
-                .andDo(print())
-                .andExpect(status().isOk());
+            mockMvc.perform(get("/test").session(session))
+                    .andDo(print())
+                    .andExpect(status().isOk());
+        }
+        @DisplayName("/record 페이지로 exinfoList, videoList 정보를 담고 이동한다.")
+        @Test
+        public void test10() throws Exception {
+            session = new MockHttpSession();
+            session.setAttribute("user",userHelper.makeUser());
+            user = (User) session.getAttribute("user");
+
+            session.setAttribute("exinfoList",userHelper.makeExinfos());
+            session.setAttribute("videoList",userHelper.makeVideos());
+
+            mockMvc.perform(get("/record").session(session))
+                    .andDo(print())
+                    .andExpect(status().isOk());
+        }
     }
     @After
     public void clean(){

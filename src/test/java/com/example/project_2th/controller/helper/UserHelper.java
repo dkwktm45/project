@@ -83,7 +83,7 @@ public class UserHelper {
     }
 
     public static Map<String , Object> makeAdmin(){
-        User user =  User.builder().userName("김화순").userPhone("9696")
+        User user =  User.builder().userName("김화순").loginNumber("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
                 .managerYn(1).videoYn(1).userGym("해운대").build();
 
