@@ -34,13 +34,9 @@ public class MainController {
     public String goRecord(HttpServletRequest req) {
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
-
         Map<String,Object> map = userService.infoRecord(user);
-
-
         session.setAttribute("exinfoList", map.get("exinfoList"));
         session.setAttribute("videoList", map.get("videoList"));
-
         return "redirect:/record";
     }
 
@@ -50,15 +46,6 @@ public class MainController {
         return "record";
     }
 
-    @GetMapping("/denied")
-    public String denied(@RequestParam(value = "error", required = false)String error,
-                         @RequestParam(value = "exception",required = false)String exception,
-                         Model model){
-        model.addAttribute("error",error);
-        model.addAttribute("exception",exception);
-        return "redirect:/login";
-
-    }
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -70,20 +57,7 @@ public class MainController {
         session = request.getSession(true);
         Map<String ,Object> list = userService.filterLogin(request.getParameter("loginNumber")
                 ,request.getParameter("userGym"));
-        if (list.size() ==2){
-            logger.info("admin page");
-            logger.info("users : " + list.get("userList"));
-            logger.info("manager : " + list.get("user"));
-            session.setAttribute("userList",list.get("userList"));
-            session.setAttribute("user",list.get("user"));
-            return "redirect:/admin";
-        }else if(list.size()==1){
-            logger.info("user page");
-            session.setAttribute("user",list.get("user"));
-            return "redirect:/main";
-        }
-        logger.info("로그인 실패");
-        return "redirect:/login";
+        return userService.collectPage(list,session);
     }
 
     @GetMapping("/main")

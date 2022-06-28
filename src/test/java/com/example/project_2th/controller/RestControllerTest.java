@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,14 +31,18 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.MultiValueMapAdapter;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletInputStream;
 import java.io.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -64,7 +69,7 @@ class RestControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    protected UserHelper userHelper;
+    protected UserHelper userHelper = new UserHelper();
 
     @Spy
     private List<Exercies> exerciesList =null;
@@ -75,23 +80,29 @@ class RestControllerTest {
     @DisplayName("calendarView 에서 날짜에 따른 운동 정보들을 가져온다.")
     @Test
     void calendarView() throws Exception {
-
-        this.userHelper = new UserHelper();
-        calendar = this.userHelper.makeCalendar();
+        calendar =Calendar.builder().user(User.builder().userId(1L).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
+                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build()).exDay(Date.valueOf("2021-05-05")).build();
         exerciesList = new ArrayList<>();
         exerciesList.add(this.userHelper.makeExercies());
         exerciesList.add(this.userHelper.makeExercies());
         exerciesList.add(this.userHelper.makeExercies());
+        given(this.exerciesService.calendarExinfo(any(Calendar.class)))
+                .willReturn(exerciesList);
+
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = mapper.writeValueAsString(calendar);
-
-        given(this.exerciesService.calendarExinfo(calendar))
-                .willReturn(exerciesList);
 
         mockMvc.perform(post("/calendarView")
                         .content(jsonInString)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()",is(3)))
+                .andExpect(jsonPath("$.[0:3].userSet").exists())
+                .andExpect(jsonPath("$.[0:3].exKinds").exists())
+                .andExpect(jsonPath("$.[0:3].cnt").exists())
+                .andExpect(jsonPath("$.[0:3].exCount").exists())
+                .andExpect(jsonPath("$.[0:3].exName").exists())
                 .andExpect(handler().handlerType(RestController.class))
                 .andDo(print());
 
@@ -102,11 +113,10 @@ class RestControllerTest {
     @Test
     void insertExURL() throws Exception {
         byte[] bytes = new byte[]{1, 2};
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        data.add("userId", String.valueOf(userHelper.makeUser().getUserId()));
+        data.add("userId", "1");
         data.add("exSeq", String.valueOf(userHelper.makeExercies().getExSeq()));
-        data.add("cnt", "11");
+        data.add("cnt", userHelper.makeExercies().getCnt());
 
         MvcResult result = mockMvc.perform(post("/insertExURL")
                         .params(data).content(bytes)
@@ -132,24 +142,27 @@ class RestControllerTest {
 //
     void getVideoinfo() throws Exception {
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        data.add("videoSeq", String.valueOf(userHelper.makeVideo().getVideoSeq()));
-        ExerciesVideo videoInfo = userHelper.makeVideo();
-
+        ExerciesVideo exerciesVideo = userHelper.makeVideo();
+        data.add("videoSeq", String.valueOf(exerciesVideo.getVideoSeq()));
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("exinfo", userHelper.makeExercies());
         map.put("postures", userHelper.makePose());
 
-        given(this.exerciesVideoService.selectVideoInfo(videoInfo.getVideoSeq()))
+        given(this.exerciesVideoService.selectVideoInfo(exerciesVideo.getVideoSeq()))
                 .willReturn(map);
 
         mockMvc.perform(get("/insertPose")
                         .params(data)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exinfo").exists())
+                .andExpect(jsonPath("$.postures[0:3].videoTime").exists())
+                .andExpect(jsonPath("$.postures[0:3].poseResult").exists())
+                .andExpect(jsonPath("$.postures[0:3].aiComment").exists())
                 .andExpect(handler().handlerType(RestController.class))
                 .andDo(print());
 
-        verify(exerciesVideoService).selectVideoInfo(videoInfo.getVideoSeq());
+        verify(exerciesVideoService).selectVideoInfo(exerciesVideo.getVideoSeq());
     }
 
     @DisplayName("/insertBadImage : bad image 를 저장하는 uri")

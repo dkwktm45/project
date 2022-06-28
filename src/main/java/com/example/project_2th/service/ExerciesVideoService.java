@@ -1,6 +1,7 @@
 package com.example.project_2th.service;
 
 
+import com.example.project_2th.adapter.PostNotFound;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.Postures;
@@ -42,7 +43,7 @@ public class ExerciesVideoService {
 
     public void videoSave(String cnt, Long user_id,Long ex_seq, ServletInputStream input) throws IOException {
         logger.info("videoSave perform");
-        User user = userRepository.findByUserId(user_id);
+        User user = userRepository.findByUserId(user_id).orElseThrow(PostNotFound::new);
         Exercies exercies = exinfoRepository.findByExSeq(ex_seq);
 
         UUID uuid = UUID.randomUUID();

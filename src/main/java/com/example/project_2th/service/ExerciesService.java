@@ -34,10 +34,8 @@ public class ExerciesService {
     public Exercies exerciesInfo(Exercies exercies){
         exercies.setExDay(Date.valueOf(LocalDate.now()));
         exinfoRepository.save(exercies);
-        Exercies exinfo = exinfoRepository.findByOne(exercies.getUser().getUserId(), exercies.getExName());
         return exercies;
     }
-
     public List<Exercies> calendarExinfo(Calendar calendar){
         return exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay());
     }

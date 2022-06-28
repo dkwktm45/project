@@ -1,5 +1,6 @@
 package com.example.project_2th.repository;
 
+import com.example.project_2th.adapter.PostNotFound;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
 import org.junit.jupiter.api.DisplayName;
@@ -45,7 +46,7 @@ public class UserRepositoryTest {
 
         //when
         logger.info("find 시작");
-        User result = userRepository.findByLoginNumberAndUserGym(user.getLoginNumber(), user.getUserGym());
+        User result = userRepository.findByLoginNumberAndUserGym(user.getLoginNumber(), user.getUserGym()).orElseThrow(PostNotFound::new);
         logger.info("find 끝");
 
         //then
@@ -65,7 +66,7 @@ public class UserRepositoryTest {
 
         //when
         logger.info("find 시작");
-        User result = userRepository.findByUserIdAndUserGym(user1.getUserPhone(), user1.getUserGym());
+        User result = userRepository.findByUserIdAndUserGym(user1.getUserPhone(), user1.getUserGym()).orElseThrow(PostNotFound::new);
         logger.info("find 끝");
 
         //then
@@ -85,7 +86,7 @@ public class UserRepositoryTest {
 
         //when
         logger.info("find 시작");
-        User result = userRepository.findByUserId(user.getUserId());
+        User result = userRepository.findByUserId(user.getUserId()).orElseThrow(PostNotFound::new);
         logger.info("find 끝");
 
         //then

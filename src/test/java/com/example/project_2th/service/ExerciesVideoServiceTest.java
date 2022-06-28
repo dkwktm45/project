@@ -1,6 +1,7 @@
 package com.example.project_2th.service;
 
 
+import com.example.project_2th.adapter.PostNotFound;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
@@ -71,7 +72,7 @@ public class ExerciesVideoServiceTest {
         request.setContent(bytes);
         ServletInputStream stream = request.getInputStream();
 
-        Mockito.when(userRepository.findByUserId(1L)).thenReturn(user);
+        Mockito.when(userRepository.findByUserId(1L).orElseThrow(PostNotFound::new)).thenReturn(user);
         Mockito.when(exinfoRepository.findByExSeq(1L)).thenReturn(exercies);
 
         exerciesVideoService = new ExerciesVideoService(userRepository,exinfoRepository,videoRepository);

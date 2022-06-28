@@ -1,5 +1,6 @@
 package com.example.project_2th.service;
 
+import com.example.project_2th.adapter.PostNotFound;
 import com.example.project_2th.controller.MainController;
 import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
@@ -39,7 +40,7 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public Map<String,Object> filterLogin(String number, String gym){
-        User loginUser = userRepository.findByLoginNumberAndUserGym(number,gym);
+        User loginUser = userRepository.findByLoginNumberAndUserGym(number,gym).orElseThrow(PostNotFound::new);
         Map<String,Object> list = new HashMap<>();
         if (loginUser == null) {
             log.info("로그인 실패");
@@ -79,9 +80,7 @@ public class UserService {
         return map;
     }
     public void join(User user){
-        String phone = user.getUserPhone();
-        String login = phone.substring(9);
-        User resultUser= User.builder().loginNumber(login).userName(user.getUserName()).userPhone(user.getUserPhone())
+        User resultUser= User.builder().loginNumber(user.getUserPhone()).userName(user.getUserName()).userPhone(user.getUserPhone())
                 .userBirthdate(user.getUserBirthdate()).userExpireDate(user.getUserExpireDate())
                 .managerYn(user.getManagerYn()).videoYn(user.getVideoYn()).userGym(user.getUserGym()).build();
         logger.info("join perform : {}",resultUser);
@@ -93,7 +92,7 @@ public class UserService {
     private void validateDuplicateMember(User user) {
         logger.info("user validation");
 
-        User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym());
+        User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym()).orElseThrow(PostNotFound::new);
         if(!(findMember == null)){
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
@@ -105,10 +104,24 @@ public class UserService {
     public void updateMonth(HttpServletRequest req){
         Date expiredDate= Date.valueOf(req.getParameter("userExpireDate"));
         Long id = Long.valueOf(req.getParameter("userId"));
-        User user = userRepository.findByUserId(id);
+        User user = userRepository.findByUserId(id).orElseThrow(PostNotFound::new);
         user.setUserExpireDate(expiredDate);
         userRepository.save(user);
-        //return "redirect:/admin/Member";
     }
-
+    public String collectPage(Map<String ,Object> list,HttpSession session){
+        if (list.size() ==2){
+            logger.info("admin page");
+            logger.info("users : " + list.get("userList"));
+            logger.info("manager : " + list.get("user"));
+            session.setAttribute("userList",list.get("userList"));
+            session.setAttribute("user",list.get("user"));
+            return "redirect:/admin";
+        }else if(list.size()==1){
+            logger.info("user page");
+            session.setAttribute("user",list.get("user"));
+            return "redirect:/main";
+        }
+        logger.info("로그인 실패");
+        return "redirect:/login";
+    }
 }

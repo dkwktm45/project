@@ -1,5 +1,6 @@
 package com.example.project_2th.service;
 
+import com.example.project_2th.adapter.PostNotFound;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
@@ -63,7 +64,7 @@ public class UserServiceTest {
 
             Mockito.when(userRepository.findByLoginNumberAndUserGym(
                     user.getUserPhone()
-                    , user.getUserGym())).thenReturn(user);
+                    , user.getUserGym()).orElseThrow(PostNotFound::new)).thenReturn(user);
 
             UserService userService = new UserService(userRepository);
 
@@ -81,19 +82,20 @@ public class UserServiceTest {
             List<User> users = (List<User>) adminInfo.get("userList");
 
             Mockito.when(userRepository.findByLoginNumberAndUserGym(
-                    user.getUserPhone()
-                    , user.getUserGym())).thenReturn(user);
+                    user.getLoginNumber()
+                    , user.getUserGym())).thenReturn(Optional.ofNullable(user));
             Mockito.when(userRepository.findByUserGymAndManagerYn(
                     user.getUserGym()
                     , user.getManagerYn()-1)).thenReturn(users);
 
+
             UserService userService = new UserService(userRepository);
 
-            Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
+            Map<String, Object> result = userService.filterLogin(user.getLoginNumber(), user.getUserGym());
             assertEquals(result.get("user"),user);
             assertEquals(result.get("userList"),adminInfo.get("userList"));
 
-            verify(userRepository).findByLoginNumberAndUserGym( user.getUserPhone()
+            verify(userRepository).findByLoginNumberAndUserGym( user.getLoginNumber()
                     , user.getUserGym());
             verify(userRepository).findByUserGymAndManagerYn( user.getUserGym()
                     , user.getManagerYn()-1);
@@ -193,7 +195,7 @@ public class UserServiceTest {
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
 
-            Mockito.when(userRepository.findByUserIdAndUserGym(loginUser.getUserPhone(),loginUser.getUserGym())).thenReturn(refEq(loginUser));
+            Mockito.when(userRepository.findByUserIdAndUserGym(loginUser.getUserPhone(),loginUser.getUserGym()).orElseThrow(PostNotFound::new)).thenReturn(refEq(loginUser));
             Mockito.when(userRepository.save(loginUser)).thenReturn(null);
             try{
 
@@ -236,7 +238,7 @@ public class UserServiceTest {
         user = User.builder().userId(1L).userName("김화순").userPhone("9696")
                 .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-10-22"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
-        Mockito.when(userRepository.findByUserId(user.getUserId())).thenReturn(userHelper.makeUser());
+        Mockito.when(userRepository.findByUserId(user.getUserId()).orElseThrow(PostNotFound::new)).thenReturn(userHelper.makeUser());
 
         Mockito.when(userRepository.save(user)).thenReturn(null);
 

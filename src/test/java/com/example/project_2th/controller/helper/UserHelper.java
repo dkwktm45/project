@@ -24,6 +24,9 @@ public class UserHelper {
                 .managerYn(0).videoYn(1).userGym("해운대").build();
     }
 
+    public Calendar userCalendar2(){
+        return Calendar.builder().user(makeUser()).exDay(Date.valueOf("2021-05-05")).build();
+    }
     public List<User> makeUsers(){
         List<User> users = new ArrayList<>();
         users.add(User.builder().userName("김화순").userPhone("9696")
