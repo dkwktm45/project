@@ -36,6 +36,7 @@ public class ExerciesService {
         exinfoRepository.save(exercies);
         return exercies;
     }
+
     public List<Exercies> calendarExinfo(Calendar calendar){
         return exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay());
     }

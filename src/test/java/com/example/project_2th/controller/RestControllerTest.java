@@ -35,6 +35,8 @@ import javax.persistence.EntityManager;
 import javax.servlet.ServletInputStream;
 import java.io.*;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,7 +83,7 @@ class RestControllerTest {
     @Test
     void calendarView() throws Exception {
         calendar =Calendar.builder().user(User.builder().userId(1L).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
-                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                 .managerYn(0).videoYn(1).userGym("해운대").build()).exDay(Date.valueOf("2021-05-05")).build();
         exerciesList = new ArrayList<>();
         exerciesList.add(this.userHelper.makeExercies());

@@ -196,6 +196,7 @@ $(".expiry").on("keydown",function (e){
       $(this).focus();
     }else{
       var today = new Date();
+      console.log(today)
       var monthNumber = number + today.getMonth()+ 1;
       var yearPlus = 0;
       if(monthNumber >= 12 ){

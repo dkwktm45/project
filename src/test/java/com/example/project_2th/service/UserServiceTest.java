@@ -29,6 +29,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -164,11 +166,11 @@ public class UserServiceTest {
         @Test
         void test4(){
             user = User.builder().userName("김태롱").userPhone("010-6457-2354")
-                    .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                    .userBirthdate(LocalDate.parse(("1963-07-16"))).userExpireDate(LocalDate.parse("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
             User loginUser = User.builder().loginNumber("2354").userName("김태롱").userPhone("010-6457-2354")
-                    .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                    .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
 
@@ -187,11 +189,11 @@ public class UserServiceTest {
         @Test
         void test5(){
             user = User.builder().userName("김태롱").userPhone("010-6457-2354")
-                    .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                    .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
             User loginUser = User.builder().loginNumber("2354").userName("김태롱").userPhone("010-6457-2354")
-                    .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-08-20"))
+                    .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
 
@@ -236,7 +238,7 @@ public class UserServiceTest {
         request.addParameter("userExpireDate","2022-10-22");
         request.addParameter("userId", String.valueOf(1L));
         user = User.builder().userId(1L).userName("김화순").userPhone("9696")
-                .userBirthdate(java.sql.Date.valueOf("1963-07-16")).userExpireDate(java.sql.Date.valueOf("2022-10-22"))
+                .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-10-22"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
         Mockito.when(userRepository.findByUserId(user.getUserId()).orElseThrow(PostNotFound::new)).thenReturn(userHelper.makeUser());
 

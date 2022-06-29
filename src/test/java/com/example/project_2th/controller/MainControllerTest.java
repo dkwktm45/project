@@ -188,7 +188,6 @@ public class MainControllerTest {
         public void test5() throws Exception {
             session = new MockHttpSession();
             session.setAttribute("user",userHelper.makeUser());
-
             mockMvc.perform(get("/main").session(session))
                     .andDo(print())
                     .andExpect(status().isOk());

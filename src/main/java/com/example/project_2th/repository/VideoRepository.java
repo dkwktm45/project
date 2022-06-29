@@ -10,13 +10,14 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public interface VideoRepository extends JpaRepository<ExerciesVideo,Long> {
 
     ExerciesVideo findByExercies(Exercies exinfo);
 
     @EntityGraph(attributePaths = {"exercies","postures"})
-    ExerciesVideo findByVideoSeq(Long id);
+    Optional<ExerciesVideo> findByVideoSeq(Long id);
 
 
     List<ExerciesVideo> findAll();

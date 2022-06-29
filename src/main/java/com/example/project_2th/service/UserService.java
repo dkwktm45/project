@@ -23,10 +23,12 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -40,7 +42,7 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public Map<String,Object> filterLogin(String number, String gym){
-        User loginUser = userRepository.findByLoginNumberAndUserGym(number,gym).orElseThrow(PostNotFound::new);
+        User loginUser = userRepository.findByLoginNumberAndUserGym(number,gym).orElseThrow();
         Map<String,Object> list = new HashMap<>();
         if (loginUser == null) {
             log.info("로그인 실패");
@@ -69,10 +71,9 @@ public class UserService {
     public Map<String, Object> infoRecord(User user){
         List<User> users = userRepository.findAllByFetchJoin();
         List<ExerciesVideo> videoList = users.get(Math.toIntExact(user.getUserId() - 1)).getExercieVideosList();
-        List<Exercies> exerciesList = new ArrayList<>();
-        for (int i = 0; i < videoList.size(); i++) {
-            exerciesList.add(videoList.get(i).getExercies());
-        }
+        List<Exercies> exerciesList = videoList.stream().map(
+                video -> video.getExercies()
+        ).collect(Collectors.toList());
         Map<String ,Object> map = new HashMap<>();
         map.put("videoList",videoList);
         map.put("exinfoList",exerciesList);
@@ -102,13 +103,15 @@ public class UserService {
     }
 
     public void updateMonth(HttpServletRequest req){
-        Date expiredDate= Date.valueOf(req.getParameter("userExpireDate"));
+        LocalDate expiredDate= LocalDate.parse((req.getParameter("userExpireDate")));
         Long id = Long.valueOf(req.getParameter("userId"));
         User user = userRepository.findByUserId(id).orElseThrow(PostNotFound::new);
         user.setUserExpireDate(expiredDate);
         userRepository.save(user);
     }
+
     public String collectPage(Map<String ,Object> list,HttpSession session){
+
         if (list.size() ==2){
             logger.info("admin page");
             logger.info("users : " + list.get("userList"));

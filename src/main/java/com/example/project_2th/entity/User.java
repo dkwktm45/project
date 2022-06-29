@@ -1,15 +1,19 @@
 package com.example.project_2th.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -33,10 +37,13 @@ public class User{
     private String userName;
     private String userPhone;
     private String userGym;
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 
     @Setter
-    private Date userExpireDate;
-    private Date userBirthdate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate userExpireDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate userBirthdate;
 
     @Nullable
     private String contents;

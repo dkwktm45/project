@@ -1,5 +1,6 @@
 package com.example.project_2th.repository;
 
+import com.example.project_2th.adapter.PostNotFound;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
@@ -81,7 +82,7 @@ class VideoRepositoryTest {
         em.persist(exerciesVideo);
 
         logger.info("when");
-        ExerciesVideo result = videoRepository.findByVideoSeq(1L);
+        ExerciesVideo result = videoRepository.findByVideoSeq(1L).orElseThrow(PostNotFound::new);
 
         logger.info("then");
         assertNotNull(result.getExercies());
