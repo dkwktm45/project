@@ -46,7 +46,7 @@ public class UserRepositoryTest {
 
         //when
         logger.info("find 시작");
-        User result = userRepository.findByLoginNumberAndUserGym(user.getLoginNumber(), user.getUserGym()).orElseThrow(PostNotFound::new);
+        User result = userRepository.findByLoginNumberAndUserGym(user.getLoginNumber(), user.getUserGym());
         logger.info("find 끝");
 
         //then
@@ -66,7 +66,7 @@ public class UserRepositoryTest {
 
         //when
         logger.info("find 시작");
-        User result = userRepository.findByUserIdAndUserGym(user1.getUserPhone(), user1.getUserGym()).orElseThrow(PostNotFound::new);
+        User result = userRepository.findByUserIdAndUserGym(user1.getUserPhone(), user1.getUserGym());
         logger.info("find 끝");
 
         //then

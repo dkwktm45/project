@@ -41,90 +41,93 @@ public class UserService {
 
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public Map<String,Object> filterLogin(String number, String gym){
-        User loginUser = userRepository.findByLoginNumberAndUserGym(number,gym).orElseThrow();
-        Map<String,Object> list = new HashMap<>();
+    public Map<String, Object> filterLogin(String number, String gym) {
+        User loginUser = userRepository.findByLoginNumberAndUserGym(number, gym);
+        Map<String, Object> list = new HashMap<>();
         if (loginUser == null) {
             log.info("로그인 실패");
             return null;
         } else {
             if (loginUser.getManagerYn() == 1) {
                 // 중복 구간 수정 필요!
-                List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(),loginUser.getManagerYn()-1);
-                list.put("user",loginUser);
-                list.put("userList",userList);
+                List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(), loginUser.getManagerYn() - 1);
+                list.put("user", loginUser);
+                list.put("userList", userList);
                 return list;
             } else {
-                log.info("session : "+loginUser);
-                list.put("user",loginUser);
+                log.info("session : " + loginUser);
+                list.put("user", loginUser);
                 return list;
             }
         }
     }
 
-    public List<Calendar> infoCalendar(User user){
+    public List<Calendar> infoCalendar(User user) {
         List<User> users = userRepository.findAllByFetchJoin();
         List<Calendar> exinfo = users.get(Math.toIntExact(user.getUserId() - 1)).getCalendarList();
         return exinfo;
     }
 
-    public Map<String, Object> infoRecord(User user){
+    public Map<String, Object> infoRecord(User user) {
         List<User> users = userRepository.findAllByFetchJoin();
         List<ExerciesVideo> videoList = users.get(Math.toIntExact(user.getUserId() - 1)).getExercieVideosList();
         List<Exercies> exerciesList = videoList.stream().map(
                 video -> video.getExercies()
         ).collect(Collectors.toList());
-        Map<String ,Object> map = new HashMap<>();
-        map.put("videoList",videoList);
-        map.put("exinfoList",exerciesList);
+        Map<String, Object> map = new HashMap<>();
+        map.put("videoList", videoList);
+        map.put("exinfoList", exerciesList);
 
         return map;
     }
-    public void join(User user){
-        User resultUser= User.builder().loginNumber(user.getUserPhone()).userName(user.getUserName()).userPhone(user.getUserPhone())
+
+    public void join(User user) {
+
+        User resultUser = User.builder().loginNumber(user.getUserPhone().substring(9)).userName(user.getUserName()).userPhone(user.getUserPhone())
                 .userBirthdate(user.getUserBirthdate()).userExpireDate(user.getUserExpireDate())
                 .managerYn(user.getManagerYn()).videoYn(user.getVideoYn()).userGym(user.getUserGym()).build();
-        logger.info("join perform : {}",resultUser);
+        logger.info("join perform : {}", resultUser);
 
-        validateDuplicateMember(resultUser);
+        logger.info("user validation");
+        User findMember = userRepository.findByUserIdAndUserGym(
+                resultUser.getUserPhone()
+                , resultUser.getUserGym());
+        if(findMember !=null){
+            throw new IllegalStateException("존재하는 회원입니다.");
+        }
         userRepository.save(resultUser);
     }
 
-    private void validateDuplicateMember(User user) {
-        logger.info("user validation");
+    public void validateDuplicateMember(User user) {
 
-        User findMember = userRepository.findByUserIdAndUserGym(user.getUserPhone(),user.getUserGym()).orElseThrow(PostNotFound::new);
-        if(!(findMember == null)){
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+    }
+        public List<User> reLoadMember (User user){
+            return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1);
+        }
+
+        public void updateMonth (HttpServletRequest req){
+            LocalDate expiredDate = LocalDate.parse((req.getParameter("userExpireDate")));
+            Long id = Long.valueOf(req.getParameter("userId"));
+            User user = userRepository.findByUserId(id).orElseThrow(PostNotFound::new);
+            user.setUserExpireDate(expiredDate);
+            userRepository.save(user);
+        }
+
+        public String collectPage (Map < String, Object > list, HttpSession session){
+
+            if (list.size() == 2) {
+                logger.info("admin page");
+                logger.info("users : " + list.get("userList"));
+                logger.info("manager : " + list.get("user"));
+                session.setAttribute("userList", list.get("userList"));
+                session.setAttribute("user", list.get("user"));
+                return "redirect:/admin";
+            } else if (list.size() == 1) {
+                logger.info("user page");
+                session.setAttribute("user", list.get("user"));
+                return "redirect:/main";
+            }
+            logger.info("로그인 실패");
+            return "redirect:/login";
         }
     }
-    public List<User> reLoadMember(User user){
-        return userRepository.findByUserGymAndManagerYn(user.getUserGym(),user.getManagerYn()-1);
-    }
-
-    public void updateMonth(HttpServletRequest req){
-        LocalDate expiredDate= LocalDate.parse((req.getParameter("userExpireDate")));
-        Long id = Long.valueOf(req.getParameter("userId"));
-        User user = userRepository.findByUserId(id).orElseThrow(PostNotFound::new);
-        user.setUserExpireDate(expiredDate);
-        userRepository.save(user);
-    }
-
-    public String collectPage(Map<String ,Object> list,HttpSession session){
-
-        if (list.size() ==2){
-            logger.info("admin page");
-            logger.info("users : " + list.get("userList"));
-            logger.info("manager : " + list.get("user"));
-            session.setAttribute("userList",list.get("userList"));
-            session.setAttribute("user",list.get("user"));
-            return "redirect:/admin";
-        }else if(list.size()==1){
-            logger.info("user page");
-            session.setAttribute("user",list.get("user"));
-            return "redirect:/main";
-        }
-        logger.info("로그인 실패");
-        return "redirect:/login";
-    }
-}

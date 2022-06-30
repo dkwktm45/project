@@ -23,8 +23,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "user")
 @Builder
+@Table(name = "user")
 @JsonIgnoreProperties(value = {"exerciesList","calendarList","exercieVideosList"} , allowSetters = true)
 @ToString(exclude = {"exerciesList","calendarList","exercieVideosList"})
 public class User{
