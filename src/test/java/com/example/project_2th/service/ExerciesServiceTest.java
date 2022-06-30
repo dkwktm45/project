@@ -48,6 +48,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,10 +62,6 @@ public class ExerciesServiceTest {
 
     @InjectMocks
     ExerciesService exerciesService;
-
-
-    protected MockHttpSession session;
-    protected MockHttpServletRequest request;
     protected UserHelper userHelper = new UserHelper();
 
     @Test
@@ -74,7 +71,6 @@ public class ExerciesServiceTest {
 
         Mockito.when(exinfoRepository.save(exercies)).thenReturn(null);
 
-        Mockito.when(exinfoRepository.findByOne(exercies.getUser().getUserId(),exercies.getExName())).thenReturn(exercies);
 
         exerciesService = new ExerciesService(exinfoRepository);
 
@@ -82,8 +78,7 @@ public class ExerciesServiceTest {
 
         assertEquals(exinfo.getExCount(),exercies.getExCount());
 
-        Mockito.verify(exinfoRepository).save(exercies);
-        Mockito.verify(exinfoRepository).findByOne(exercies.getUser().getUserId(),exercies.getExName());
+        Mockito.verify(exinfoRepository).save(refEq(exercies));
     }
 
     @Test
