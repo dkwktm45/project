@@ -1,10 +1,13 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.adapter.GsonLocalDateTimeAdapter;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -88,12 +93,14 @@ public class AdminControllerTest {
     @DisplayName("회원가입")
     @Test
     public void test3() throws Exception{
-        ObjectMapper mapper = new ObjectMapper();
         User user = userHelper.makeUser();
-        String jsonInString = mapper.writeValueAsString(user);
-
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new GsonLocalDateTimeAdapter())
+                .create();
+        String json = gson.toJson(user);
         mockMvc.perform(post("/admin/joinMember")
-                        .content(jsonInString)
+                        .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(AdminController.class))
