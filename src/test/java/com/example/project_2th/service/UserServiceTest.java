@@ -7,6 +7,7 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.UserRepository;
+import com.example.project_2th.response.UserResponse;
 import org.junit.After;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -231,7 +232,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findByUserGymAndManagerYn(admin.getUserGym(), admin.getManagerYn()-1)).thenReturn(users);
 
         UserService userService = new UserService(userRepository);
-        List<User> resultUsers = userService.reLoadMember(admin);
+        List<UserResponse> resultUsers = userService.reLoadMember(admin);
 
         assertEquals(resultUsers.size(),4);
         verify(userRepository).findByUserGymAndManagerYn(admin.getUserGym(), admin.getManagerYn()-1);

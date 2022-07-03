@@ -1,4 +1,4 @@
-package com.example.project_2th.adapter;
+package com.example.project_2th.controller.helper;
 
 import com.google.gson.*;
 

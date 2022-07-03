@@ -8,6 +8,7 @@ import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -92,7 +93,7 @@ public class UserService {
         User findMember = userRepository.findByUserIdAndUserGym(
                 resultUser.getUserPhone()
                 , resultUser.getUserGym());
-        if(findMember !=null){
+        if (findMember != null) {
             throw new IllegalStateException("존재하는 회원입니다.");
         }
         userRepository.save(resultUser);
@@ -101,33 +102,37 @@ public class UserService {
     public void validateDuplicateMember(User user) {
 
     }
-        public List<User> reLoadMember (User user){
-            return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1);
-        }
 
-        public void updateMonth (HttpServletRequest req){
-            LocalDate expiredDate = LocalDate.parse((req.getParameter("userExpireDate")));
-            Long id = Long.valueOf(req.getParameter("userId"));
-            User user = userRepository.findByUserId(id).orElseThrow(PostNotFound::new);
-            user.setUserExpireDate(expiredDate);
-            userRepository.save(user);
-        }
-
-        public String collectPage (Map < String, Object > list, HttpSession session){
-
-            if (list.size() == 2) {
-                logger.info("admin page");
-                logger.info("users : " + list.get("userList"));
-                logger.info("manager : " + list.get("user"));
-                session.setAttribute("userList", list.get("userList"));
-                session.setAttribute("user", list.get("user"));
-                return "redirect:/admin";
-            } else if (list.size() == 1) {
-                logger.info("user page");
-                session.setAttribute("user", list.get("user"));
-                return "redirect:/main";
-            }
-            logger.info("로그인 실패");
-            return "redirect:/login";
-        }
+    public List<UserResponse> reLoadMember(User user) {
+        return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
+                .stream()
+                .map(UserResponse::new)
+                .collect(Collectors.toList());
     }
+
+    public void updateMonth(HttpServletRequest req) {
+        LocalDate expiredDate = LocalDate.parse((req.getParameter("userExpireDate")));
+        Long id = Long.valueOf(req.getParameter("userId"));
+        User user = userRepository.findByUserId(id).orElseThrow(PostNotFound::new);
+        user.setUserExpireDate(expiredDate);
+        userRepository.save(user);
+    }
+
+    public String collectPage(Map<String, Object> list, HttpSession session) {
+
+        if (list.size() == 2) {
+            logger.info("admin page");
+            logger.info("users : " + list.get("userList"));
+            logger.info("manager : " + list.get("user"));
+            session.setAttribute("userList", list.get("userList"));
+            session.setAttribute("user", list.get("user"));
+            return "redirect:/admin";
+        } else if (list.size() == 1) {
+            logger.info("user page");
+            session.setAttribute("user", list.get("user"));
+            return "redirect:/main";
+        }
+        logger.info("로그인 실패");
+        return "redirect:/login";
+    }
+}

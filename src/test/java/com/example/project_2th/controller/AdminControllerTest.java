@@ -1,33 +1,26 @@
 package com.example.project_2th.controller;
 
-import com.example.project_2th.adapter.GsonLocalDateTimeAdapter;
+import com.example.project_2th.controller.helper.GsonLocalDateTimeAdapter;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
+import com.example.project_2th.response.UserResponse;
 import com.example.project_2th.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.json.GsonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +73,7 @@ public class AdminControllerTest {
         session = new MockHttpSession();
         user = (User) this.userHelper.makeAdmin().get("user");
         session.setAttribute("user",user);
-        List<User> userList = (List<User>) this.userHelper.makeAdmin().get("userList");
+        List<UserResponse> userList = (List<UserResponse>) this.userHelper.makeAdmin().get("userList");
 
         given(this.userService.reLoadMember(user)).willReturn(userList);
 

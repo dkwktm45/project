@@ -1,25 +1,21 @@
-package com.example.project_2th.entity;
+package com.example.project_2th.response;
 
+import com.example.project_2th.entity.Exercies;
+import com.example.project_2th.entity.Postures;
+import com.example.project_2th.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
 @Builder
-@ToString(exclude = {"user","exercies","postures"})
-@Table(name = "user_exercies_videos")
-public class ExerciesVideo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Getter
+public class VideoResponse {
     private Long videoSeq;
 
     private String fileName;
@@ -34,7 +30,6 @@ public class ExerciesVideo {
     @JoinColumn(name = "ex_seq")
     private Exercies exercies;
 
-    @Builder.Default
     @OneToMany
     @JsonManagedReference
     @JoinColumn(name = "video_seq", insertable = false,updatable = false)
