@@ -1,5 +1,7 @@
 package com.example.project_2th.response;
 
+import com.example.project_2th.entity.Calendar;
+import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
@@ -9,7 +11,6 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.sql.Date;
 
-@Builder
 @Getter
 public class ExerciesResponse {
     private Long exSeq;
@@ -24,5 +25,15 @@ public class ExerciesResponse {
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserResponse user;
+
+    public ExerciesResponse(Exercies exercies) {
+        this.exSeq = exercies.getExSeq();
+        this.exDay = exercies.getExDay();
+        this.exName = exercies.getExName();
+        this.exKinds = exercies.getExKinds();
+        this.user = new UserResponse(exercies.getUser());
+        this.userSet = exercies.getUserSet();
+        this.exCount = exercies.getExCount();
+    }
 }

@@ -5,6 +5,7 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.controller.helper.UserHelper;
+import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -123,11 +124,11 @@ public class MainControllerTest {
         user = (User) session.getAttribute("user");
 
         Calendar calendar = userHelper.makeCalendar();
-
-        List<Calendar> calendarList = new ArrayList<>();
-        calendarList.add(calendar);
-        calendarList.add(calendar);
-        calendarList.add(calendar);
+        CalendarResponse response = new CalendarResponse(calendar);
+        List<CalendarResponse> calendarList = new ArrayList<>();
+        calendarList.add(response);
+        calendarList.add(response);
+        calendarList.add(response);
 
         given(this.userService.infoCalendar(user)).willReturn(calendarList);
 

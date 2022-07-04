@@ -1,12 +1,14 @@
 package com.example.project_2th.service;
 
 
+import com.example.project_2th.adapter.PostNotFound;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.response.VideoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -78,10 +80,10 @@ public class ExerciesVideoService {
     }
 
     public Map<String, Object> selectVideoInfo(Long videoSeq) {
-        Optional<ExerciesVideo> result = videoRepository.findByVideoSeq(videoSeq);
+        VideoResponse result = new VideoResponse(videoRepository.findByVideoSeq(videoSeq).orElseThrow(PostNotFound::new));
         Map<String, Object> map = Map.of(
-                "exinfo",result.stream().map(info -> info.getExercies()).collect(Collectors.toList()),
-                "postures",result.stream().map(info -> info.getPostures()).collect(Collectors.toList())
+                "exinfo",result.getExercies(),
+                "postures",result.getPostures()
         );
         return map;
     }

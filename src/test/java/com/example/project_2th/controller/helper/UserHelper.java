@@ -78,23 +78,24 @@ public class UserHelper {
         return postures;
     }
 
-    public static Map<String ,Object> mapToObject(User user){
+    public Map<String ,Object> mapToObject(User user){
         Map<String ,Object> objectMap = new HashMap<>();
         objectMap.put("user",user);
         return objectMap;
     }
 
-    public static Map<String , Object> makeAdmin(){
+    public Map<String , Object> makeAdmin(){
         User user =  User.builder().userName("김화순").loginNumber("9696")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
-                .managerYn(1).videoYn(1).userGym("해운대").build();
+                .managerYn(1).exerciesList(makeExinfos()).exercieVideosList(makeVideos())
+                .calendarList(makeCalendars()).videoYn(1).userGym("해운대").build();
 
         List<User> users = new ArrayList<>();
 
-        users.add(makeUser());
-        users.add(makeUser());
-        users.add(makeUser());
-        users.add(makeUser());
+        users.add(user);
+        users.add(user);
+        users.add(user);
+        users.add(user);
 
         Map<String ,Object> objectMap = new HashMap<>();
         objectMap.put("user",user);

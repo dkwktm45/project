@@ -9,6 +9,7 @@ import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.response.ExerciesResponse;
 import groovy.util.logging.Slf4j;
 import org.assertj.core.util.DateUtil;
 import org.junit.Before;
@@ -45,6 +46,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -88,11 +90,12 @@ public class ExerciesServiceTest {
         List<Exercies> exercies = userHelper.makeExinfos();
         Mockito.when(exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay()))
                 .thenReturn(exercies);
+        exercies.forEach(ExerciesResponse::new);
 
         exerciesService = new ExerciesService(exinfoRepository);
-        List<Exercies> exerciesResult =  exerciesService.calendarExinfo(calendar);
+        List<ExerciesResponse> exerciesResult =  exerciesService.calendarExinfo(calendar);
 
-        assertEquals(exerciesResult,exercies);
+        assertEquals(exerciesResult.get(0).getExCount(),exercies.get(0).getExCount());
         Mockito.verify(exinfoRepository).findExDay(calendar.getUser().getUserId(),calendar.getExDay());
     }
 }

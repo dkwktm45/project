@@ -3,10 +3,8 @@ package com.example.project_2th.service;
 
 import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.entity.ExerciesVideo;
-import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
-import com.example.project_2th.repository.UserRepository;
+import com.example.project_2th.response.ExerciesResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -15,11 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -37,8 +34,10 @@ public class ExerciesService {
         return exercies;
     }
 
-    public List<Exercies> calendarExinfo(Calendar calendar){
-        return exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay());
+    public List<ExerciesResponse> calendarExinfo(Calendar calendar){
+        return exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay())
+                .stream().map(ExerciesResponse::new)
+                .collect(Collectors.toList());
     }
 
     public List<Exercies> findExercies(String exkinds){

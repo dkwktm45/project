@@ -5,6 +5,7 @@ import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
+import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -89,8 +90,9 @@ class RestControllerTest {
         exerciesList.add(this.userHelper.makeExercies());
         exerciesList.add(this.userHelper.makeExercies());
         exerciesList.add(this.userHelper.makeExercies());
+        List<ExerciesResponse> list= new ArrayList(exerciesList);
         given(this.exerciesService.calendarExinfo(any(Calendar.class)))
-                .willReturn(exerciesList);
+                .willReturn(list);
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = mapper.writeValueAsString(calendar);

@@ -1,5 +1,6 @@
 package com.example.project_2th.entity;
 
+import com.example.project_2th.response.VideoResponse;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

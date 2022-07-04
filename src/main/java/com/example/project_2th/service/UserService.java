@@ -8,6 +8,7 @@ import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +26,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,35 +41,33 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public Map<String, Object> filterLogin(String number, String gym) {
-        User loginUser = userRepository.findByLoginNumberAndUserGym(number, gym);
+        User loginUser = userRepository.findByLoginNumberAndUserGym(number, gym).orElseThrow(PostNotFound::new);
+        UserResponse userResponse = new UserResponse(loginUser);
         Map<String, Object> list = new HashMap<>();
-        if (loginUser == null) {
-            log.info("로그인 실패");
-            return null;
-        } else {
-            if (loginUser.getManagerYn() == 1) {
-                // 중복 구간 수정 필요!
-                List<User> userList = userRepository.findByUserGymAndManagerYn(loginUser.getUserGym(), loginUser.getManagerYn() - 1);
-                list.put("user", loginUser);
-                list.put("userList", userList);
-                return list;
-            } else {
-                log.info("session : " + loginUser);
-                list.put("user", loginUser);
-                return list;
-            }
+        if (userResponse.getManagerYn() == 1) {
+            List<UserResponse> userList = userRepository.findByUserGymAndManagerYn(userResponse.getUserGym(), userResponse.getManagerYn() - 1)
+                    .stream().map(UserResponse::new).collect(Collectors.toList());
+            list.put("user", userResponse);
+            list.put("userList", userList);
+            return list;
+        } else if(userResponse.getManagerYn() == 0){
+            list.put("user", loginUser);
+            return list;
         }
+        return null;
     }
 
-    public List<Calendar> infoCalendar(User user) {
-        List<User> users = userRepository.findAllByFetchJoin();
-        List<Calendar> exinfo = users.get(Math.toIntExact(user.getUserId() - 1)).getCalendarList();
-        return exinfo;
+    public List<CalendarResponse> infoCalendar(User user) {
+        List<CalendarResponse> users = userRepository.findAllByFetchJoin()
+                .get(Math.toIntExact(user.getUserId() - 1))
+                .getCalendarList().stream().map(CalendarResponse::new)
+                .collect(Collectors.toList());
+        return users;
     }
 
     public Map<String, Object> infoRecord(User user) {
-        List<User> users = userRepository.findAllByFetchJoin();
-        List<ExerciesVideo> videoList = users.get(Math.toIntExact(user.getUserId() - 1)).getExercieVideosList();
+        List<ExerciesVideo> videoList = userRepository.findAllByFetchJoin().
+                get(Math.toIntExact(user.getUserId() - 1)).getExercieVideosList();
         List<Exercies> exerciesList = videoList.stream().map(
                 video -> video.getExercies()
         ).collect(Collectors.toList());
@@ -93,6 +89,7 @@ public class UserService {
         User findMember = userRepository.findByUserIdAndUserGym(
                 resultUser.getUserPhone()
                 , resultUser.getUserGym());
+
         if (findMember != null) {
             throw new IllegalStateException("존재하는 회원입니다.");
         }
@@ -104,10 +101,11 @@ public class UserService {
     }
 
     public List<UserResponse> reLoadMember(User user) {
-        return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
+        List<UserResponse> result = userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
                 .stream()
                 .map(UserResponse::new)
                 .collect(Collectors.toList());
+        return result;
     }
 
     public void updateMonth(HttpServletRequest req) {

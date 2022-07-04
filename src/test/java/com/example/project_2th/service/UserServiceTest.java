@@ -7,6 +7,7 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.UserRepository;
+import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.UserResponse;
 import org.junit.After;
 import org.junit.jupiter.api.*;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
@@ -57,7 +59,7 @@ public class UserServiceTest {
 
             Mockito.when(userRepository.findByLoginNumberAndUserGym(
                     user.getUserPhone()
-                    , user.getUserGym())).thenReturn(user);
+                    , user.getUserGym())).thenReturn(ofNullable(user));
 
             UserService userService = new UserService(userRepository);
 
@@ -72,26 +74,27 @@ public class UserServiceTest {
         void test2(){
             Map<String , Object> adminInfo = userHelper.makeAdmin();
             user = (User) adminInfo.get("user");
+            UserResponse response = new UserResponse(user);
             List<User> users = (List<User>) adminInfo.get("userList");
 
             Mockito.when(userRepository.findByLoginNumberAndUserGym(
                     user.getLoginNumber()
-                    , user.getUserGym())).thenReturn(user);
+                    , user.getUserGym())).thenReturn(ofNullable(user));
             Mockito.when(userRepository.findByUserGymAndManagerYn(
-                    user.getUserGym()
-                    , user.getManagerYn()-1)).thenReturn(users);
+                    response.getUserGym()
+                    , response.getManagerYn()-1)).thenReturn(users);
 
 
             UserService userService = new UserService(userRepository);
 
             Map<String, Object> result = userService.filterLogin(user.getLoginNumber(), user.getUserGym());
-            assertEquals(result.get("user"),user);
-            assertEquals(result.get("userList"),adminInfo.get("userList"));
+            assertNotNull(result);
+            assertEquals(result.size(),2);
 
             verify(userRepository).findByLoginNumberAndUserGym( user.getLoginNumber()
                     , user.getUserGym());
-            verify(userRepository).findByUserGymAndManagerYn( user.getUserGym()
-                    , user.getManagerYn()-1);
+            verify(userRepository).findByUserGymAndManagerYn( response.getUserGym()
+                    , response.getManagerYn()-1);
         }
 
         @DisplayName("user null")
@@ -101,14 +104,15 @@ public class UserServiceTest {
 
             Mockito.when(userRepository.findByLoginNumberAndUserGym(
                     user.getUserPhone()
-                    , user.getUserGym())).thenReturn(null);
+                    , user.getUserGym())).thenReturn(ofNullable(null));
 
             UserService userService = new UserService(userRepository);
+            try{
+                Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
+            }catch (PostNotFound e){
+                System.out.println(e.getMessage());
+            }
 
-            Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
-            assertNull(result);
-            verify(userRepository).findByLoginNumberAndUserGym(user.getUserPhone()
-                    , user.getUserGym());
         }
     }
 
@@ -139,7 +143,7 @@ public class UserServiceTest {
 
             UserService userService = new UserService(userRepository);
 
-            List<Calendar> exinfo = userService.infoCalendar(user);
+            List<CalendarResponse> exinfo = userService.infoCalendar(user);
 
             assertEquals(4,exinfo.size());
             verify(userRepository).findAllByFetchJoin();
@@ -247,7 +251,7 @@ public class UserServiceTest {
         user = User.builder().userId(1L).userName("김화순").userPhone("9696")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-10-22"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
-        Mockito.when(userRepository.findByUserId(user.getUserId())).thenReturn(Optional.ofNullable(user));
+        Mockito.when(userRepository.findByUserId(user.getUserId())).thenReturn(ofNullable(user));
 
         Mockito.when(userRepository.save(user)).thenReturn(null);
 

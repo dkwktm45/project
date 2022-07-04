@@ -19,6 +19,7 @@ import com.example.project_2th.repository.PosturesRepository;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -54,12 +55,12 @@ public class RestController {
     private final Logger logger = LoggerFactory.getLogger(RestController.class);
 
     @PostMapping(value = "/calendarView")
-    public ResponseEntity<List<Exercies>> calendarView(@RequestBody  Calendar calendar) throws Exception {
+    public ResponseEntity<List<ExerciesResponse>> calendarView(@RequestBody  Calendar calendar) throws Exception {
         logger.info("calendarView perfom");
         logger.info("user : " + calendar.getUser());
         logger.info("day : " + calendar.getExDay());
 
-        List<Exercies> exinfoList = exerciesService.calendarExinfo(calendar);
+        List<ExerciesResponse> exinfoList = exerciesService.calendarExinfo(calendar);
         logger.info("exinfoList : {}",exinfoList);
         return ResponseEntity.ok().body(exinfoList);
     }
