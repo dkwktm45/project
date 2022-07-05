@@ -49,8 +49,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -198,7 +197,7 @@ class RestControllerTest {
         data.add("userExpireDate", "2022-10-10");
         data.add("userId", String.valueOf(1L));
 
-        MvcResult result = mockMvc.perform(post("/updateMonth")
+        MvcResult result = mockMvc.perform(patch("/updateMonth")
                         .params(data)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -210,6 +209,5 @@ class RestControllerTest {
         String userId = String.valueOf(request.getAttribute("userId"));
         assertNotNull(userExpireDate);
         assertNotNull(userId);
-
     }
 }

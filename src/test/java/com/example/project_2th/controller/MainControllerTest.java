@@ -6,6 +6,7 @@ import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.response.CalendarResponse;
+import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -170,7 +171,8 @@ public class MainControllerTest {
         session = new MockHttpSession();
         session.setAttribute("user",userHelper.makeUser());
         Exercies exercies = userHelper.makeExercies();
-        given(this.exerciesService.exerciesInfo(exercies)).willReturn(exercies);
+        ExerciesResponse response = new ExerciesResponse(exercies);
+        given(this.exerciesService.exerciesInfo(exercies)).willReturn(response);
 
 
         mockMvc.perform(post("/insertEx").flashAttr("user_exercies",exercies)

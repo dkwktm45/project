@@ -1,6 +1,6 @@
 package com.example.project_2th.repository;
 
-import com.example.project_2th.adapter.PostNotFound;
+import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
 import org.junit.jupiter.api.DisplayName;

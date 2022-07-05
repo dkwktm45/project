@@ -40,7 +40,7 @@ public class AdminControllerTest {
     MockHttpSession session;
     MockHttpServletRequest request;
 
-    protected UserHelper userHelper;
+    protected UserHelper userHelper = new UserHelper();
     private Map<String,Object> map;
 
     protected User user;

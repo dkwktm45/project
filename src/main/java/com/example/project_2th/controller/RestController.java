@@ -109,7 +109,7 @@ public class RestController {
     }
 
 
-    @PostMapping("/updateMonth")
+    @PatchMapping("/updateMonth")
     public void updateMonth(HttpServletRequest req){
         logger.info("updateMonth perfom return void [params] userExpireDate : {} ,userId : {}"
         ,req.getParameter("userExpireDate"),req.getParameter("userId"));

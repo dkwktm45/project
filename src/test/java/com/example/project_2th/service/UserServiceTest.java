@@ -1,8 +1,7 @@
 package com.example.project_2th.service;
 
-import com.example.project_2th.adapter.PostNotFound;
+import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.controller.helper.UserHelper;
-import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
@@ -25,7 +24,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 import static org.junit.Assert.*;
@@ -192,7 +190,6 @@ public class UserServiceTest {
         @DisplayName("join success")
         @Test
         void test4(){
-
             Mockito.when(userRepository.findByUserIdAndUserGym(loginUser.getUserPhone(),loginUser.getUserGym())).thenReturn(null);
             Mockito.when(userRepository.save(any(User.class))).thenReturn(null);
 
@@ -201,26 +198,21 @@ public class UserServiceTest {
 
             verify(userRepository).findByUserIdAndUserGym(
                     refEq(loginUser.getUserPhone()),refEq(loginUser.getUserGym()));
-            verify(userRepository).save(any(User.class));
-
         }
 
         @DisplayName("join fail")
         @Test
         void test5(){
-
             Mockito.when(userRepository.findByUserIdAndUserGym(
                     anyString()
                     ,anyString())).thenReturn(loginUser);
             Mockito.when(userRepository.save(loginUser)).thenReturn(null);
-            try{
-                UserService userService = new UserService(userRepository);
-                userService.join(user);
-            }catch (IllegalStateException e){
-                System.out.println(e.getMessage());
-            }
+            UserService userService = new UserService(userRepository);
 
-            verify(userRepository).findByUserIdAndUserGym(anyString(),anyString());
+            IllegalStateException e = assertThrows(IllegalStateException.class,() ->{
+                userService.join(user);
+            });
+            assertEquals("존재하는 회원입니다.",e.getMessage());
         }
     }
 
@@ -249,18 +241,16 @@ public class UserServiceTest {
         request.addParameter("userExpireDate","2022-10-22");
         request.addParameter("userId", String.valueOf(1L));
         user = User.builder().userId(1L).userName("김화순").userPhone("9696")
-                .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-10-22"))
+                .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-10-12"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
         Mockito.when(userRepository.findByUserId(user.getUserId())).thenReturn(ofNullable(user));
 
-        Mockito.when(userRepository.save(user)).thenReturn(null);
 
         UserService userService = new UserService(userRepository);
 
         userService.updateMonth(request);
 
         Mockito.verify(userRepository).findByUserId(user.getUserId());
-        Mockito.verify(userRepository).save(refEq(user));
     }
     @After
     public void clear(){

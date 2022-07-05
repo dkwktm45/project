@@ -76,7 +76,7 @@ public class ExerciesServiceTest {
 
         exerciesService = new ExerciesService(exinfoRepository);
 
-        Exercies exinfo = exerciesService.exerciesInfo(exercies);
+        ExerciesResponse exinfo = exerciesService.exerciesInfo(exercies);
 
         assertEquals(exinfo.getExCount(),exercies.getExCount());
 

@@ -1,9 +1,8 @@
 package com.example.project_2th.response;
 
-import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.entity.ExerciesVideo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.persistence.*;
 
@@ -23,5 +22,4 @@ public class PoseResponse {
     @JsonBackReference
     @JoinColumn(name = "video_seq")
     private VideoResponse exerciesVideo;
-
 }

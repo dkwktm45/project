@@ -37,9 +37,7 @@ public class User{
     private String userName;
     private String userPhone;
     private String userGym;
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 
-    @Setter
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate userExpireDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -68,5 +66,13 @@ public class User{
     @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private final List<ExerciesVideo> exercieVideosList = new ArrayList<>();
 
+    public UserEditor.UserEditorBuilder toEditor(){
+        return UserEditor.builder().userPhone(userPhone).userExpireDate(userExpireDate);
+    }
+
+    public void editor(UserEditor userEditor){
+        this.userExpireDate = userEditor.getUserExpireDate();
+        this.loginNumber = userEditor.getUserPhone().substring(9);
+    }
 
 }

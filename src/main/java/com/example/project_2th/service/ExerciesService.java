@@ -28,10 +28,10 @@ public class ExerciesService {
     private final ExinfoRepository exinfoRepository;
     private final Logger logger = LoggerFactory.getLogger(ExerciesService.class);
 
-    public Exercies exerciesInfo(Exercies exercies){
+    public ExerciesResponse exerciesInfo(Exercies exercies){
         exercies.setExDay(Date.valueOf(LocalDate.now()));
-        exinfoRepository.save(exercies);
-        return exercies;
+        ExerciesResponse response = new ExerciesResponse(exercies);
+        return response;
     }
 
     public List<ExerciesResponse> calendarExinfo(Calendar calendar){

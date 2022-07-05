@@ -105,7 +105,7 @@
 
     $.ajax({
       url: "/updateMonth",
-      type:"POST",
+      type:"PATCH",
       data: {"userExpireDate" : dateString,"userId" :$(this).closest(".bot_user_right").prev().attr("id") },
       success:function(){
         console.log("성공")

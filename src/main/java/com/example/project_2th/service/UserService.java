@@ -1,13 +1,8 @@
 package com.example.project_2th.service;
 
-import com.example.project_2th.adapter.PostNotFound;
-import com.example.project_2th.controller.MainController;
-import com.example.project_2th.entity.Calendar;
-import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.entity.ExerciesVideo;
-import com.example.project_2th.entity.User;
+import com.example.project_2th.exception.PostNotFound;
+import com.example.project_2th.entity.*;
 import com.example.project_2th.repository.UserRepository;
-import com.example.project_2th.repository.VideoRepository;
 import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.UserResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,20 +70,20 @@ public class UserService {
 
     public void join(User user) {
 
-        User resultUser = User.builder().loginNumber(user.getUserPhone().substring(9)).userName(user.getUserName()).userPhone(user.getUserPhone())
-                .userBirthdate(user.getUserBirthdate()).userExpireDate(user.getUserExpireDate())
-                .managerYn(user.getManagerYn()).videoYn(user.getVideoYn()).userGym(user.getUserGym()).build();
-        logger.info("join perform : {}", resultUser);
+        UserEditor.UserEditorBuilder editorBuilder = user.toEditor();
+        UserEditor userEditor = editorBuilder.userPhone(user.getUserPhone()).build();
+        user.editor(userEditor);
+
+        logger.info("join perform : {}", user);
 
         logger.info("user validation");
-        User findMember = userRepository.findByUserIdAndUserGym(
-                resultUser.getUserPhone()
-                , resultUser.getUserGym());
+        user = userRepository.findByUserIdAndUserGym(
+                user.getUserPhone()
+                , user.getUserGym());
 
-        if (findMember != null) {
+        if (user != null) {
             throw new IllegalStateException("존재하는 회원입니다.");
         }
-        userRepository.save(resultUser);
     }
 
     public void validateDuplicateMember(User user) {
@@ -112,8 +102,11 @@ public class UserService {
         LocalDate expiredDate = LocalDate.parse((req.getParameter("userExpireDate")));
         Long id = Long.valueOf(req.getParameter("userId"));
         User user = userRepository.findByUserId(id).orElseThrow(PostNotFound::new);
-        user.setUserExpireDate(expiredDate);
-        userRepository.save(user);
+
+        logger.info("update perform service , expired : {}",expiredDate);
+        UserEditor.UserEditorBuilder editorBuilder = user.toEditor();
+        UserEditor userEditor = editorBuilder.userExpireDate(expiredDate).build();
+        user.editor(userEditor);
     }
 
     public String collectPage(Map<String, Object> list, HttpSession session) {

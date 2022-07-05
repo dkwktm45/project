@@ -2,6 +2,7 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.User;
 import com.example.project_2th.entity.Exercies;
+import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -89,7 +90,7 @@ public class MainController {
     @PostMapping(value = "/insertEx")
     public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,HttpServletRequest req) throws Exception {
         HttpSession session = req.getSession();
-        Exercies exinfo = exerciesService.exerciesInfo(exercies);
+        ExerciesResponse exinfo = exerciesService.exerciesInfo(exercies);
         if (exinfo== null){
             log.error("운동 정보가 담겨 있지 않습니다.");
             return "redirect:/main";
