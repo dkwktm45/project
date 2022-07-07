@@ -6,15 +6,15 @@ public class PostNotFound extends SuperException {
     public PostNotFound(){
         super(MESSAGE);
     }
-/*
+
     public PostNotFound(String name, String message){
         super(MESSAGE);
         addValidation(name,message);
     }
-*/
+
 
     @Override
-    public int statusCode(){
-        return 404;
+    public int getStatusCode(){
+        return 400;
     }
 }

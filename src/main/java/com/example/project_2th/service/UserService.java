@@ -33,6 +33,7 @@ public class UserService {
     public Map<String, Object> filterLogin(String number, String gym) {
         User loginUser = userRepository.findByLoginNumberAndUserGym(number, gym).orElseThrow(PostNotFound::new);
         UserResponse userResponse = new UserResponse(loginUser);
+
         Map<String, Object> list = new HashMap<>();
         if (userResponse.getManagerYn() == 1) {
             List<UserResponse> userList = userRepository.findByUserGymAndManagerYn(userResponse.getUserGym(), userResponse.getManagerYn() - 1)
@@ -77,17 +78,12 @@ public class UserService {
         logger.info("join perform : {}", user);
 
         logger.info("user validation");
-        user = userRepository.findByUserIdAndUserGym(
+        User emptyUser = userRepository.findByUserIdAndUserGym(
                 user.getUserPhone()
                 , user.getUserGym());
 
-        if (user != null) {
-            throw new IllegalStateException("존재하는 회원입니다.");
-        }
-    }
-
-    public void validateDuplicateMember(User user) {
-
+        emptyUser.valid();
+        userRepository.save(user);
     }
 
     public List<UserResponse> reLoadMember(User user) {

@@ -12,10 +12,11 @@ public abstract class SuperException extends RuntimeException {
     public SuperException(String message){
         super(message);
     }
-    public SuperException(String message, Throwable cause){
+
+    public SuperException( String message,Throwable cause){
         super(message,cause);
     }
-    public abstract int statusCode();
+    public abstract int getStatusCode();
 
     public void addValidation(String fieldName, String message){
         validation.put(fieldName,message);

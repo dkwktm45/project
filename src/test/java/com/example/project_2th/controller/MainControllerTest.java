@@ -5,7 +5,9 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.controller.helper.UserHelper;
+import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.response.CalendarResponse;
+import com.example.project_2th.response.ErrorResponse;
 import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
@@ -21,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -28,6 +31,7 @@ import org.springframework.util.MultiValueMap;
 import java.sql.Date;
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mockitoSession;
@@ -90,7 +94,39 @@ public class MainControllerTest {
         verify(userService).collectPage(list,session);
         verify(userService).filterLogin(user.getLoginNumber(), user.getUserGym());
     }
+    @DisplayName("form 데이터를 loginInsert로 실패")
+    @Test
+    public void test10() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Referer","/main");
 
+        Map<String,Object> list = this.userHelper.mapToObject(this.userHelper.makeUser());
+        User user = (User) list.get("user");
+
+        given(this.userService.filterLogin(user.getLoginNumber(), user.getUserGym())).willThrow(new PostNotFound());
+        given(this.userService.collectPage(list,session)).willReturn("redirect:/main");
+
+
+        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
+        info.add("userGym", user.getUserGym());
+        info.add("loginNumber", user.getLoginNumber());
+
+
+        MvcResult result = mockMvc.perform(post("/loginInsert").params(info).session(session))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(request().sessionAttributeDoesNotExist())
+                .andExpect(redirectedUrl("/error"))
+                .andDo(print())
+                .andReturn();
+        ErrorResponse response = (ErrorResponse) result.getModelAndView().getModel().get("error");
+        System.out.println(response.getCode());
+        System.out.println(response.getMessage());
+        assertEquals("400",response.getCode());
+        assertEquals("존재하지 않습니다.",response.getMessage());
+        assertNotNull(response);
+        verify(userService).filterLogin(user.getLoginNumber(), user.getUserGym());
+    }
     @DisplayName("form 데이터를 loginInsert로 이동(admin)")
     @Test
     public void test4() throws Exception {

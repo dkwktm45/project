@@ -75,4 +75,10 @@ public class User{
         this.loginNumber = userEditor.getUserPhone().substring(9);
     }
 
+    public void valid(){
+        if(this.userId !=null){
+            throw new IllegalStateException("존재하는 회원입니다.");
+        }
+    }
+
 }

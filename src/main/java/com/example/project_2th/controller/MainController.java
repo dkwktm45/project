@@ -70,6 +70,10 @@ public class MainController {
         return "main";
     }
 
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
     // calender
     @GetMapping("/test")
     public String test() {

@@ -14,14 +14,13 @@ public class ErrorResponse {
     private final String code;
     private final String message;
     private final Map<String , String> validation;
+    private final String path;
 
     @Builder
-    public ErrorResponse(String code,String message,Map<String , String> validation){
+    public ErrorResponse(String code,String message,Map<String , String> validation,String path){
         this.code = code;
         this.message = message;
         this.validation = validation;
-    }
-    public void addVaildation(String field, String defaultMessage) {
-        this.validation.put(field, defaultMessage);
+        this.path = path;
     }
 }
