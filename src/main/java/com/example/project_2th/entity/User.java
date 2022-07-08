@@ -47,7 +47,7 @@ public class User{
     private String contents;
     private int managerYn;
     private int videoYn;
-
+    private String role;
 
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY )
