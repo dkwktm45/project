@@ -89,43 +89,6 @@ table{
 #user_gym{
     width: 88%;
 }
-/* #user_gym{
-   position:relative;
-   border-radius:40px;
-   font-weight:bolder;
-   appearance:none;
-   padding: 50px 50px 50px 50px;
-   width:950px;
-   height:200px;
-   font-size:60px;
-   font-family:Regular;
-   }
-   #user_gym:focus{
-   position:relative;
-   border-radius:40px;
-   font-weight:bolder;
-   appearance:none;
-   padding: 50px 50px 50px 50px;
-   width:950px;
-   height:200px;
-   font-size:60px;
-   font-family:Regular;
-   } */
-
-/*    #b{
-   position:relative;
-   width:150px;
-   height:50px;
-   font-size:30px;
-   } */
-
-
-
-/*        @font-face{
-            font-family:Regular;
-            src:url('resources/font/FrancoisOne-Regular.ttf');
-        }*/
-
 
 option{
     font-weight:bolder;

@@ -18,6 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
@@ -31,11 +34,13 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
-@Import({UserService.class,UserRepository.class})
+@Import({UserService.class,UserRepository.class,PasswordEncoder.class})
 public class UserServiceTest {
 
     @MockBean
     UserRepository userRepository;
+    @MockBean
+    PasswordEncoder encoder;
 
     @Autowired
     UserService userService;
@@ -59,7 +64,7 @@ public class UserServiceTest {
                     user.getUserPhone()
                     , user.getUserGym())).thenReturn(ofNullable(user));
 
-            UserService userService = new UserService(userRepository);
+            UserService userService = new UserService(userRepository,encoder);
 
             Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
             assertEquals(result.get("user"),user);
@@ -83,7 +88,7 @@ public class UserServiceTest {
                     , response.getManagerYn()-1)).thenReturn(users);
 
 
-            UserService userService = new UserService(userRepository);
+            UserService userService = new UserService(userRepository,encoder);
 
             Map<String, Object> result = userService.filterLogin(user.getLoginNumber(), user.getUserGym());
             assertNotNull(result);
@@ -104,7 +109,7 @@ public class UserServiceTest {
                     user.getUserPhone()
                     , user.getUserGym())).thenReturn(ofNullable(null));
 
-            UserService userService = new UserService(userRepository);
+            UserService userService = new UserService(userRepository,encoder);
             try{
                 Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
             }catch (PostNotFound e){
@@ -139,7 +144,7 @@ public class UserServiceTest {
 
             Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(users);
 
-            UserService userService = new UserService(userRepository);
+            UserService userService = new UserService(userRepository,encoder);
 
             List<CalendarResponse> exinfo = userService.infoCalendar(user);
 
@@ -157,7 +162,7 @@ public class UserServiceTest {
 
             Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(users);
 
-            UserService userService = new UserService(userRepository);
+            UserService userService = new UserService(userRepository,encoder);
 
             Map<String, Object> exinfo = userService.infoRecord(user);
             assertEquals(exinfo.size(),2);
@@ -178,9 +183,10 @@ public class UserServiceTest {
                     .userBirthdate(LocalDate.parse(("1963-07-16"))).userExpireDate(LocalDate.parse("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
 
-            loginUser = User.builder().loginNumber("2354").userName("김태롱").userPhone("010-6457-2354")
+            loginUser = User.builder().userId(1L).loginNumber("2354").userName("김태롱").userPhone("010-6457-2354")
                     .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                     .managerYn(0).videoYn(1).userGym("해운대").build();
+            encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         }
         @AfterEach
         void afterSet(){
@@ -193,7 +199,7 @@ public class UserServiceTest {
             Mockito.when(userRepository.findByUserIdAndUserGym(loginUser.getUserPhone(),loginUser.getUserGym())).thenReturn(null);
             Mockito.when(userRepository.save(any(User.class))).thenReturn(null);
 
-            UserService userService = new UserService(userRepository);
+            UserService userService = new UserService(userRepository,encoder);
             userService.join(user);
 
             verify(userRepository).findByUserIdAndUserGym(
@@ -205,9 +211,9 @@ public class UserServiceTest {
         void test5(){
             Mockito.when(userRepository.findByUserIdAndUserGym(
                     anyString()
-                    ,anyString())).thenReturn(loginUser);
+                    ,anyString())).thenReturn(ofNullable(loginUser));
             Mockito.when(userRepository.save(loginUser)).thenReturn(null);
-            UserService userService = new UserService(userRepository);
+            UserService userService = new UserService(userRepository,encoder);
 
             IllegalStateException e = assertThrows(IllegalStateException.class,() ->{
                 userService.join(user);
@@ -227,7 +233,7 @@ public class UserServiceTest {
         List<User> users = (List<User>) adminInfo.get("userList");
         Mockito.when(userRepository.findByUserGymAndManagerYn(admin.getUserGym(), admin.getManagerYn()-1)).thenReturn(users);
 
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository,encoder);
         List<UserResponse> resultUsers = userService.reLoadMember(admin);
 
         assertEquals(resultUsers.size(),4);
@@ -246,7 +252,7 @@ public class UserServiceTest {
         Mockito.when(userRepository.findByUserId(user.getUserId())).thenReturn(ofNullable(user));
 
 
-        UserService userService = new UserService(userRepository);
+        UserService userService = new UserService(userRepository,encoder);
 
         userService.updateMonth(request);
 
@@ -257,4 +263,5 @@ public class UserServiceTest {
         request.clearAttributes();
         request = null;
     }
+
 }

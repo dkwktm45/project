@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Nullable
     @Query(value = "select * from user where user_phone = :user_phone and user_gym = :user_gym"
             ,nativeQuery=true)
-    User findByUserIdAndUserGym(
+    Optional<User> findByUserIdAndUserGym(
             @Param("user_phone") String userPhone,
             @Param("user_gym") String userGym);
 

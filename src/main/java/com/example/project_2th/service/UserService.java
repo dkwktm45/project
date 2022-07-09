@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,8 @@ public class UserService {
     @Autowired
     private final UserRepository userRepository;
 
+    @Autowired
+    private final PasswordEncoder encoder;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public Map<String, Object> filterLogin(String number, String gym) {
@@ -72,18 +75,18 @@ public class UserService {
     public void join(User user) {
 
         UserEditor.UserEditorBuilder editorBuilder = user.toEditor();
-        UserEditor userEditor = editorBuilder.userPhone(user.getUserPhone()).build();
+        String phone = user.getUserPhone().substring(9);
+        String test = encoder.encode(phone);
+        UserEditor userEditor = editorBuilder.userPhone(test).build();
         user.editor(userEditor);
 
         logger.info("join perform : {}", user);
 
         logger.info("user validation");
-        User emptyUser = userRepository.findByUserIdAndUserGym(
+        Optional<User> vaildUser = userRepository.findByUserIdAndUserGym(
                 user.getUserPhone()
                 , user.getUserGym());
-
-        emptyUser.valid();
-        userRepository.save(user);
+        Object vaild = (vaildUser == null) ? userRepository.save(user) : vaildUser.get().valid();
     }
 
     public List<UserResponse> reLoadMember(User user) {

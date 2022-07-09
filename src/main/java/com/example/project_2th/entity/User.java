@@ -1,7 +1,5 @@
 package com.example.project_2th.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
@@ -10,14 +8,9 @@ import org.springframework.lang.Nullable;
 
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @AllArgsConstructor
@@ -72,13 +65,14 @@ public class User{
 
     public void editor(UserEditor userEditor){
         this.userExpireDate = userEditor.getUserExpireDate();
-        this.loginNumber = userEditor.getUserPhone().substring(9);
+        this.loginNumber = userEditor.getUserPhone();
     }
 
-    public void valid(){
+    public Object valid(){
         if(this.userId !=null){
             throw new IllegalStateException("존재하는 회원입니다.");
         }
+        return null;
     }
 
 }
