@@ -26,8 +26,9 @@ spring:
   devtools:
     livereload:
       enabled: true
-    restart:
-      enabled: true
+    remote:
+      restart:
+        enabled: true
   thymeleaf:
     prefix: classpath:/templates/
     cache: false

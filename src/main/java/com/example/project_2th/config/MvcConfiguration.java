@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 public class MvcConfiguration implements WebMvcConfigurer {
@@ -17,6 +18,15 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("file:///C:/user/badImage/");
         registry.addResourceHandler("/image/**")
                 .addResourceLocations("classpath:static/image/");
+        registry
+                .addResourceHandler("/**")
+                .addResourceLocations(RESOURCE_LOCATIONS)
+                .setCachePeriod(3600)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
     }
+    private static final String[] RESOURCE_LOCATIONS = {
+            "classpath:/static/"
+    };
 
 }

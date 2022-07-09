@@ -86,9 +86,9 @@ table{
     border-radius:30px;
 }
 
-/*  #user_gym{
-display:none
-} */
+#user_gym{
+    width: 88%;
+}
 /* #user_gym{
    position:relative;
    border-radius:40px;
