@@ -8,7 +8,9 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 public class MvcConfiguration implements WebMvcConfigurer {
-
+    private static final String[] RESOURCE_LOCATIONS = {
+            "classpath:/static/"
+    };
     // 파일 불러오기 위한 경로 설정
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
@@ -25,8 +27,6 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
     }
-    private static final String[] RESOURCE_LOCATIONS = {
-            "classpath:/static/"
-    };
+
 
 }

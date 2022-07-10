@@ -205,6 +205,12 @@ public class UserServiceTest {
             verify(userRepository).findByUserIdAndUserGym(
                     refEq(loginUser.getUserPhone()),refEq(loginUser.getUserGym()));
         }
+        @DisplayName("join success")
+        @Test
+        void test20(){
+            String test = encoder.encode("1234");
+            System.out.println("encoder 값 : " + test);
+        }
 
         @DisplayName("join fail")
         @Test

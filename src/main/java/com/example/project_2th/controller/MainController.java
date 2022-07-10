@@ -52,18 +52,6 @@ public class MainController {
         return "login";
     }
 
-    // login -> main or admin
-    @PostMapping(value = "/loginInsert")
-    public String memberLogin(HttpServletRequest request,HttpSession session ) throws Exception {
-        logger.info("login perform");
-        logger.info("phone : " + request.getParameter("loginNumber") +
-                " gym : " + request.getParameter("userGym"));
-        session = request.getSession(true);
-        Map<String ,Object> list = userService.filterLogin(request.getParameter("loginNumber")
-                ,request.getParameter("userGym"));
-        logger.info("login info : " + list);
-        return userService.collectPage(list,session);
-    }
 
     @GetMapping("/main")
     public String main() {

@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/login.css">
-    <link rel="stylesheet" type="text/css"  href="/static/css/bootstrap.css">
-
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <link rel="stylesheet" type="text/css"  href="/css/bootstrap.css">
 </head>
 <body>
 
@@ -13,7 +12,7 @@
     <p id="title_name"> The </a>
     <p id="title_name2"> Ai Fitness </a>
 </div>
-<form action="loginInsert" method ="post" id="form" align="center">
+<form th:action="@{/loginInsert}" method ="post" id="form" align="center">
     <div style="width:100%; height:150px;"></div>
     <div class="middle1">
         <div>
@@ -47,6 +46,6 @@
     </table>
 </footer>
 
-<script type="application/javascript" src="/static/js/bootstrap.js"></script>
+<script type="application/javascript" src="/js/bootstrap.js"></script>
 </body>
 </html>
