@@ -1,6 +1,7 @@
 package com.example.project_2th.security.config;
 
 import com.example.project_2th.security.CustomAuthenticationProvider;
+import com.example.project_2th.security.handler.LoginSuccessHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -45,18 +46,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/main").hasAnyRole("USER")
+                .antMatchers("/user/login").permitAll()
+                .antMatchers("/user/**").hasAnyRole("USER")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .loginProcessingUrl("/loginInsert")
-                .usernameParameter("userGym")			// 아이디 파라미터명 설정
+                .usernameParameter("userPhone")			// 아이디 파라미터명 설정
                 .passwordParameter("loginNumber")
-                .defaultSuccessUrl("/main")
-                .permitAll();
+                .successHandler(new LoginSuccessHandler())
+                .permitAll()
+                .and()
+                .csrf().disable();
 
     }
 }

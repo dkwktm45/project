@@ -45,6 +45,7 @@ public class UserResponse {
         this.userName = user.getUserName();
         this.userPhone = user.getUserPhone();
         this.contents = user.getContents();
+        this.userGym = user.getUserGym();
         this.userBirthdate = user.getUserBirthdate();
         this.userExpireDate = user.getUserExpireDate();
         this.managerYn = user.getManagerYn();

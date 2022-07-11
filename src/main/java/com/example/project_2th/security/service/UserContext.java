@@ -10,7 +10,7 @@ public class UserContext extends User {
     private final com.example.project_2th.entity.User user;
 
     public UserContext(com.example.project_2th.entity.User user, Collection<? extends GrantedAuthority> authorities) {
-        super(user.getUserGym(), user.getLoginNumber(), authorities);
+        super(user.getUserPhone(), user.getLoginNumber(), authorities);
         this.user = user;
     }
 

@@ -1,9 +1,9 @@
 
 function go_calendar(){
-    location.href = "/infoCalender";
+    location.href = "/user/infoCalender";
 }
 function go_record(){
-    location.href = "/goRecord";
+    location.href = "/user/goRecord";
 }
 
 function goJoin(){

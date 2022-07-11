@@ -76,7 +76,7 @@ public class MainControllerTest {
         Map<String,Object> list = this.userHelper.mapToObject(this.userHelper.makeUser());
         User user = (User) list.get("user");
 
-        given(this.userService.filterLogin(user.getLoginNumber(), user.getUserGym())).willReturn(list);
+        given(this.userService.filterLogin(user)).willReturn(list);
         given(this.userService.collectPage(list,session)).willReturn("redirect:/main");
 
 
@@ -92,7 +92,7 @@ public class MainControllerTest {
                 .andDo(print());
 
         verify(userService).collectPage(list,session);
-        verify(userService).filterLogin(user.getLoginNumber(), user.getUserGym());
+        verify(userService).filterLogin(user);
     }
     @DisplayName("form 데이터를 loginInsert로 실패")
     @Test
@@ -104,7 +104,7 @@ public class MainControllerTest {
         Map<String,Object> list = this.userHelper.mapToObject(this.userHelper.makeUser());
         User user = (User) list.get("user");
 
-        given(this.userService.filterLogin(user.getLoginNumber(), user.getUserGym())).willThrow(new PostNotFound());
+        given(this.userService.filterLogin(user)).willThrow(new PostNotFound());
         given(this.userService.collectPage(list,session)).willReturn("redirect:/main");
 
 
@@ -125,7 +125,7 @@ public class MainControllerTest {
         assertEquals("400",response.getCode());
         assertEquals("존재하지 않습니다.",response.getMessage());
         assertNotNull(response);
-        verify(userService).filterLogin(user.getLoginNumber(), user.getUserGym());
+        verify(userService).filterLogin(user);
     }
     @DisplayName("form 데이터를 loginInsert로 이동(admin)")
     @Test
@@ -134,7 +134,7 @@ public class MainControllerTest {
         Map<String,Object> list =userHelper.makeAdmin();
         User user = (User) list.get("user");
 
-        given(this.userService.filterLogin(user.getLoginNumber(), user.getUserGym())).willReturn(list);
+        given(this.userService.filterLogin(user)).willReturn(list);
         given(this.userService.collectPage(list,session)).willReturn("redirect:/admin");
 
         MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
@@ -149,7 +149,7 @@ public class MainControllerTest {
                 .andDo(print());
 
         verify(userService).collectPage(list,session);
-        verify(userService).filterLogin(user.getLoginNumber(), user.getUserGym());
+        verify(userService).filterLogin(user);
     }
 
 

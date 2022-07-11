@@ -66,7 +66,7 @@ public class UserServiceTest {
 
             UserService userService = new UserService(userRepository,encoder);
 
-            Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
+            Map<String, Object> result = userService.filterLogin(user);
             assertEquals(result.get("user"),user);
             verify(userRepository).findByLoginNumberAndUserGym( user.getUserPhone()
                     , user.getUserGym());
@@ -90,7 +90,7 @@ public class UserServiceTest {
 
             UserService userService = new UserService(userRepository,encoder);
 
-            Map<String, Object> result = userService.filterLogin(user.getLoginNumber(), user.getUserGym());
+            Map<String, Object> result = userService.filterLogin(user);
             assertNotNull(result);
             assertEquals(result.size(),2);
 
@@ -111,7 +111,7 @@ public class UserServiceTest {
 
             UserService userService = new UserService(userRepository,encoder);
             try{
-                Map<String, Object> result = userService.filterLogin(user.getUserPhone(), user.getUserGym());
+                Map<String, Object> result = userService.filterLogin(user);
             }catch (PostNotFound e){
                 System.out.println(e.getMessage());
             }

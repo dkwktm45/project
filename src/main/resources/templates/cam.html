@@ -145,7 +145,7 @@
         console.log(b);
 
         cnt = 0;
-        url = "/insertExURL?userId="+[[${session.user.userId}]]+"&exSeq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
+        url = "/user/insertExURL?userId="+[[${session.user.userId}]]+"&exSeq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
 
         var oReq = new XMLHttpRequest();
         oReq.open("POST", url, true);

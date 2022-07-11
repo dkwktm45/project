@@ -1,25 +1,16 @@
 package com.example.project_2th.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.sql.Date;
-import java.util.HashMap;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 
 import com.example.project_2th.entity.*;
-import com.example.project_2th.repository.PosturesRepository;
-import com.example.project_2th.repository.ExinfoRepository;
-import com.example.project_2th.repository.UserRepository;
-import com.example.project_2th.repository.VideoRepository;
 import com.example.project_2th.response.ExerciesResponse;
+import com.example.project_2th.response.UserResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -31,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -54,7 +45,7 @@ public class RestController {
 
     private final Logger logger = LoggerFactory.getLogger(RestController.class);
 
-    @PostMapping(value = "/calendarView")
+    @PostMapping(value = "/user/calendarView")
     public ResponseEntity<List<ExerciesResponse>> calendarView(@RequestBody  Calendar calendar) throws Exception {
         logger.info("calendarView perfom");
         logger.info("user : " + calendar.getUser());
@@ -65,7 +56,7 @@ public class RestController {
         return ResponseEntity.ok().body(exinfoList);
     }
 
-    @PostMapping(value = "insertExURL")
+    @PostMapping(value = "/user/insertExURL")
     public String insertExURL(HttpServletRequest req) throws Exception {
         logger.info("insertExURL perfom");
         String cnt = req.getParameter("cnt");
@@ -80,7 +71,7 @@ public class RestController {
         return "main";
     }
 
-    @GetMapping(value = "/insertPose")
+    @GetMapping(value = "/user/insertPose")
     public ResponseEntity<Map<String, Object>> getVideoinfo(HttpServletRequest req) throws Exception {
         logger.info("insertPose perfom : param =  {}",req.getParameter("videoSeq"));
 
@@ -98,7 +89,7 @@ public class RestController {
         return ResponseEntity.ok().body(videoInfo);
     }
 
-    @PostMapping(value = "/insertBadImage")
+    @PostMapping(value = "/user/insertBadImage")
     public void insertBadImage(HttpServletRequest request) throws Exception {
         logger.info("insertBadImage perfom return void");
         String ai_comment = request.getParameter("ai_comment");
@@ -108,8 +99,13 @@ public class RestController {
         postruesService.badeImage(ai_comment, ex_seq);
     }
 
+    @PostMapping(value = "/admin/loadUser")
+    public ResponseEntity<List<UserResponse>> loadUser(@AuthenticationPrincipal User user) throws Exception {
+        logger.info("loadUser perfom");
+        return ResponseEntity.ok().body(userService.loadUser(user));
+    }
 
-    @PatchMapping("/updateMonth")
+    @PatchMapping("/admin/updateMonth")
     public void updateMonth(HttpServletRequest req){
         logger.info("updateMonth perfom return void [params] userExpireDate : {} ,userId : {}"
         ,req.getParameter("userExpireDate"),req.getParameter("userId"));

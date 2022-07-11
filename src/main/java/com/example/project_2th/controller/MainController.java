@@ -21,6 +21,7 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/user")
 public class MainController {
 
     @Autowired
@@ -38,7 +39,7 @@ public class MainController {
         Map<String,Object> map = userService.infoRecord(user);
         session.setAttribute("exinfoList", map.get("exinfoList"));
         session.setAttribute("videoList", map.get("videoList"));
-        return "redirect:/record";
+        return "redirect:/user/record";
     }
 
     // 기록페이지
@@ -76,7 +77,7 @@ public class MainController {
 
         session.setAttribute("calendarInfo",userService.infoCalendar(user));
 
-        return "redirect:/test";
+        return "redirect:/user/test";
     }
 
     @PostMapping(value = "/insertEx")
@@ -88,11 +89,10 @@ public class MainController {
             return "redirect:/main";
         }
         session.setAttribute("exinfo",exinfo);
-        return "redirect:cam.do";
-
+        return "redirect:/user/cam";
     }
 
-    @RequestMapping("/cam.do")
+    @RequestMapping("/cam")
     public String cam() {
         return "cam";
     }

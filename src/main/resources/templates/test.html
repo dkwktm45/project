@@ -87,7 +87,7 @@
             var resultDay = year+"-"+MD;
             const json = JSON.stringify(userinfo);
             $.ajax({
-                url: "/calendarView",
+                url: "/user/calendarView",
                 type: "POST",
                 data: JSON.stringify({"user" : userinfo, "exDay" : resultDay}),
                 dataType: "JSON",
@@ -156,10 +156,7 @@
         $('.modal2_wrap').css('display', 'none');
         $('.record_bg').css('display', 'none');
     });
-    /* var className = document.getElementsByClassName('fc-event-title-container');
-    for(var i = 0; i < className.length; i++){
-       className[i].addEventListener('click', onClick2, false);
-    } */
+
 
 </script>
 </body>

@@ -5,6 +5,9 @@ import com.example.project_2th.entity.*;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.UserResponse;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,8 +37,7 @@ public class UserService {
     private final PasswordEncoder encoder;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public Map<String, Object> filterLogin(String number, String gym) {
-        User loginUser = userRepository.findByLoginNumberAndUserGym(number, gym).orElseThrow(PostNotFound::new);
+    public Map<String, Object> filterLogin(User loginUser) {
         UserResponse userResponse = new UserResponse(loginUser);
 
         Map<String, Object> list = new HashMap<>();
@@ -49,6 +52,11 @@ public class UserService {
             return list;
         }
         return null;
+    }
+
+    public List<UserResponse> loadUser(User user){
+        return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
+                .stream().map(UserResponse::new).collect(Collectors.toList());
     }
 
     public List<CalendarResponse> infoCalendar(User user) {
@@ -120,9 +128,9 @@ public class UserService {
         } else if (list.size() == 1) {
             logger.info("user page");
             session.setAttribute("user", list.get("user"));
-            return "redirect:/main";
+            return "redirect:/user/main";
         }
         logger.info("로그인 실패");
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 }

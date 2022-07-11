@@ -15,17 +15,12 @@
 <form th:action="@{/loginInsert}" method ="post" id="form" align="center">
     <div style="width:100%; height:150px;"></div>
     <div class="middle1">
-        <div>
-            <select name="userGym" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                <option selected>지점을 선택해주세요!</option>
-                <option value="해운대">해운대</option>
-                <option value="광주남구">광주남구</option>
-                <option value="민섭이점">민섭이점</option>
-            </select>
+        <div class="input-group mb-3 ">
+            <input class="form-control input-lg phone-number-check" placeholder="연락처를 입력해주세요" name="userPhone" type="text"  aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
         </div>
         <div style="width:100%; height:30px;"></div>
         <div class="input-group mb-3 ">
-            <input class="form-control input-lg" placeholder="회원번호를 입력해주세요" name="loginNumber" type="text"  aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            <input class="form-control input-lg" placeholder="회원번호를 입력해주세요" name="loginNumber" type="password"  aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
         </div>
         <input font-family="Regular" class="button mt-5" type = "submit" value ="로그인">
     </div>
@@ -45,7 +40,56 @@
         </tr>
     </table>
 </footer>
-
+<script th:src="@{/static/js/side/modal.js}"></script>
+<script th:src="@{http://code.jquery.com/jquery-3.5.1.min.js}"></script>
 <script type="application/javascript" src="/js/bootstrap.js"></script>
+<script>
+    $(".phone-number-check").on('keydown', function(e){
+        // 숫자만 입력받기
+        var trans_num = $(this).val().replace(/-/gi,'');
+        var k = e.keyCode;
+
+        if(trans_num.length >= 11 && ((k >= 48 && k <=126) || (k >= 12592 && k <= 12687 || k==32 || k==229 || (k>=45032 && k<=55203)) ))
+        {
+            console.log("문제인 곳")
+            e.preventDefault();
+        }
+    }).on('blur', function(){ // 포커스를 잃었을때 실행합니다.
+        if($(this).val() == '') return;
+        console.log("여기다!")
+        // 기존 번호에서 - 를 삭제합니다.
+        var trans_num = $(this).val().replace(/-/gi,'');
+
+        // 입력값이 있을때만 실행합니다.
+        if(trans_num != null && trans_num != '')
+        {
+            // 총 핸드폰 자리수는 11글자이거나, 10자여야 합니다.
+            if(trans_num.length==11 || trans_num.length==10)
+            {
+                // 유효성 체크
+                var regExp_ctn = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})([0-9]{3,4})([0-9]{4})$/;
+                if(regExp_ctn.test(trans_num))
+                {
+                    let numStyle =$(".hiddenSpan:eq(1)")
+                    // 유효성 체크에 성공하면 하이픈을 넣고 값을 바꿔줍니다.
+                    trans_num = trans_num.replace(/^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?([0-9]{3,4})-?([0-9]{4})$/, "$1-$2-$3");
+                    (numStyle.css("display") !== "none") ? numStyle.css("display","none") : numStyle;
+
+                    $(this).val(trans_num);
+                }
+                else
+                {
+                    $(".hiddenSpan:eq(1)").css("display","block");
+                    $(this).focus();
+                }
+            }
+            else
+            {
+                $(".hiddenSpan:eq(1)").css("display","block");
+                $(this).focus();
+            }
+        }
+    });
+</script>
 </body>
 </html>

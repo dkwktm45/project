@@ -104,7 +104,7 @@
     console.log(dateString)
 
     $.ajax({
-      url: "/updateMonth",
+      url: "/admin/updateMonth",
       type:"PATCH",
       data: {"userExpireDate" : dateString,"userId" :$(this).closest(".bot_user_right").prev().attr("id") },
       success:function(){

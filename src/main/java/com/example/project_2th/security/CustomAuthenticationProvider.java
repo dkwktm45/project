@@ -20,17 +20,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // 검증이 구현
-        String username = authentication.getName();
-        String password = (String)authentication.getCredentials();
-        String id = String.valueOf(userRepository.findByLoginNumberAndUserGym(password, username).orElseThrow(PostNotFound::new).getUserId());
-        UserContext userContext = (UserContext) userDetailsService.loadUserByUsername(id);
+        String userPhone = authentication.getName();
+        String password = (String)authentication.getCredentials();//4903
 
-        if(passwordEncoder.matches(password, userContext.getUser().getLoginNumber())){
+        UserContext userContext = (UserContext) userDetailsService.loadUserByUsername(userPhone);
+
+        if(!passwordEncoder.matches(password, userContext.getUser().getLoginNumber())){
             throw new BadCredentialsException("badCredentialsException");
         }
 

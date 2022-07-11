@@ -24,6 +24,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> findByUserId(Long userId);
 
+    Optional<User> findByUserPhone(String userPhone);
+
     User findByLoginNumber(String loginNumber);
 
     @EntityGraph(attributePaths = {"calendarList"})
