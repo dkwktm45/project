@@ -6,6 +6,8 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.response.ExerciesResponse;
+import com.example.project_2th.response.UserResponse;
+import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -14,16 +16,31 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -35,6 +52,7 @@ import org.springframework.util.MultiValueMapAdapter;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletInputStream;
 import java.io.*;
+import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,12 +67,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(RestController.class)
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {RestController.class})
+@WebAppConfiguration
+@AutoConfigureMockMvc
 class RestControllerTest {
 
     @MockBean
@@ -68,9 +89,11 @@ class RestControllerTest {
 
     @MockBean
     private ExerciesVideoService exerciesVideoService;
+
     @Autowired
     private MockMvc mockMvc;
 
+    private Principal principal;
     protected UserHelper userHelper = new UserHelper();
 
     @Spy
@@ -142,7 +165,6 @@ class RestControllerTest {
 
     @DisplayName("/insertPose : video 번호를 통해 자세정보와 운동정보를 보내는 uri")
     @Test
-//
     void getVideoinfo() throws Exception {
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         ExerciesVideo exerciesVideo = userHelper.makeVideo();
@@ -209,5 +231,24 @@ class RestControllerTest {
         String userId = String.valueOf(request.getAttribute("userId"));
         assertNotNull(userExpireDate);
         assertNotNull(userId);
+    }
+    @WithMockUser
+    @DisplayName("해당 체육관에 대한 회원 정보를 가져온다.")
+    @Test
+    void loadUser() throws Exception {
+        User user = (User) userHelper.makeAdmin().get("user");
+        UserResponse userResponse = new UserResponse(userHelper.makeUser());
+        List<UserResponse> result = new ArrayList<>();
+        result.add(userResponse);
+        result.add(userResponse);
+        result.add(userResponse);
+        given(this.userService.loadUser(any(User.class)))
+                .willReturn(result);
+
+        mockMvc.perform(post("/admin/loadUser").with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(handler().handlerType(RestController.class))
+                .andDo(print());
+
     }
 }

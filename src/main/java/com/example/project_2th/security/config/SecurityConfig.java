@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/user/login").permitAll()
                 .antMatchers("/user/**").hasAnyRole("USER")
@@ -52,14 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/loginInsert")
+                .loginProcessingUrl("/loginInsert").permitAll()
                 .usernameParameter("userPhone")			// 아이디 파라미터명 설정
                 .passwordParameter("loginNumber")
                 .successHandler(new LoginSuccessHandler())
-                .permitAll()
-                .and()
-                .csrf().disable();
-
+                .permitAll();
     }
 }

@@ -27,8 +27,6 @@ import java.util.stream.Collectors;
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final Logger logger = LoggerFactory.getLogger(LoginSuccessHandler.class);
 
-
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         logger.info("login handler perform");
@@ -37,7 +35,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         UserResponse userResponse = new UserResponse(user);
         response.setContentType("text/plain;charset=UTF-8");
 
-        UserRepository userRepository = null;
         if (userResponse.getManagerYn() == 1) {
             session.setAttribute("user", userResponse);
             response.sendRedirect("/admin");

@@ -4,12 +4,15 @@ import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -18,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 @Getter
 public class UserResponse {
 
@@ -56,10 +58,11 @@ public class UserResponse {
     }
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY )
+    @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private List<ExerciesResponse> exerciesList = new ArrayList<>();
 
+    @JsonIgnore
     @JsonManagedReference
     @OneToMany
     @JoinColumn(name = "user_id",updatable = false,insertable = false)

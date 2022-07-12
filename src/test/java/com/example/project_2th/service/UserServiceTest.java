@@ -264,6 +264,21 @@ public class UserServiceTest {
 
         Mockito.verify(userRepository).findByUserId(user.getUserId());
     }
+    @DisplayName("loadUser service")
+    @Test
+    void test9(){
+        user = User.builder().userId(1L).exercieVideosList(userHelper.makeVideos()).exerciesList(userHelper.makeExinfos()).calendarList(userHelper.makeCalendars()).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
+                .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
+                .managerYn(1).videoYn(1).userGym("해운대").build();
+        Mockito.when(userRepository.findByUserGymAndManagerYn(user.getUserGym(),user.getManagerYn()-1)).thenReturn(userHelper.makeUsers());
+
+
+        UserService userService = new UserService(userRepository,encoder);
+
+        List<UserResponse> responses = userService.loadUser(user);
+
+        Mockito.verify(userRepository).findByUserGymAndManagerYn(user.getUserGym(),user.getManagerYn()-1);
+    }
     @After
     public void clear(){
         request.clearAttributes();

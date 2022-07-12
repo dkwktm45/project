@@ -9,24 +9,42 @@ import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.ErrorResponse;
 import com.example.project_2th.response.ExerciesResponse;
+import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.sql.Date;
 import java.util.*;
@@ -37,12 +55,19 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.verify;
 import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.match;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(MainController.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {MainController.class, ObjectMapper.class})
+@WebAppConfiguration
+@AutoConfigureMockMvc
 public class MainControllerTest {
 
     @MockBean
@@ -54,11 +79,13 @@ public class MainControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private WebApplicationContext context;
 
     MockHttpSession session;
-
     protected UserHelper userHelper = new UserHelper();
     protected User user;
+
     @Test
     @DisplayName("로그인 페이지")
     public void test1() throws Exception {
@@ -68,88 +95,40 @@ public class MainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("form 데이터를 loginInsert로 이동(user)")
-    @Test
-    public void test2() throws Exception {
-        MockHttpSession session = new MockHttpSession();
+    @Nested
+    @DisplayName("security Login")
+    class login {
+        @BeforeEach
+        void setUp() {
+            user = userHelper.makeUser();
 
-        Map<String,Object> list = this.userHelper.mapToObject(this.userHelper.makeUser());
-        User user = (User) list.get("user");
+            List<GrantedAuthority> roles= new ArrayList<>();
 
-        given(this.userService.filterLogin(user)).willReturn(list);
-        given(this.userService.collectPage(list,session)).willReturn("redirect:/main");
+            roles.add(new SimpleGrantedAuthority(user.getRole()));
 
+            UserContext userDetails = new UserContext(user,roles);
 
-        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
-        info.add("userGym", user.getUserGym());
-        info.add("loginNumber", user.getLoginNumber());
+            SecurityContext context = SecurityContextHolder.getContext();
+            context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getLoginNumber(), roles));
 
+            mockMvc = MockMvcBuilders
+                    .webAppContextSetup((WebApplicationContext) context)
+                    .apply(springSecurity())
+                    .build();
 
-        mockMvc.perform(post("/loginInsert").params(info).session(session))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(request().sessionAttributeDoesNotExist())
-                .andExpect(redirectedUrl("/main"))
-                .andDo(print());
+            userService.join(user);
+        }
 
-        verify(userService).collectPage(list,session);
-        verify(userService).filterLogin(user);
-    }
-    @DisplayName("form 데이터를 loginInsert로 실패")
-    @Test
-    public void test10() throws Exception {
-        MockHttpSession session = new MockHttpSession();
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.addHeader("Referer","/main");
-
-        Map<String,Object> list = this.userHelper.mapToObject(this.userHelper.makeUser());
-        User user = (User) list.get("user");
-
-        given(this.userService.filterLogin(user)).willThrow(new PostNotFound());
-        given(this.userService.collectPage(list,session)).willReturn("redirect:/main");
-
-
-        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
-        info.add("userGym", user.getUserGym());
-        info.add("loginNumber", user.getLoginNumber());
-
-
-        MvcResult result = mockMvc.perform(post("/loginInsert").params(info).session(session))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(request().sessionAttributeDoesNotExist())
-                .andExpect(redirectedUrl("/error"))
-                .andDo(print())
-                .andReturn();
-        ErrorResponse response = (ErrorResponse) result.getModelAndView().getModel().get("error");
-        System.out.println(response.getCode());
-        System.out.println(response.getMessage());
-        assertEquals("400",response.getCode());
-        assertEquals("존재하지 않습니다.",response.getMessage());
-        assertNotNull(response);
-        verify(userService).filterLogin(user);
-    }
-    @DisplayName("form 데이터를 loginInsert로 이동(admin)")
-    @Test
-    public void test4() throws Exception {
-        session = new MockHttpSession();
-        Map<String,Object> list =userHelper.makeAdmin();
-        User user = (User) list.get("user");
-
-        given(this.userService.filterLogin(user)).willReturn(list);
-        given(this.userService.collectPage(list,session)).willReturn("redirect:/admin");
-
-        MultiValueMap<String, String> info = new LinkedMultiValueMap<>();
-
-        info.add("userGym", user.getUserGym());
-        info.add("loginNumber", user.getLoginNumber());
-
-        mockMvc.perform(post("/loginInsert").params(info).session(session))
-                .andExpect(redirectedUrl("/admin"))
-                .andExpect(request().sessionAttributeDoesNotExist())
-                .andExpect(status().is3xxRedirection())
-                .andDo(print());
-
-        verify(userService).collectPage(list,session);
-        verify(userService).filterLogin(user);
+        @Test
+        @WithMockUser
+        public void test2() throws Exception {
+            mockMvc.perform(formLogin("/loginInsert").userParameter("userPhone")
+                            .passwordParam("loginNumber").user(user.getUserPhone())
+                            .password(user.getLoginNumber()))
+                    .andDo(print())
+                    //정상 처리 되는지 확인
+                    .andExpect(status().is3xxRedirection());
+        }
     }
 
 
@@ -157,7 +136,7 @@ public class MainControllerTest {
     @Test
     public void test6() throws Exception {
         session = new MockHttpSession();
-        session.setAttribute("user",userHelper.makeUser());
+        session.setAttribute("user", userHelper.makeUser());
         user = (User) session.getAttribute("user");
 
         Calendar calendar = userHelper.makeCalendar();
@@ -171,24 +150,25 @@ public class MainControllerTest {
 
         mockMvc.perform(get("/infoCalender").session(session))
                 .andExpect(redirectedUrl("/test"))
-                .andExpect(request().sessionAttribute("calendarInfo",calendarList))
+                .andExpect(request().sessionAttribute("calendarInfo", calendarList))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
 
         verify(userService).infoCalendar(user);
     }
+
     @DisplayName("/goRecord session에는 exinfoList, videoList가 담긴채로 이동한다.")
     @Test
     public void test7() throws Exception {
         session = new MockHttpSession();
-        session.setAttribute("user",userHelper.makeUser());
+        session.setAttribute("user", userHelper.makeUser());
         user = (User) session.getAttribute("user");
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         List<Exercies> exinfoList = this.userHelper.makeExinfos();
         List<ExerciesVideo> videoList = this.userHelper.makeVideos();
-        map.put("videoList",videoList);
-        map.put("exinfoList",exinfoList);
+        map.put("videoList", videoList);
+        map.put("exinfoList", exinfoList);
 
         given(this.userService.infoRecord(user)).willReturn(map);
 
@@ -201,17 +181,18 @@ public class MainControllerTest {
         verify(userService).infoRecord(user);
 
     }
+
     @DisplayName("/insertEx 이동하면서 session exinfo 정보를 담는다.")
     @Test
     public void test8() throws Exception {
         session = new MockHttpSession();
-        session.setAttribute("user",userHelper.makeUser());
+        session.setAttribute("user", userHelper.makeUser());
         Exercies exercies = userHelper.makeExercies();
         ExerciesResponse response = new ExerciesResponse(exercies);
         given(this.exerciesService.exerciesInfo(exercies)).willReturn(response);
 
 
-        mockMvc.perform(post("/insertEx").flashAttr("user_exercies",exercies)
+        mockMvc.perform(post("/insertEx").flashAttr("user_exercies", exercies)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -220,46 +201,49 @@ public class MainControllerTest {
 
     @Nested
     @DisplayName("main redirect")
-    class t1est11{
+    class t1est11 {
 
         @DisplayName("main 페이지로 유저 정보가 담겨서 이동한다.")
         @Test
         public void test5() throws Exception {
             session = new MockHttpSession();
-            session.setAttribute("user",userHelper.makeUser());
+            session.setAttribute("user", userHelper.makeUser());
             mockMvc.perform(get("/main").session(session))
                     .andDo(print())
                     .andExpect(status().isOk());
         }
+
         @DisplayName("/test 페이지로 user, calendar 정보를 담고 이동한다.")
         @Test
         public void test9() throws Exception {
 
             session = new MockHttpSession();
-            session.setAttribute("user",userHelper.makeUser());
-            session.setAttribute("calendarInfo",userHelper.makeCalendar());
+            session.setAttribute("user", userHelper.makeUser());
+            session.setAttribute("calendarInfo", userHelper.makeCalendar());
 
             mockMvc.perform(get("/test").session(session))
                     .andDo(print())
                     .andExpect(status().isOk());
         }
+
         @DisplayName("/record 페이지로 exinfoList, videoList 정보를 담고 이동한다.")
         @Test
         public void test10() throws Exception {
             session = new MockHttpSession();
-            session.setAttribute("user",userHelper.makeUser());
+            session.setAttribute("user", userHelper.makeUser());
             user = (User) session.getAttribute("user");
 
-            session.setAttribute("exinfoList",userHelper.makeExinfos());
-            session.setAttribute("videoList",userHelper.makeVideos());
+            session.setAttribute("exinfoList", userHelper.makeExinfos());
+            session.setAttribute("videoList", userHelper.makeVideos());
 
             mockMvc.perform(get("/record").session(session))
                     .andDo(print())
                     .andExpect(status().isOk());
         }
     }
+
     @After
-    public void clean(){
+    public void clean() {
         session.clearAttributes();
     }
 

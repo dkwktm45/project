@@ -17,7 +17,7 @@ public class UserHelper {
     public static User makeUser(){
         return User.builder().userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
-                .managerYn(0).videoYn(1).userGym("해운대").build();
+                .managerYn(0).videoYn(1).userGym("해운대").role("USER").build();
     }
 
     public User userCalendar(){
@@ -85,10 +85,10 @@ public class UserHelper {
     }
 
     public Map<String , Object> makeAdmin(){
-        User user =  User.builder().userName("김화순").loginNumber("9696")
+        User user =  User.builder().userName("김화순").loginNumber("9696").userPhone("010-4311-9696")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                 .managerYn(1).exerciesList(makeExinfos()).exercieVideosList(makeVideos())
-                .calendarList(makeCalendars()).videoYn(1).userGym("해운대").build();
+                .calendarList(makeCalendars()).role("ADMIN").videoYn(1).userGym("해운대").build();
 
         List<User> users = new ArrayList<>();
 
