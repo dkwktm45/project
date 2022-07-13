@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,10 +100,12 @@ public class RestController {
         postruesService.badeImage(ai_comment, ex_seq);
     }
 
-    @PostMapping(value = "/admin/loadUser")
+    @PreAuthorize("hasPermission('ADMIN')")
+    @PostMapping(value = "/admin/loadUser",produces = "application/json")
     public ResponseEntity<List<UserResponse>> loadUser(@AuthenticationPrincipal User user) throws Exception {
         logger.info("loadUser perfom");
-        return ResponseEntity.ok().body(userService.loadUser(user));
+        List<UserResponse> userResponses = userService.loadUser(user);
+        return ResponseEntity.ok().body(userResponses);
     }
 
     @PatchMapping("/admin/updateMonth")

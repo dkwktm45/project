@@ -232,12 +232,11 @@ class RestControllerTest {
         assertNotNull(userExpireDate);
         assertNotNull(userId);
     }
-    @WithMockUser
+    @WithMockUser(roles = {"ADMIN"})
     @DisplayName("해당 체육관에 대한 회원 정보를 가져온다.")
     @Test
     void loadUser() throws Exception {
-        User user = (User) userHelper.makeAdmin().get("user");
-        UserResponse userResponse = new UserResponse(userHelper.makeUser());
+        UserResponse userResponse = new UserResponse(userHelper.userCalendar());
         List<UserResponse> result = new ArrayList<>();
         result.add(userResponse);
         result.add(userResponse);
@@ -245,10 +244,15 @@ class RestControllerTest {
         given(this.userService.loadUser(any(User.class)))
                 .willReturn(result);
 
-        mockMvc.perform(post("/admin/loadUser").with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(handler().handlerType(RestController.class))
-                .andDo(print());
+        try{
+            mockMvc.perform(post("/admin/loadUser").accept("application/json")
+                            .contentType("application/json").with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(handler().handlerType(RestController.class))
+                    .andDo(print());
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
     }
 }
