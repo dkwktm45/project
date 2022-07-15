@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         roles.add(new SimpleGrantedAuthority(user.getRole()));
 
         UserContext userContext = new UserContext(user,roles);
-
         return userContext;
     }
 }

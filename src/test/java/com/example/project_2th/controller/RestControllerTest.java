@@ -7,6 +7,7 @@ import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.response.UserResponse;
+import com.example.project_2th.response.VideoResponse;
 import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
@@ -25,6 +26,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -60,7 +62,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -97,7 +101,7 @@ class RestControllerTest {
     protected UserHelper userHelper = new UserHelper();
 
     @Spy
-    private List<Exercies> exerciesList =null;
+    private List<Exercies> exerciesList = null;
 
     @Spy
     private Calendar calendar;
@@ -105,14 +109,14 @@ class RestControllerTest {
     @DisplayName("calendarView 에서 날짜에 따른 운동 정보들을 가져온다.")
     @Test
     void calendarView() throws Exception {
-        calendar =Calendar.builder().user(User.builder().userId(1L).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
+        calendar = Calendar.builder().user(User.builder().userId(1L).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                 .managerYn(0).videoYn(1).userGym("해운대").build()).exDay(Date.valueOf("2021-05-05")).build();
         exerciesList = new ArrayList<>();
         exerciesList.add(this.userHelper.makeExercies());
         exerciesList.add(this.userHelper.makeExercies());
         exerciesList.add(this.userHelper.makeExercies());
-        List<ExerciesResponse> list= new ArrayList(exerciesList);
+        List<ExerciesResponse> list = new ArrayList(exerciesList);
         given(this.exerciesService.calendarExinfo(any(Calendar.class)))
                 .willReturn(list);
 
@@ -123,7 +127,7 @@ class RestControllerTest {
                         .content(jsonInString)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()",is(3)))
+                .andExpect(jsonPath("$.length()", is(3)))
                 .andExpect(jsonPath("$.[0:3].userSet").exists())
                 .andExpect(jsonPath("$.[0:3].exKinds").exists())
                 .andExpect(jsonPath("$.[0:3].cnt").exists())
@@ -132,7 +136,7 @@ class RestControllerTest {
                 .andExpect(handler().handlerType(RestController.class))
                 .andDo(print());
 
-        verify(exerciesService,never()).calendarExinfo(calendar);
+        verify(exerciesService, never()).calendarExinfo(calendar);
     }
 
     @DisplayName("video 저장 uri")
@@ -232,27 +236,27 @@ class RestControllerTest {
         assertNotNull(userExpireDate);
         assertNotNull(userId);
     }
+
     @WithMockUser(roles = {"ADMIN"})
     @DisplayName("해당 체육관에 대한 회원 정보를 가져온다.")
     @Test
     void loadUser() throws Exception {
-        UserResponse userResponse = new UserResponse(userHelper.userCalendar());
-        List<UserResponse> result = new ArrayList<>();
-        result.add(userResponse);
-        result.add(userResponse);
-        result.add(userResponse);
-        given(this.userService.loadUser(any(User.class)))
-                .willReturn(result);
-
-        try{
-            mockMvc.perform(post("/admin/loadUser").accept("application/json")
-                            .contentType("application/json").with(csrf()))
-                    .andExpect(status().isOk())
-                    .andExpect(handler().handlerType(RestController.class))
-                    .andDo(print());
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+        List<VideoResponse> videoResponse = new ArrayList<>();
+        for (VideoResponse result : userHelper.makeVideos().stream().map(VideoResponse::new).collect(Collectors.toList())) {
+            videoResponse.add(result);
         }
+        List<UserResponse> result = new ArrayList<>();
+/*
+        given(this.userService.loadUser(any(User.class)))
+                .willReturn(videoResponse);*/
+
+        mockMvc.perform(post("/admin/loadUser")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON).with(csrf()))
+                .andExpect(status().isInternalServerError())
+                .andExpect(result2 -> assertThat(result2.getResolvedException()).isInstanceOf(HttpMessageNotWritableException.class))
+                .andExpect(handler().handlerType(RestController.class))
+                .andDo(print());
 
     }
 }

@@ -40,6 +40,7 @@ public class VideoResponse{
         return this.postures == null ? new ArrayList<>() : this.postures;
     }
 
+    @Builder
     public VideoResponse(ExerciesVideo exerciesVideo){
         this.videoSeq = exerciesVideo.getVideoSeq();
         this.fileName = exerciesVideo.getFileName();

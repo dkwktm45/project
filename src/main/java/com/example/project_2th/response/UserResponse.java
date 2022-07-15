@@ -8,8 +8,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
@@ -19,9 +21,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
 @Getter
 public class UserResponse{
 
@@ -58,19 +59,9 @@ public class UserResponse{
         this.calendarList = new ArrayList(user.getCalendarList());
     }
 
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",updatable = false,insertable = false)
+
     private List<ExerciesResponse> exerciesList = new ArrayList<>();
-
-    @JsonIgnore
-    @JsonManagedReference
-    @OneToMany
-    @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private List<CalendarResponse> calendarList = new ArrayList<>();
-
-    @OneToMany
-    @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private List<VideoResponse> exercieVideosList = new ArrayList<>();
 
 }

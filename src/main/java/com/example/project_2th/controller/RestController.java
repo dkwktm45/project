@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.example.project_2th.entity.*;
 import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.response.UserResponse;
+import com.example.project_2th.response.VideoResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -21,10 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @org.springframework.web.bind.annotation.RestController
@@ -101,11 +106,12 @@ public class RestController {
     }
 
     @PreAuthorize("hasPermission('ADMIN')")
-    @PostMapping(value = "/admin/loadUser",produces = "application/json")
-    public ResponseEntity<List<UserResponse>> loadUser(@AuthenticationPrincipal User user) throws Exception {
+    @PostMapping(value = "/admin/loadUser")
+    public HttpServletRequest loadUser(@AuthenticationPrincipal User user,HttpServletRequest request) throws Exception {
         logger.info("loadUser perfom");
-        List<UserResponse> userResponses = userService.loadUser(user);
-        return ResponseEntity.ok().body(userResponses);
+        List<User> videoResponses = userService.loadUser(user);
+        request.setAttribute("video",videoResponses);
+        return request;
     }
 
     @PatchMapping("/admin/updateMonth")

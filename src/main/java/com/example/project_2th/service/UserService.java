@@ -5,6 +5,7 @@ import com.example.project_2th.entity.*;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.UserResponse;
+import com.example.project_2th.response.VideoResponse;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -54,9 +55,11 @@ public class UserService {
         return null;
     }
 
-    public List<UserResponse> loadUser(User user){
-        return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
-                .stream().map(UserResponse::new).collect(Collectors.toList());
+    public List<User> loadUser(User user){
+        List<VideoResponse> videoList = new ArrayList<>();
+        List<User> result = userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
+                .stream().collect(Collectors.toList());
+        return result;
     }
 
     public List<CalendarResponse> infoCalendar(User user) {
