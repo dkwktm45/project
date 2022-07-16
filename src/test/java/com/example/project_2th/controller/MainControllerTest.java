@@ -84,9 +84,6 @@ public class MainControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext context;
-
     MockHttpSession session;
     protected UserHelper userHelper = new UserHelper();
     protected User user;

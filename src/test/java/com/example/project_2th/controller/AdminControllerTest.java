@@ -10,11 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -25,8 +28,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,16 +42,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = AdminController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE,classes = SecurityConfig.class)
-        })
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @WithMockUser(roles = "ADMIN")
 public class AdminControllerTest {
 
     @MockBean
     private UserService userService;
+    @Autowired
+    private MockMvc mockMvc;
 
     MockHttpSession session;
     MockHttpServletRequest request;
@@ -54,24 +60,21 @@ public class AdminControllerTest {
     private Map<String,Object> map;
 
     protected User user;
-    @Autowired
-    private MockMvc mockMvc;
 
-    @Before
-    public void setup() {
-    }
+
+
 
     @DisplayName("admin페이지로 관리자와 회원 정보를 가져온다.")
     @Test
     public void test1() throws Exception {
-        session = new MockHttpSession();
-
         map = this.userHelper.makeAdmin();
-        session.setAttribute("user",map.get("user"));
-        session.setAttribute("userList",map.get("userList"));
+        User user = (User) map.get("user");
+        UserResponse response = new UserResponse(user);
+        List<UserResponse> responses = new ArrayList<>();
+        responses.add(response);
+        given(this.userService.loadUser(user)).willReturn(responses);
 
-
-        mockMvc.perform(get("/admin/").session(session))
+        mockMvc.perform(get("/admin/"))
                 .andExpect(status().isOk())
                 .andExpect(handler().handlerType(AdminController.class))
                 .andDo(print());
