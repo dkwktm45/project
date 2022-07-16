@@ -6,67 +6,48 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.response.ExerciesResponse;
-import com.example.project_2th.response.UserResponse;
-import com.example.project_2th.response.VideoResponse;
-import com.example.project_2th.security.service.UserContext;
+import com.example.project_2th.security.config.SecurityConfig;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
 import com.example.project_2th.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.MultiValueMapAdapter;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletInputStream;
-import java.io.*;
 import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -77,10 +58,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {RestController.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
-class RestControllerTest {
+@WebMvcTest(controllers = RestControllerApi.class,
+    excludeFilters = {
+        @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE,classes = SecurityConfig.class)
+    })
+class RestControllerApiTest {
 
     @MockBean
     private UserService userService;
@@ -106,8 +88,10 @@ class RestControllerTest {
     @Spy
     private Calendar calendar;
 
+
     @DisplayName("calendarView 에서 날짜에 따른 운동 정보들을 가져온다.")
     @Test
+    @WithMockUser(roles = "USER")
     void calendarView() throws Exception {
         calendar = Calendar.builder().user(User.builder().userId(1L).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
@@ -123,9 +107,11 @@ class RestControllerTest {
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = mapper.writeValueAsString(calendar);
 
-        mockMvc.perform(post("/calendarView")
+        mockMvc.perform(post("/user/calendarView")
                         .content(jsonInString)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(3)))
                 .andExpect(jsonPath("$.[0:3].userSet").exists())
@@ -133,7 +119,7 @@ class RestControllerTest {
                 .andExpect(jsonPath("$.[0:3].cnt").exists())
                 .andExpect(jsonPath("$.[0:3].exCount").exists())
                 .andExpect(jsonPath("$.[0:3].exName").exists())
-                .andExpect(handler().handlerType(RestController.class))
+                .andExpect(handler().handlerType(RestControllerApi.class))
                 .andDo(print());
 
         verify(exerciesService, never()).calendarExinfo(calendar);
@@ -141,6 +127,7 @@ class RestControllerTest {
 
     @DisplayName("video 저장 uri")
     @Test
+    @WithMockUser(roles = "USER")
     void insertExURL() throws Exception {
         byte[] bytes = new byte[]{1, 2};
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
@@ -148,11 +135,11 @@ class RestControllerTest {
         data.add("exSeq", String.valueOf(userHelper.makeExercies().getExSeq()));
         data.add("cnt", userHelper.makeExercies().getCnt());
 
-        MvcResult result = mockMvc.perform(post("/insertExURL")
+        MvcResult result = mockMvc.perform(post("/user/insertExURL")
                         .params(data).content(bytes)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON).with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(handler().handlerType(RestController.class))
+                .andExpect(handler().handlerType(RestControllerApi.class))
                 .andDo(print()).andReturn();
 
         MockHttpServletRequest request = result.getRequest();
@@ -169,6 +156,7 @@ class RestControllerTest {
 
     @DisplayName("/insertPose : video 번호를 통해 자세정보와 운동정보를 보내는 uri")
     @Test
+    @WithMockUser(roles = "USER")
     void getVideoinfo() throws Exception {
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         ExerciesVideo exerciesVideo = userHelper.makeVideo();
@@ -180,15 +168,16 @@ class RestControllerTest {
         given(this.exerciesVideoService.selectVideoInfo(exerciesVideo.getVideoSeq()))
                 .willReturn(map);
 
-        mockMvc.perform(get("/insertPose")
+        mockMvc.perform(get("/user/insertPose")
                         .params(data)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.exinfo").exists())
                 .andExpect(jsonPath("$.postures[0:3].videoTime").exists())
                 .andExpect(jsonPath("$.postures[0:3].poseResult").exists())
                 .andExpect(jsonPath("$.postures[0:3].aiComment").exists())
-                .andExpect(handler().handlerType(RestController.class))
+                .andExpect(handler().handlerType(RestControllerApi.class))
                 .andDo(print());
 
         verify(exerciesVideoService).selectVideoInfo(exerciesVideo.getVideoSeq());
@@ -196,17 +185,19 @@ class RestControllerTest {
 
     @DisplayName("/insertBadImage : bad image 를 저장하는 uri")
     @Test
+    @WithMockUser(roles = "USER")
     void insertBadImage() throws Exception {
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("ai_comment", String.valueOf(2L));
         data.add("ex_seq", String.valueOf(1L));
 
 
-        MvcResult result = mockMvc.perform(post("/insertBadImage")
+        MvcResult result = mockMvc.perform(post("/user/insertBadImage")
                         .params(data)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(handler().handlerType(RestController.class))
+                .andExpect(handler().handlerType(RestControllerApi.class))
                 .andDo(print()).andReturn();
 
         MockHttpServletRequest request = result.getRequest();
@@ -218,16 +209,18 @@ class RestControllerTest {
 
     @DisplayName("updateMonth uri 에서 개월수 update")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void updateMonth() throws Exception {
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("userExpireDate", "2022-10-10");
         data.add("userId", String.valueOf(1L));
 
-        MvcResult result = mockMvc.perform(patch("/updateMonth")
+        MvcResult result = mockMvc.perform(patch("/admin/updateMonth")
                         .params(data)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(handler().handlerType(RestController.class))
+                .andExpect(handler().handlerType(RestControllerApi.class))
                 .andDo(print()).andReturn();
 
         MockHttpServletRequest request = result.getRequest();
@@ -237,26 +230,5 @@ class RestControllerTest {
         assertNotNull(userId);
     }
 
-    @WithMockUser(roles = {"ADMIN"})
-    @DisplayName("해당 체육관에 대한 회원 정보를 가져온다.")
-    @Test
-    void loadUser() throws Exception {
-        List<VideoResponse> videoResponse = new ArrayList<>();
-        for (VideoResponse result : userHelper.makeVideos().stream().map(VideoResponse::new).collect(Collectors.toList())) {
-            videoResponse.add(result);
-        }
-        List<UserResponse> result = new ArrayList<>();
-/*
-        given(this.userService.loadUser(any(User.class)))
-                .willReturn(videoResponse);*/
 
-        mockMvc.perform(post("/admin/loadUser")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON).with(csrf()))
-                .andExpect(status().isInternalServerError())
-                .andExpect(result2 -> assertThat(result2.getResolvedException()).isInstanceOf(HttpMessageNotWritableException.class))
-                .andExpect(handler().handlerType(RestController.class))
-                .andDo(print());
-
-    }
 }

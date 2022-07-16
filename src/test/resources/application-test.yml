@@ -1,5 +1,10 @@
 server:
   port: 8005
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 spring:
   datasource:
     driver-class-name: org.h2.Driver

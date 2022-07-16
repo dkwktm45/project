@@ -1,17 +1,7 @@
 package com.example.project_2th.controller;
 
-import java.security.Principal;
-import java.util.List;
-import java.util.Map;
-
-
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.HttpServletRequest;
-
-import com.example.project_2th.entity.*;
+import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.response.ExerciesResponse;
-import com.example.project_2th.response.UserResponse;
-import com.example.project_2th.response.VideoResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -24,18 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 
-@org.springframework.web.bind.annotation.RestController
+@RestController
 @RequiredArgsConstructor
 @Slf4j
-public class RestController {
+public class RestControllerApi {
 
     @Autowired
     private final ExerciesService exerciesService;
@@ -49,7 +39,7 @@ public class RestController {
     @Autowired
     private final UserService userService;
 
-    private final Logger logger = LoggerFactory.getLogger(RestController.class);
+    private final Logger logger = LoggerFactory.getLogger(RestControllerApi.class);
 
     @PostMapping(value = "/user/calendarView")
     public ResponseEntity<List<ExerciesResponse>> calendarView(@RequestBody  Calendar calendar) throws Exception {
@@ -59,7 +49,7 @@ public class RestController {
 
         List<ExerciesResponse> exinfoList = exerciesService.calendarExinfo(calendar);
         logger.info("exinfoList : {}",exinfoList);
-        return ResponseEntity.ok().body(exinfoList);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(exinfoList);
     }
 
     @PostMapping(value = "/user/insertExURL")
@@ -105,14 +95,6 @@ public class RestController {
         postruesService.badeImage(ai_comment, ex_seq);
     }
 
-    @PreAuthorize("hasPermission('ADMIN')")
-    @PostMapping(value = "/admin/loadUser")
-    public HttpServletRequest loadUser(@AuthenticationPrincipal User user,HttpServletRequest request) throws Exception {
-        logger.info("loadUser perfom");
-        List<User> videoResponses = userService.loadUser(user);
-        request.setAttribute("video",videoResponses);
-        return request;
-    }
 
     @PatchMapping("/admin/updateMonth")
     public void updateMonth(HttpServletRequest req){

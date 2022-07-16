@@ -87,7 +87,20 @@
     </div>
     <div class="container-xl">
       <div>
-
+        <div class="row row-cols-2" th:each="user , i : ${session.userList}" >
+          <div th:each="video ,t: ${user.getExercieVideosList()}" class="col videoList">
+            <div th:id = "${video.getExercies().getExKinds()}" th:class="'div_p'+${t.index+1}">
+              <div class="item">
+                <video th:src="'/video/'+${video.getFileName()}+'.webm'"
+                       th:class="${video.getVideoSeq()} + ' w-100'"
+                       th:id="'record_video'+${t.index+1}">
+                </video>
+                <div class="videoDate" th:text="${video.getVideoDate()}"></div>
+                <div class="userName" th:text="${video.getUser().getUserName()}"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -105,39 +118,6 @@
 <script src="https://unpkg.com/tippy.js@6"></script>
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script th:inline="javascript">
-  $(document).ready(function() {
-    /*<![CDATA[*/
-    let userinfo =/*[[${session.user}]]*/;
-    /*]]*/
-    $.ajax({
-      url: "/admin/loadUser",
-      type:"POST",
-      data: {"userGym" : userinfo.userGym,"role" : userinfo.role },
-      success:function(result){
-        console.log("성공 {}",result)
-        $.each(result, (index, obj) => {
-          html1 += "<div class = 'row row-cols-2' th:each='user , i : ${session.userList}'>";
-          html1 += "<div th:each='video ,t: ${user.getExercieVideosList()}' class='col videoList'>";
-          html1 += "<div th:id = '${video.getExercies().getExKinds()}' th:class=''div_p'+${t.index+1}'>";
-          html1 += "<div  class='item'>";
-          html1 += "<video th:src=\"'/video/'+${video.getFileName()}+'.webm'\"\n" +
-                  "                       th:class=\"${video.getVideoSeq()} + ' w-100'\"\n" +
-                  "                       th:id=\"'record_video'+${t.index+1}\">\n" +
-                  "                </video>";
-          html1 += "<div class=\"videoDate\" th:text=\"${video.getVideoDate()}\"></div>";
-          html1 += "<div class=\"userName\" th:text=\"${video.getUser().getUserName()}\"></div>";
-          html1 += "</div>";
-          html1 += "</div>";
-          html1 += "</div>";
-          html1 += "</div>";
-        })
-        $(".container-xl").children().first().html(html1);
-      },error: function (request, status, error) {
-        alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-      }
-    })
-
-  });
   $(".hide").children("li").on("click",function(){
     var myClass = $(this).attr("class");
     alert(myClass);

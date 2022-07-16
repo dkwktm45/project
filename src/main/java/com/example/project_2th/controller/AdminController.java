@@ -1,17 +1,20 @@
 package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.User;
+import com.example.project_2th.response.UserResponse;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +28,10 @@ public class AdminController {
     private final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping({"/",""})
-    public String admin() {
+    public String admin(HttpServletRequest request,@AuthenticationPrincipal User user) {
+        HttpSession session = request.getSession();
+        List<UserResponse> videoResponses = userService.loadUser(user);
+        session.setAttribute("userList",videoResponses);
         return "/admin";
     }
 

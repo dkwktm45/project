@@ -55,10 +55,9 @@ public class UserService {
         return null;
     }
 
-    public List<User> loadUser(User user){
-        List<VideoResponse> videoList = new ArrayList<>();
-        List<User> result = userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
-                .stream().collect(Collectors.toList());
+    public List<UserResponse> loadUser(User user){
+        List<UserResponse> result = userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
+                .stream().map(UserResponse::new).collect(Collectors.toList());
         return result;
     }
 
