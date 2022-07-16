@@ -44,23 +44,26 @@ public class RestControllerApi {
     @PostMapping(value = "/user/calendarView")
     public ResponseEntity<List<ExerciesResponse>> calendarView(@RequestBody  Calendar calendar) throws Exception {
         logger.info("calendarView perfom");
+
         logger.info("user : " + calendar.getUser());
         logger.info("day : " + calendar.getExDay());
-
         List<ExerciesResponse> exinfoList = exerciesService.calendarExinfo(calendar);
-        logger.info("exinfoList : {}",exinfoList);
+
+        logger.info(" [response] exinfoList : {}",exinfoList);
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(exinfoList);
     }
 
     @PostMapping(value = "/user/insertExURL")
-    public String insertExURL(HttpServletRequest req) throws Exception {
+    public String insertExURL(HttpServletRequest request) throws Exception {
         logger.info("insertExURL perfom");
-        String cnt = req.getParameter("cnt");
-        Long user_id = Long.valueOf(req.getParameter("userId"));
-        Long ex_seq = Long.valueOf(req.getParameter("exSeq"));
-        ServletInputStream inputStream = req.getInputStream();
+
+        String cnt = request.getParameter("cnt");
+        Long user_id = Long.valueOf(request.getParameter("userId"));
+        Long ex_seq = Long.valueOf(request.getParameter("exSeq"));
+        ServletInputStream inputStream = request.getInputStream();
 
         exerciesVideoService.videoSave(cnt, user_id, ex_seq, inputStream);
+
         logger.info("[createVideo] cnt : {},userId : {}, exSeq : {},stream : {}"
                 ,cnt,user_id,ex_seq,inputStream);
 
@@ -68,15 +71,15 @@ public class RestControllerApi {
     }
 
     @GetMapping(value = "/user/insertPose")
-    public ResponseEntity<Map<String, Object>> getVideoinfo(HttpServletRequest req) throws Exception {
-        logger.info("insertPose perfom : param =  {}",req.getParameter("videoSeq"));
+    public ResponseEntity<Map<String, Object>> getVideoinfo(HttpServletRequest request) throws Exception {
+        logger.info("insertPose perfom ");
 
-        if (req.getParameter("videoSeq") == null){
+        if (request.getParameter("videoSeq") == null){
             logger.error("videoSeq : null");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        Long videoSeq = Long.valueOf(req.getParameter("videoSeq"));
+        Long videoSeq = Long.valueOf(request.getParameter("videoSeq"));
         Map<String,Object> videoInfo = exerciesVideoService.selectVideoInfo(videoSeq);
 
         logger.info("[response] exinfo : {},postures : {}"
@@ -85,22 +88,23 @@ public class RestControllerApi {
         return ResponseEntity.ok().body(videoInfo);
     }
 
-    @PostMapping(value = "/user/insertBadImage")
-    public void insertBadImage(HttpServletRequest request) throws Exception {
-        logger.info("insertBadImage perfom return void");
-        String ai_comment = request.getParameter("ai_comment");
-        Long ex_seq = Long.valueOf(request.getParameter("ex_seq"));
-        logger.info("void ai_comment : {} , ex_seq : {}",ai_comment,ex_seq);
+    @PutMapping(value = "/user/insertBadImage")
+    public void insertBadImage(HttpServletRequest requestuest) throws Exception {
+        logger.info("insertBadImage perfom");
 
+        String ai_comment = requestuest.getParameter("ai_comment");
+        Long ex_seq = Long.valueOf(requestuest.getParameter("ex_seq"));
+
+        logger.info("void ai_comment : {} , ex_seq : {}",ai_comment,ex_seq);
         postruesService.badeImage(ai_comment, ex_seq);
     }
 
 
     @PatchMapping("/admin/updateMonth")
-    public void updateMonth(HttpServletRequest req){
+    public void updateMonth(HttpServletRequest request){
         logger.info("updateMonth perfom return void [params] userExpireDate : {} ,userId : {}"
-        ,req.getParameter("userExpireDate"),req.getParameter("userId"));
-        userService.updateMonth(req);
+        ,request.getParameter("userExpireDate"),request.getParameter("userId"));
+        userService.updateMonth(request);
     }
 
 }

@@ -162,7 +162,7 @@ $("#button").on("click",function (){
     "managerYn" : $("input[name=managerYn]").val()
   };
   $.ajax({
-    type : 'POST',
+    type : 'PUT',
     url : '/admin/joinMember',
     data : JSON.stringify(userData),
     contentType : "application/json;charset=UTF-8",

@@ -192,7 +192,7 @@ class RestControllerApiTest {
         data.add("ex_seq", String.valueOf(1L));
 
 
-        MvcResult result = mockMvc.perform(post("/user/insertBadImage")
+        MvcResult result = mockMvc.perform(put("/user/insertBadImage")
                         .params(data)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(csrf()))

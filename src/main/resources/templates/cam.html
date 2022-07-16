@@ -202,13 +202,13 @@
           var oReq = new XMLHttpRequest();
           var url
           if (feedback_l==null){
-            url = "insertBadImage?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_l;
+            url = "/user/insertBadImage?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_l;
           }else if(feedback_r==null){
             feedback_r ="test"
-            url = "insertBadImage?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_r;
+            url = "/user/insertBadImage?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_r;
           }
           console.log(url)
-          oReq.open("POST", url, true);
+          oReq.open("PUT", url, true);
           oReq.onload = function (oEvent) {
             // Uploaded.
             if (oReq.status == 200){

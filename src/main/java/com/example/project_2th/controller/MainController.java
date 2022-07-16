@@ -2,6 +2,7 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.User;
 import com.example.project_2th.entity.Exercies;
+import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -34,11 +36,17 @@ public class MainController {
     // 기록페이지 re
     @GetMapping("/goRecord")
     public String goRecord(HttpServletRequest req) {
+        logger.info("goRecord perform");
+
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
         Map<String,Object> map = userService.infoRecord(user);
         session.setAttribute("exinfoList", map.get("exinfoList"));
         session.setAttribute("videoList", map.get("videoList"));
+
+        logger.info("[session] : exinfoList {} , videoList {}"
+                ,map.get("exinfoList")
+                ,map.get("videoList"));
         return "redirect:/user/record";
     }
 
@@ -72,16 +80,21 @@ public class MainController {
     // gocalender
     @GetMapping(value = "/infoCalender")
     public String infoCalender(HttpServletRequest req) {
+        logger.info("infoCalender perform");
+
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
+        List<CalendarResponse> responses = userService.infoCalendar(user);
+        session.setAttribute("calendarInfo",responses);
 
-        session.setAttribute("calendarInfo",userService.infoCalendar(user));
-
+        logger.info("[session] : calendarInfo {} ",responses);
         return "redirect:/user/test";
     }
 
     @PostMapping(value = "/insertEx")
     public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,HttpServletRequest req) throws Exception {
+        logger.info("insertEx perform");
+
         HttpSession session = req.getSession();
         ExerciesResponse exinfo = exerciesService.exerciesInfo(exercies);
         if (exinfo== null){
@@ -89,6 +102,8 @@ public class MainController {
             return "redirect:/main";
         }
         session.setAttribute("exinfo",exinfo);
+
+        logger.info("[session] : exinfo {} ",exinfo);
         return "redirect:/user/cam";
     }
 

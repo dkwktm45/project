@@ -37,8 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -61,9 +60,6 @@ public class AdminControllerTest {
 
     protected User user;
 
-
-
-
     @DisplayName("admin페이지로 관리자와 회원 정보를 가져온다.")
     @Test
     public void test1() throws Exception {
@@ -76,6 +72,7 @@ public class AdminControllerTest {
 
         mockMvc.perform(get("/admin/"))
                 .andExpect(status().isOk())
+                .andExpect(request().sessionAttribute("userList",responses))
                 .andExpect(handler().handlerType(AdminController.class))
                 .andDo(print());
     }
@@ -105,7 +102,7 @@ public class AdminControllerTest {
                 .registerTypeAdapter(LocalDate.class, new GsonLocalDateTimeAdapter())
                 .create();
         String json = gson.toJson(user);
-        mockMvc.perform(post("/admin/joinMember")
+        mockMvc.perform(put("/admin/joinMember")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is3xxRedirection())

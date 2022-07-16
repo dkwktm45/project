@@ -29,9 +29,13 @@ public class AdminController {
 
     @GetMapping({"/",""})
     public String admin(HttpServletRequest request,@AuthenticationPrincipal User user) {
+        logger.info("admin : loadUser perform");
+
         HttpSession session = request.getSession();
         List<UserResponse> videoResponses = userService.loadUser(user);
         session.setAttribute("userList",videoResponses);
+
+        logger.info("admin : loadUser end {}",videoResponses);
         return "/admin";
     }
 
@@ -48,14 +52,21 @@ public class AdminController {
 
     @GetMapping("/Member")
     public String aminMember(HttpServletRequest req , HttpSession session) {
+        logger.info("aminMember : reLoadMember perform");
+
         session =req.getSession();
         User loginUser = (User) session.getAttribute("user");
-        session.setAttribute("userList",userService.reLoadMember(loginUser));
+        List<UserResponse> responseList = userService.reLoadMember(loginUser);
+        session.setAttribute("userList",responseList);
+
+        logger.info("aminMember : reLoadMember end {}",responseList);
         return "/adminMember";
     }
 
-    @PostMapping(value = "/joinMember")
+    @PutMapping(value = "/joinMember")
     public String joinMember(@RequestBody User user){
+        logger.info("joinMember : join perform");
+
         logger.info("name : " +user.getUserName());
         logger.info("videoYn : " +String.valueOf(user.getVideoYn()));
         logger.info("gym : " +user.getUserGym());
@@ -64,6 +75,9 @@ public class AdminController {
         logger.info("phone : " +user.getUserPhone());
 
         userService.join(user);
+
+        logger.info("joinMember : join");
+
         return "redirect:/admin/Join";
     }
 
