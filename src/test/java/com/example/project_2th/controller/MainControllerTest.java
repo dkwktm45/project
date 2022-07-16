@@ -122,6 +122,31 @@ public class MainControllerTest {
 
         verify(userService).infoCalendar(user);
     }
+    @DisplayName("calendar 페이지로 유저에 대한 운동 정보가 담겨서 이동한다.")
+    @Test
+    public void test11() throws Exception {
+        session = new MockHttpSession();
+        session.setAttribute("user", userHelper.makeUser());
+        user = (User) session.getAttribute("user");
+
+        Calendar calendar = userHelper.makeCalendar();
+        CalendarResponse response = new CalendarResponse(calendar);
+        List<CalendarResponse> calendarList = new ArrayList<>();
+        calendarList.add(response);
+        calendarList.add(response);
+        calendarList.add(response);
+
+        given(this.userService.infoCalendar(user)).willReturn(calendarList);
+
+        mockMvc.perform(get("/user/infoCalender").session(session))
+                .andExpect(redirectedUrl("/user/test"))
+                .andExpect(request().sessionAttribute("calendarInfo", calendarList))
+                .andExpect(status().is3xxRedirection())
+                .andDo(print());
+
+        verify(userService).infoCalendar(user);
+    }
+
 
     @DisplayName("/goRecord session에는 exinfoList, videoList가 담긴채로 이동한다.")
     @Test

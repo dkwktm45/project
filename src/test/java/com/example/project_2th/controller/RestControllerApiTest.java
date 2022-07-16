@@ -12,7 +12,9 @@ import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
 import com.example.project_2th.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
@@ -79,7 +81,6 @@ class RestControllerApiTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private Principal principal;
     protected UserHelper userHelper = new UserHelper();
 
     @Spy
@@ -153,81 +154,88 @@ class RestControllerApiTest {
         assertNotNull(exSeq);
         assertNotNull(stream);
     }
+    @Nested
+    class exinfo{
+        MultiValueMap<String, String> data;
+        @BeforeEach
+        void setUp(){
+            data = new LinkedMultiValueMap<>();
 
-    @DisplayName("/insertPose : video 번호를 통해 자세정보와 운동정보를 보내는 uri")
-    @Test
-    @WithMockUser(roles = "USER")
-    void getVideoinfo() throws Exception {
-        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        ExerciesVideo exerciesVideo = userHelper.makeVideo();
-        data.add("videoSeq", String.valueOf(exerciesVideo.getVideoSeq()));
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("exinfo", userHelper.makeExercies());
-        map.put("postures", userHelper.makePose());
+        }
 
-        given(this.exerciesVideoService.selectVideoInfo(exerciesVideo.getVideoSeq()))
-                .willReturn(map);
+        @DisplayName("/insertPose : video 번호를 통해 자세정보와 운동정보를 보내는 uri")
+        @Test
+        @WithMockUser(roles = "USER")
+        void getVideoinfo() throws Exception {
+            ExerciesVideo exerciesVideo = userHelper.makeVideo();
+            data.add("videoSeq", String.valueOf(exerciesVideo.getVideoSeq()));
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("exinfo", userHelper.makeExercies());
+            map.put("postures", userHelper.makePose());
 
-        mockMvc.perform(get("/user/insertPose")
-                        .params(data)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.exinfo").exists())
-                .andExpect(jsonPath("$.postures[0:3].videoTime").exists())
-                .andExpect(jsonPath("$.postures[0:3].poseResult").exists())
-                .andExpect(jsonPath("$.postures[0:3].aiComment").exists())
-                .andExpect(handler().handlerType(RestControllerApi.class))
-                .andDo(print());
+            given(exerciesVideoService.selectVideoInfo(exerciesVideo.getVideoSeq()))
+                    .willReturn(map);
 
-        verify(exerciesVideoService).selectVideoInfo(exerciesVideo.getVideoSeq());
-    }
+            mockMvc.perform(get("/user/insertPose")
+                            .params(data)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.exinfo").exists())
+                    .andExpect(jsonPath("$.postures[0:3].videoTime").exists())
+                    .andExpect(jsonPath("$.postures[0:3].poseResult").exists())
+                    .andExpect(jsonPath("$.postures[0:3].aiComment").exists())
+                    .andExpect(handler().handlerType(RestControllerApi.class))
+                    .andDo(print());
 
-    @DisplayName("/insertBadImage : bad image 를 저장하는 uri")
-    @Test
-    @WithMockUser(roles = "USER")
-    void insertBadImage() throws Exception {
-        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        data.add("ai_comment", String.valueOf(2L));
-        data.add("ex_seq", String.valueOf(1L));
+            verify(exerciesVideoService).selectVideoInfo(exerciesVideo.getVideoSeq());
+        }
+
+        @DisplayName("/insertBadImage : bad image 를 저장하는 uri")
+        @Test
+        @WithMockUser(roles = "USER")
+        void insertBadImage() throws Exception {
+            data.add("ai_comment", String.valueOf(2L));
+            data.add("ex_seq", String.valueOf(1L));
 
 
-        MvcResult result = mockMvc.perform(put("/user/insertBadImage")
-                        .params(data)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(handler().handlerType(RestControllerApi.class))
-                .andDo(print()).andReturn();
+            MvcResult result = mockMvc.perform(put("/user/insertBadImage")
+                            .params(data)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(handler().handlerType(RestControllerApi.class))
+                    .andDo(print()).andReturn();
 
-        MockHttpServletRequest request = result.getRequest();
-        String comment = String.valueOf(request.getAttribute("ai_comment"));
-        String seq = String.valueOf(request.getAttribute("ex_seq"));
-        assertNotNull(comment);
-        assertNotNull(seq);
-    }
+            MockHttpServletRequest request = result.getRequest();
+            String comment = String.valueOf(request.getAttribute("ai_comment"));
+            String seq = String.valueOf(request.getAttribute("ex_seq"));
+            assertNotNull(comment);
+            assertNotNull(seq);
+        }
 
-    @DisplayName("updateMonth uri 에서 개월수 update")
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    void updateMonth() throws Exception {
-        MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        data.add("userExpireDate", "2022-10-10");
-        data.add("userId", String.valueOf(1L));
+        @DisplayName("updateMonth uri 에서 개월수 update")
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        void updateMonth() throws Exception {
+            data.add("userExpireDate", "2022-10-10");
+            data.add("userId", String.valueOf(1L));
 
-        MvcResult result = mockMvc.perform(patch("/admin/updateMonth")
-                        .params(data)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(handler().handlerType(RestControllerApi.class))
-                .andDo(print()).andReturn();
+            MvcResult result = mockMvc.perform(patch("/admin/updateMonth")
+                            .params(data)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(handler().handlerType(RestControllerApi.class))
+                    .andDo(print()).andReturn();
 
-        MockHttpServletRequest request = result.getRequest();
-        String userExpireDate = String.valueOf(request.getAttribute("userExpireDate"));
-        String userId = String.valueOf(request.getAttribute("userId"));
-        assertNotNull(userExpireDate);
-        assertNotNull(userId);
+            MockHttpServletRequest request = result.getRequest();
+            String userExpireDate = String.valueOf(request.getAttribute("userExpireDate"));
+            String userId = String.valueOf(request.getAttribute("userId"));
+            assertNotNull(userExpireDate);
+            assertNotNull(userId);
+        }
+
     }
 
 

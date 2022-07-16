@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.net.PortUnreachableException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
@@ -38,31 +39,15 @@ public class UserService {
     private final PasswordEncoder encoder;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public Map<String, Object> filterLogin(User loginUser) {
-        UserResponse userResponse = new UserResponse(loginUser);
-
-        Map<String, Object> list = new HashMap<>();
-        if (userResponse.getManagerYn() == 1) {
-            List<UserResponse> userList = userRepository.findByUserGymAndManagerYn(userResponse.getUserGym(), userResponse.getManagerYn() - 1)
-                    .stream().map(UserResponse::new).collect(Collectors.toList());
-            list.put("user", userResponse);
-            list.put("userList", userList);
-            return list;
-        } else if(userResponse.getManagerYn() == 0){
-            list.put("user", loginUser);
-            return list;
-        }
-        return null;
-    }
 
     public List<UserResponse> loadUser(User user){
-        List<UserResponse> result = userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
+        return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
+                .orElseThrow(PostNotFound::new)
                 .stream().map(UserResponse::new).collect(Collectors.toList());
-        return result;
     }
 
     public List<CalendarResponse> infoCalendar(User user) {
-        List<CalendarResponse> users = userRepository.findAllByFetchJoin()
+        List<CalendarResponse> users = userRepository.findAllByFetchJoin().orElseThrow(PostNotFound::new)
                 .get(Math.toIntExact(user.getUserId() - 1))
                 .getCalendarList().stream().map(CalendarResponse::new)
                 .collect(Collectors.toList());
@@ -70,7 +55,7 @@ public class UserService {
     }
 
     public Map<String, Object> infoRecord(User user) {
-        List<ExerciesVideo> videoList = userRepository.findAllByFetchJoin().
+        List<ExerciesVideo> videoList = userRepository.findAllByFetchJoin().orElseThrow(PostNotFound::new).
                 get(Math.toIntExact(user.getUserId() - 1)).getExercieVideosList();
         List<Exercies> exerciesList = videoList.stream().map(
                 video -> video.getExercies()
@@ -101,7 +86,7 @@ public class UserService {
 
     public List<UserResponse> reLoadMember(User user) {
         List<UserResponse> result = userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
-                .stream()
+                .orElseThrow(PostNotFound::new).stream()
                 .map(UserResponse::new)
                 .collect(Collectors.toList());
         return result;
@@ -116,23 +101,5 @@ public class UserService {
         UserEditor.UserEditorBuilder editorBuilder = user.toEditor();
         UserEditor userEditor = editorBuilder.userExpireDate(expiredDate).build();
         user.editor(userEditor);
-    }
-
-    public String collectPage(Map<String, Object> list, HttpSession session) {
-
-        if (list.size() == 2) {
-            logger.info("admin page");
-            logger.info("users : " + list.get("userList"));
-            logger.info("manager : " + list.get("user"));
-            session.setAttribute("userList", list.get("userList"));
-            session.setAttribute("user", list.get("user"));
-            return "redirect:/admin";
-        } else if (list.size() == 1) {
-            logger.info("user page");
-            session.setAttribute("user", list.get("user"));
-            return "redirect:/user/main";
-        }
-        logger.info("로그인 실패");
-        return "redirect:/user/login";
     }
 }

@@ -106,7 +106,7 @@ public class UserRepositoryTest {
         logger.info("저장 끝");
 
         //when
-        List<User> users= userRepository.findAllByFetchJoin();
+        List<User> users= userRepository.findAllByFetchJoin().orElseThrow(PostNotFound::new);
 
         //then
         assertEquals(4,users.get(0).getCalendarList().size());
@@ -127,7 +127,7 @@ public class UserRepositoryTest {
         testEntityManager.persist(users.get(2));
         logger.info("저장 끝");
 
-        List<User> result = userRepository.findByUserGymAndManagerYn("해운대",0);
+        List<User> result = userRepository.findByUserGymAndManagerYn("해운대",0).orElseThrow(PostNotFound::new);
 
         assertEquals(users.size(),result.size());
     }
