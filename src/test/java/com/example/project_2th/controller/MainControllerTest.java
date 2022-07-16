@@ -9,6 +9,7 @@ import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.ErrorResponse;
 import com.example.project_2th.response.ExerciesResponse;
+import com.example.project_2th.security.config.SecurityConfig;
 import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
@@ -65,9 +68,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {MainController.class, ObjectMapper.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = MainController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE,classes = SecurityConfig.class)
+        })
+@WithMockUser(roles = "USER")
 public class MainControllerTest {
 
     @MockBean
@@ -95,42 +100,6 @@ public class MainControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Nested
-    @DisplayName("security Login")
-    class login {
-        @BeforeEach
-        void setUp() {
-            user = userHelper.makeUser();
-
-            List<GrantedAuthority> roles= new ArrayList<>();
-
-            roles.add(new SimpleGrantedAuthority(user.getRole()));
-
-            UserContext userDetails = new UserContext(user,roles);
-
-            SecurityContext context = SecurityContextHolder.getContext();
-            context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getLoginNumber(), roles));
-
-            mockMvc = MockMvcBuilders
-                    .webAppContextSetup((WebApplicationContext) context)
-                    .apply(springSecurity())
-                    .build();
-
-            userService.join(user);
-        }
-
-        @Test
-        @WithMockUser
-        public void test2() throws Exception {
-            mockMvc.perform(formLogin("/loginInsert").userParameter("userPhone")
-                            .passwordParam("loginNumber").user(user.getUserPhone())
-                            .password(user.getLoginNumber()))
-                    .andDo(print())
-                    //정상 처리 되는지 확인
-                    .andExpect(status().is3xxRedirection());
-        }
-    }
-
 
     @DisplayName("calendar 페이지로 유저에 대한 운동 정보가 담겨서 이동한다.")
     @Test
@@ -148,8 +117,8 @@ public class MainControllerTest {
 
         given(this.userService.infoCalendar(user)).willReturn(calendarList);
 
-        mockMvc.perform(get("/infoCalender").session(session))
-                .andExpect(redirectedUrl("/test"))
+        mockMvc.perform(get("/user/infoCalender").session(session))
+                .andExpect(redirectedUrl("/user/test"))
                 .andExpect(request().sessionAttribute("calendarInfo", calendarList))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
@@ -172,8 +141,8 @@ public class MainControllerTest {
 
         given(this.userService.infoRecord(user)).willReturn(map);
 
-        mockMvc.perform(get("/goRecord").session(session))
-                .andExpect(redirectedUrl("/record"))
+        mockMvc.perform(get("/user/goRecord").session(session))
+                .andExpect(redirectedUrl("/user/record"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(request().sessionAttribute("exinfoList", map.get("exinfoList")))
                 .andExpect(request().sessionAttribute("videoList", map.get("videoList")))
@@ -192,9 +161,9 @@ public class MainControllerTest {
         given(this.exerciesService.exerciesInfo(exercies)).willReturn(response);
 
 
-        mockMvc.perform(post("/insertEx").flashAttr("user_exercies", exercies)
+        mockMvc.perform(post("/user/insertEx").flashAttr("user_exercies", exercies)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON).with(csrf()))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
     }
@@ -208,7 +177,7 @@ public class MainControllerTest {
         public void test5() throws Exception {
             session = new MockHttpSession();
             session.setAttribute("user", userHelper.makeUser());
-            mockMvc.perform(get("/main").session(session))
+            mockMvc.perform(get("/user/main").session(session))
                     .andDo(print())
                     .andExpect(status().isOk());
         }
@@ -221,7 +190,7 @@ public class MainControllerTest {
             session.setAttribute("user", userHelper.makeUser());
             session.setAttribute("calendarInfo", userHelper.makeCalendar());
 
-            mockMvc.perform(get("/test").session(session))
+            mockMvc.perform(get("/user/test").session(session))
                     .andDo(print())
                     .andExpect(status().isOk());
         }
@@ -236,7 +205,7 @@ public class MainControllerTest {
             session.setAttribute("exinfoList", userHelper.makeExinfos());
             session.setAttribute("videoList", userHelper.makeVideos());
 
-            mockMvc.perform(get("/record").session(session))
+            mockMvc.perform(get("/user/record").session(session))
                     .andDo(print())
                     .andExpect(status().isOk());
         }
