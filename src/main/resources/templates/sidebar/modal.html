@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -14,9 +15,9 @@
     <div class="modal_main">
       <div class = "modal_top">
         <div style = "font-size:80px;"><b style="font-size: 54px;">
-          <br th:if="${session.user?.getManagerYn() == 0}" th:text="${session.user?.getUserName()} + ' 님'"></div>
-          <br th:if="${session.user?.getManagerYn() == 1}" th:text="${session.user?.getUserName()}+' 트레이너님'"></div>
-      <div th:if="${session.user?.getManagerYn() == 0}">
+          <br sec:authorize="hasRole('ROLE_USER')" th:text="${session.user?.getUserName()} + ' 님'"></div>
+          <br sec:authorize="hasRole('ROLE_ADMIN')" th:text="${session.user?.getUserName()}+' 트레이너님'"></div>
+      <div sec:authorize="hasRole('ROLE_USER')">
         <div class = "modal_top_left">
             <div>만기일</div>
           </div>
@@ -25,8 +26,8 @@
           </div>
         </div>
       </div>
-      <div th:if="${session.user?.getManagerYn() == 1}"></div>
-    <th:block th:if = "${session.user?.getManagerYn() == 1 }">
+      <div sec:authorize="hasRole('ROLE_ADMIN')"></div>
+    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
       <div class = "modal_mid" >
         <div class = "modal_mid_mid">
           <div class = "modal_mid_left"><img id="moicon" src="/static/image/diary.png" onclick = "goMember()"></div>
@@ -42,7 +43,7 @@
         </div>
       </div>
     </th:block>
-    <th:block th:unless = "${session.user?.getManagerYn() == 1 }">
+    <th:block sec:authorize="hasRole('ROLE_USER')">
         <div class = "modal_mid">
           <div class = "modal_mid_mid">
             <div class = "modal_mid_left"><img th:onclick="go_calendar()" id="moicon" src="/static/image/diary.png"></div>
