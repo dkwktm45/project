@@ -6,6 +6,12 @@ html, body {
     padding: 0;
 }
 
+.alert{
+    width: 100%;
+    font-size: 43px;
+    margin-top: 3%;
+    border-radius: 41px;
+}
 
 #title_name{
     position: absolute;

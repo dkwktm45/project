@@ -57,7 +57,13 @@ public class MainController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(@RequestParam(value = "exception",required = false)String exception,
+                        @RequestParam(value = "error",required = false)String error,
+                        Model model) {
+
+        model.addAttribute("exception",exception);
+        model.addAttribute("error",error);
+
         return "login";
     }
 

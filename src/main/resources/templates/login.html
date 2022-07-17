@@ -23,6 +23,9 @@
         <div class="input-group mb-3 ">
             <input class="form-control input-lg" placeholder="회원번호를 입력해주세요" name="loginNumber" type="password"  aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
         </div>
+        <div th:if="${param.error}" class="input-group mb-3 ">
+            <span th:text="${exception}" class="alert alert-danger"></span>
+        </div>
         <input font-family="Regular" class="button mt-5" type = "submit" value ="로그인">
     </div>
 </form>

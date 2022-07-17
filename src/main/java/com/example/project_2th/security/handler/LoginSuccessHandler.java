@@ -33,7 +33,6 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         HttpSession session = request.getSession(true);
         User user = (User) authentication.getPrincipal();
         UserResponse userResponse = new UserResponse(user);
-        response.setContentType("text/plain;charset=UTF-8");
 
         if (userResponse.getManagerYn() == 1) {
             session.setAttribute("user", userResponse);

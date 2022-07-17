@@ -1,6 +1,7 @@
 package com.example.project_2th.security.config;
 
 import com.example.project_2th.security.CustomAuthenticationProvider;
+import com.example.project_2th.security.handler.LoginFailHandler;
 import com.example.project_2th.security.handler.LoginSuccessHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/user/login**").permitAll()
                 .antMatchers("/user/**").hasAnyRole("USER")
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
@@ -59,7 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .loginPage("/user/login").permitAll()
                         .loginProcessingUrl("/loginInsert")
                         .usernameParameter("userPhone").passwordParameter("loginNumber")
-                        .successHandler(new LoginSuccessHandler())
+                        .successHandler(new LoginSuccessHandler()).failureHandler(new LoginFailHandler())
                         .authenticationDetailsSource(authenticationDetailsSource)
                 );
     }
