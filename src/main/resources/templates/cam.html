@@ -74,7 +74,7 @@
         var data = new FormData();
         data.append('user', userinfo);
         data.append('pwd', 'password');
-        url = "/insertExURL?userId="+[[${session.user.userId}]]+"&ex_seq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
+        url = "/exercies-info?userId="+[[${session.user.userId}]]+"&ex_seq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
 
         var oReq = new XMLHttpRequest();
         oReq.open("POST", url, true);
@@ -145,7 +145,7 @@
         console.log(b);
 
         cnt = 0;
-        url = "/user/insertExURL?userId="+[[${session.user.userId}]]+"&exSeq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
+        url = "/user/exercies-info?userId="+[[${session.user.userId}]]+"&exSeq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
 
         var oReq = new XMLHttpRequest();
         oReq.open("POST", url, true);
@@ -202,10 +202,10 @@
           var oReq = new XMLHttpRequest();
           var url
           if (feedback_l==null){
-            url = "/user/insertBadImage?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_l;
+            url = "/user/pose-bad?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_l;
           }else if(feedback_r==null){
             feedback_r ="test"
-            url = "/user/insertBadImage?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_r;
+            url = "/user/pose-bad?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_r;
           }
           console.log(url)
           oReq.open("PUT", url, true);
@@ -237,7 +237,7 @@
             const b = new Blob(recordedChunks,{ type: "video/webm"});
             console.log(b);
 
-            url = "/web/insertExURL.do?user_id=<%=member.getUser_id()%>&ex_seq=<%=member.getEx_seq()%>&cnt="+cnt;
+            url = "/web/exercies-info.do?user_id=<%=member.getUser_id()%>&ex_seq=<%=member.getEx_seq()%>&cnt="+cnt;
 
             var oReq = new XMLHttpRequest();
             oReq.open("POST", url, true);

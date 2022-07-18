@@ -114,7 +114,7 @@ public class MainControllerTest {
 
         given(this.userService.infoCalendar(user)).willReturn(calendarList);
 
-        mockMvc.perform(get("/user/infoCalender").session(session))
+        mockMvc.perform(get("/user/calendar").session(session))
                 .andExpect(redirectedUrl("/user/test"))
                 .andExpect(request().sessionAttribute("calendarInfo", calendarList))
                 .andExpect(status().is3xxRedirection())
@@ -138,7 +138,7 @@ public class MainControllerTest {
 
         given(this.userService.infoCalendar(user)).willReturn(calendarList);
 
-        mockMvc.perform(get("/user/infoCalender").session(session))
+        mockMvc.perform(get("/user/calendar").session(session))
                 .andExpect(redirectedUrl("/user/test"))
                 .andExpect(request().sessionAttribute("calendarInfo", calendarList))
                 .andExpect(status().is3xxRedirection())
@@ -148,7 +148,7 @@ public class MainControllerTest {
     }
 
 
-    @DisplayName("/goRecord session에는 exinfoList, videoList가 담긴채로 이동한다.")
+    @DisplayName("/exinfo session에는 exinfoList, videoList가 담긴채로 이동한다.")
     @Test
     public void test7() throws Exception {
         session = new MockHttpSession();
@@ -163,7 +163,7 @@ public class MainControllerTest {
 
         given(this.userService.infoRecord(user)).willReturn(map);
 
-        mockMvc.perform(get("/user/goRecord").session(session))
+        mockMvc.perform(get("/user/exinfo").session(session))
                 .andExpect(redirectedUrl("/user/record"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(request().sessionAttribute("exinfoList", map.get("exinfoList")))
@@ -173,7 +173,7 @@ public class MainControllerTest {
 
     }
 
-    @DisplayName("/insertEx 이동하면서 session exinfo 정보를 담는다.")
+    @DisplayName("/exinfo 이동하면서 session exinfo 정보를 담는다.")
     @Test
     public void test8() throws Exception {
         session = new MockHttpSession();
@@ -183,7 +183,7 @@ public class MainControllerTest {
         given(this.exerciesService.exerciesInfo(exercies)).willReturn(response);
 
 
-        mockMvc.perform(post("/user/insertEx").flashAttr("user_exercies", exercies)
+        mockMvc.perform(post("/user/exinfo").flashAttr("user_exercies", exercies)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON).with(csrf()))
                 .andDo(print())

@@ -33,10 +33,11 @@ public class MainController {
     private final ExerciesService exerciesService;
 
     private final Logger logger = LoggerFactory.getLogger(MainController.class);
+    
     // 기록페이지 re
-    @GetMapping("/goRecord")
+    @GetMapping("/exinfo")
     public String goRecord(HttpServletRequest req) {
-        logger.info("goRecord perform");
+        logger.info("exinfo [get] perform");
 
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
@@ -52,12 +53,12 @@ public class MainController {
 
     // 기록페이지
     @GetMapping("/record")
-    public String record() {
+    public String recordPage() {
         return "record";
     }
 
     @GetMapping("/login")
-    public String login(@RequestParam(value = "exception",required = false)String exception,
+    public String loginPage(@RequestParam(value = "exception",required = false)String exception,
                         @RequestParam(value = "error",required = false)String error,
                         Model model) {
 
@@ -69,24 +70,24 @@ public class MainController {
 
 
     @GetMapping("/main")
-    public String main() {
+    public String mainPage() {
         return "main";
     }
 
     @GetMapping("/error")
-    public String error() {
+    public String errorPage() {
         return "error";
     }
     // calender
     @GetMapping("/test")
-    public String test() {
+    public String testPage() {
         return "test";
     }
 
     // gocalender
-    @GetMapping(value = "/infoCalender")
+    @GetMapping(value = "/calendar")
     public String infoCalender(HttpServletRequest req) {
-        logger.info("infoCalender perform");
+        logger.info("calendar perform");
 
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("user");
@@ -97,9 +98,9 @@ public class MainController {
         return "redirect:/user/test";
     }
 
-    @PostMapping(value = "/insertEx")
+    @PostMapping(value = "/exinfo")
     public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,HttpServletRequest req) throws Exception {
-        logger.info("insertEx perform");
+        logger.info("exinfo [post] perform");
 
         HttpSession session = req.getSession();
         ExerciesResponse exinfo = exerciesService.exerciesInfo(exercies);

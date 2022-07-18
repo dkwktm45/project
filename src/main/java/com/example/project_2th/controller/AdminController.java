@@ -2,6 +2,7 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.User;
 import com.example.project_2th.response.UserResponse;
+import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +29,12 @@ public class AdminController {
     private final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping({"/",""})
-    public String admin(HttpServletRequest request,@AuthenticationPrincipal User user) {
+    public String adminPage(HttpServletRequest request
+            ,@AuthenticationPrincipal UserContext user) {
         logger.info("admin : loadUser perform");
 
         HttpSession session = request.getSession();
-        List<UserResponse> videoResponses = userService.loadUser(user);
+        List<UserResponse> videoResponses = userService.loadUser(user.getUser());
         session.setAttribute("userList",videoResponses);
 
         logger.info("admin : loadUser end {}",videoResponses);
@@ -45,12 +47,12 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/Join")
+    @GetMapping("/register")
     public String goJoin() {
         return "/join";
     }
 
-    @GetMapping("/Member")
+    @GetMapping("/member")
     public String aminMember(HttpServletRequest req , HttpSession session) {
         logger.info("aminMember : reLoadMember perform");
 
@@ -60,12 +62,12 @@ public class AdminController {
         session.setAttribute("userList",responseList);
 
         logger.info("aminMember : reLoadMember end {}",responseList);
-        return "/adminMember";
+        return "/admin-member";
     }
 
-    @PutMapping(value = "/joinMember")
-    public String joinMember(@RequestBody User user){
-        logger.info("joinMember : join perform");
+    @PutMapping(value = "/join-member")
+    public String insertMember(@RequestBody User user){
+        logger.info("join-member : join perform");
 
         logger.info("name : " +user.getUserName());
         logger.info("videoYn : " +String.valueOf(user.getVideoYn()));
@@ -75,10 +77,7 @@ public class AdminController {
         logger.info("phone : " +user.getUserPhone());
 
         userService.join(user);
-
-        logger.info("joinMember : join");
-
-        return "redirect:/admin/Join";
+        return "redirect:/admin/register";
     }
 
 }

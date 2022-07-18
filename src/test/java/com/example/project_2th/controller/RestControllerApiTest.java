@@ -108,7 +108,7 @@ class RestControllerApiTest {
         ObjectMapper mapper = new ObjectMapper();
         String jsonInString = mapper.writeValueAsString(calendar);
 
-        mockMvc.perform(post("/user/calendarView")
+        mockMvc.perform(post("/user/calendar-info")
                         .content(jsonInString)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -136,7 +136,7 @@ class RestControllerApiTest {
         data.add("exSeq", String.valueOf(userHelper.makeExercies().getExSeq()));
         data.add("cnt", userHelper.makeExercies().getCnt());
 
-        MvcResult result = mockMvc.perform(post("/user/insertExURL")
+        MvcResult result = mockMvc.perform(post("/user/exercies-info")
                         .params(data).content(bytes)
                         .contentType(MediaType.APPLICATION_JSON).with(csrf()))
                 .andExpect(status().isOk())
@@ -163,7 +163,7 @@ class RestControllerApiTest {
 
         }
 
-        @DisplayName("/insertPose : video 번호를 통해 자세정보와 운동정보를 보내는 uri")
+        @DisplayName("/pose : video 번호를 통해 자세정보와 운동정보를 보내는 uri")
         @Test
         @WithMockUser(roles = "USER")
         void getVideoinfo() throws Exception {
@@ -176,7 +176,7 @@ class RestControllerApiTest {
             given(exerciesVideoService.selectVideoInfo(exerciesVideo.getVideoSeq()))
                     .willReturn(map);
 
-            mockMvc.perform(get("/user/insertPose")
+            mockMvc.perform(get("/user/pose")
                             .params(data)
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(csrf()))
@@ -191,7 +191,7 @@ class RestControllerApiTest {
             verify(exerciesVideoService).selectVideoInfo(exerciesVideo.getVideoSeq());
         }
 
-        @DisplayName("/insertBadImage : bad image 를 저장하는 uri")
+        @DisplayName("/pose-bad : bad image 를 저장하는 uri")
         @Test
         @WithMockUser(roles = "USER")
         void insertBadImage() throws Exception {
@@ -199,7 +199,7 @@ class RestControllerApiTest {
             data.add("ex_seq", String.valueOf(1L));
 
 
-            MvcResult result = mockMvc.perform(put("/user/insertBadImage")
+            MvcResult result = mockMvc.perform(put("/user/pose-bad")
                             .params(data)
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(csrf()))
@@ -221,7 +221,7 @@ class RestControllerApiTest {
             data.add("userExpireDate", "2022-10-10");
             data.add("userId", String.valueOf(1L));
 
-            MvcResult result = mockMvc.perform(patch("/admin/updateMonth")
+            MvcResult result = mockMvc.perform(patch("/admin/month")
                             .params(data)
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(csrf()))

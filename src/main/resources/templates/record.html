@@ -236,7 +236,7 @@
         document.querySelector('.record_bg').style.display = 'block';
 
         $.ajax({
-            url: "/insertPose?videoSeq=" + video_seq,
+            url: "/pose?videoSeq=" + video_seq,
             contentType: "application/json; charset=UTF-8",
             type: "GET",
             success: function (result) {

@@ -1,9 +1,9 @@
 
 function go_calendar(){
-    location.href = "/user/infoCalender";
+    location.href = "/user/calendar";
 }
 function go_record(){
-    location.href = "/user/goRecord";
+    location.href = "/user/exinfo";
 }
 
 function goJoin(){
@@ -13,7 +13,7 @@ function goVideo(){
     location.href = "/admin/video";
 }
 function goMember(){
-    location.href = "/admin/Member";
+    location.href = "/admin/member";
 }
 window.onload = function() {
     function show1 () {

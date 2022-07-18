@@ -41,9 +41,9 @@ public class RestControllerApi {
 
     private final Logger logger = LoggerFactory.getLogger(RestControllerApi.class);
 
-    @PostMapping(value = "/user/calendarView")
+    @PostMapping(value = "/user/calendar-info")
     public ResponseEntity<List<ExerciesResponse>> calendarView(@RequestBody  Calendar calendar) throws Exception {
-        logger.info("calendarView perfom");
+        logger.info("calendar-info perfom");
 
         logger.info("user : " + calendar.getUser());
         logger.info("day : " + calendar.getExDay());
@@ -53,7 +53,7 @@ public class RestControllerApi {
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(exinfoList);
     }
 
-    @PostMapping(value = "/user/insertExURL")
+    @PostMapping(value = "/user/exercies-info")
     public String insertExURL(HttpServletRequest request) throws Exception {
         logger.info("insertExURL perfom");
 
@@ -70,7 +70,7 @@ public class RestControllerApi {
         return "main";
     }
 
-    @GetMapping(value = "/user/insertPose")
+    @GetMapping(value = "/user/pose")
     public ResponseEntity<Map<String, Object>> getVideoinfo(HttpServletRequest request) throws Exception {
         logger.info("insertPose perfom ");
 
@@ -88,7 +88,7 @@ public class RestControllerApi {
         return ResponseEntity.ok().body(videoInfo);
     }
 
-    @PutMapping(value = "/user/insertBadImage")
+    @PutMapping(value = "/user/pose-bad")
     public void insertBadImage(HttpServletRequest requestuest) throws Exception {
         logger.info("insertBadImage perfom");
 
@@ -100,7 +100,7 @@ public class RestControllerApi {
     }
 
 
-    @PatchMapping("/admin/updateMonth")
+    @PatchMapping("/admin/month")
     public void updateMonth(HttpServletRequest request){
         logger.info("updateMonth perfom return void [params] userExpireDate : {} ,userId : {}"
         ,request.getParameter("userExpireDate"),request.getParameter("userId"));

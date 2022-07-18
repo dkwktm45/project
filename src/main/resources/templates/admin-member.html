@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>admin_member</title>
-  <link rel="stylesheet" href="/static/css/adminMember.css">
+  <link rel="stylesheet" href="/static/css/admin-member.css">
   <link rel="stylesheet" th:href="@{/static/css/side/modal.css}">
   <link rel="stylesheet" href="/static/css/bootstrap.css">
   <script th:src="@{/static/js/side/modal.js}"></script>
@@ -104,12 +104,12 @@
     console.log(dateString)
 
     $.ajax({
-      url: "/admin/updateMonth",
+      url: "/admin/month",
       type:"PATCH",
       data: {"userExpireDate" : dateString,"userId" :$(this).closest(".bot_user_right").prev().attr("id") },
       success:function(){
         console.log("성공")
-        location.href = "/admin/Member"
+        location.href = "/admin/member"
       },error: function (request, status, error) {
         alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
       }
