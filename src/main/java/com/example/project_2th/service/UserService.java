@@ -6,9 +6,6 @@ import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.UserResponse;
 import com.example.project_2th.response.VideoResponse;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -19,9 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.net.PortUnreachableException;
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,11 +33,13 @@ public class UserService {
     private final PasswordEncoder encoder;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-
-    public List<UserResponse> loadUser(User user){
+    // 주의!!
+    public List<VideoResponse> loadUser(User user){
+        List<ExerciesVideo> responses = new ArrayList<>();
         return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
                 .orElseThrow(PostNotFound::new)
-                .stream().map(UserResponse::new).collect(Collectors.toList());
+                .stream()
+                .map().collect(Collectors.toList());
     }
 
     public List<CalendarResponse> infoCalendar(User user) {

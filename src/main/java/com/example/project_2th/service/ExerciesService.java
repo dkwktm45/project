@@ -29,7 +29,7 @@ public class ExerciesService {
     private final Logger logger = LoggerFactory.getLogger(ExerciesService.class);
 
     public ExerciesResponse exerciesInfo(Exercies exercies){
-        exercies.setExDay(Date.valueOf(LocalDate.now()));
+        exercies.setExDay(LocalDate.now());
         ExerciesResponse response = new ExerciesResponse(exercies);
         return response;
     }

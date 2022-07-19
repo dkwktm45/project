@@ -91,7 +91,7 @@ public class MainControllerTest {
     @Test
     @DisplayName("로그인 페이지")
     public void test1() throws Exception {
-        mockMvc.perform(get("/login"))
+        mockMvc.perform(get("/user/login"))
                 .andDo(print())
                 //정상 처리 되는지 확인
                 .andExpect(status().isOk());
@@ -101,10 +101,10 @@ public class MainControllerTest {
     @DisplayName("calendar 페이지로 유저에 대한 운동 정보가 담겨서 이동한다.")
     @Test
     public void test6() throws Exception {
+        // given
         session = new MockHttpSession();
         session.setAttribute("user", userHelper.makeUser());
         user = (User) session.getAttribute("user");
-
         Calendar calendar = userHelper.makeCalendar();
         CalendarResponse response = new CalendarResponse(calendar);
         List<CalendarResponse> calendarList = new ArrayList<>();
@@ -112,8 +112,10 @@ public class MainControllerTest {
         calendarList.add(response);
         calendarList.add(response);
 
+        // when
         given(this.userService.infoCalendar(user)).willReturn(calendarList);
 
+        // then
         mockMvc.perform(get("/user/calendar").session(session))
                 .andExpect(redirectedUrl("/user/test"))
                 .andExpect(request().sessionAttribute("calendarInfo", calendarList))
@@ -125,10 +127,10 @@ public class MainControllerTest {
     @DisplayName("calendar 페이지로 유저에 대한 운동 정보가 담겨서 이동한다.")
     @Test
     public void test11() throws Exception {
+        //given
         session = new MockHttpSession();
         session.setAttribute("user", userHelper.makeUser());
         user = (User) session.getAttribute("user");
-
         Calendar calendar = userHelper.makeCalendar();
         CalendarResponse response = new CalendarResponse(calendar);
         List<CalendarResponse> calendarList = new ArrayList<>();
@@ -136,8 +138,10 @@ public class MainControllerTest {
         calendarList.add(response);
         calendarList.add(response);
 
+        // when
         given(this.userService.infoCalendar(user)).willReturn(calendarList);
 
+        //then
         mockMvc.perform(get("/user/calendar").session(session))
                 .andExpect(redirectedUrl("/user/test"))
                 .andExpect(request().sessionAttribute("calendarInfo", calendarList))
@@ -151,6 +155,7 @@ public class MainControllerTest {
     @DisplayName("/exinfo session에는 exinfoList, videoList가 담긴채로 이동한다.")
     @Test
     public void test7() throws Exception {
+        // given
         session = new MockHttpSession();
         session.setAttribute("user", userHelper.makeUser());
         user = (User) session.getAttribute("user");
@@ -161,8 +166,10 @@ public class MainControllerTest {
         map.put("videoList", videoList);
         map.put("exinfoList", exinfoList);
 
+        // when
         given(this.userService.infoRecord(user)).willReturn(map);
 
+        // then
         mockMvc.perform(get("/user/exinfo").session(session))
                 .andExpect(redirectedUrl("/user/record"))
                 .andExpect(status().is3xxRedirection())
@@ -176,13 +183,15 @@ public class MainControllerTest {
     @DisplayName("/exinfo 이동하면서 session exinfo 정보를 담는다.")
     @Test
     public void test8() throws Exception {
+        // given
         session = new MockHttpSession();
         session.setAttribute("user", userHelper.makeUser());
         Exercies exercies = userHelper.makeExercies();
         ExerciesResponse response = new ExerciesResponse(exercies);
+        // when
         given(this.exerciesService.exerciesInfo(exercies)).willReturn(response);
 
-
+        // then
         mockMvc.perform(post("/user/exinfo").flashAttr("user_exercies", exercies)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON).with(csrf()))

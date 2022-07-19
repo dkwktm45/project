@@ -69,25 +69,26 @@ public class ExerciesServiceTest {
     @Test
     @DisplayName("exerciesInfo service : 운동의 대한 정보를 가져온다.")
     void exerciesInfo() {
+        //given
         Exercies exercies = userHelper.makeExercies();
 
-        Mockito.when(exinfoRepository.save(exercies)).thenReturn(null);
-
-
+        // when
         exerciesService = new ExerciesService(exinfoRepository);
-
         ExerciesResponse exinfo = exerciesService.exerciesInfo(exercies);
 
+        // then
         assertEquals(exinfo.getExCount(),exercies.getExCount());
 
-        Mockito.verify(exinfoRepository).save(refEq(exercies));
     }
 
     @Test
     @DisplayName("calendarExinfo : 날짜에 맞는 운동 정보")
     void calendarExinfo() {
+        // given
         Calendar calendar = userHelper.makeCalendar();
         List<Exercies> exercies = userHelper.makeExinfos();
+
+        // when
         Mockito.when(exinfoRepository.findExDay(calendar.getUser().getUserId(),calendar.getExDay()))
                 .thenReturn(exercies);
         exercies.forEach(ExerciesResponse::new);
@@ -95,6 +96,7 @@ public class ExerciesServiceTest {
         exerciesService = new ExerciesService(exinfoRepository);
         List<ExerciesResponse> exerciesResult =  exerciesService.calendarExinfo(calendar);
 
+        // then
         assertEquals(exerciesResult.get(0).getExCount(),exercies.get(0).getExCount());
         Mockito.verify(exinfoRepository).findExDay(calendar.getUser().getUserId(),calendar.getExDay());
     }

@@ -51,6 +51,7 @@ public class ExerciesVideoServiceTest {
     @DisplayName("videoSave service")
     @Test
     void videoSave() throws IOException {
+        // given
         User user = userHelper.makeUser();
         Exercies exercies = userHelper.makeExercies();
         byte[] bytes = new byte[]{1,2};
@@ -59,12 +60,14 @@ public class ExerciesVideoServiceTest {
         request.setContent(bytes);
         ServletInputStream stream = request.getInputStream();
 
+        // when
         Mockito.when(userRepository.findByUserId(anyLong())).thenReturn(Optional.ofNullable(user));
         Mockito.when(exinfoRepository.findByExSeq(anyLong())).thenReturn(exercies);
 
         exerciesVideoService = new ExerciesVideoService(userRepository,exinfoRepository,videoRepository);
         exerciesVideoService.videoSave("10",1L,1L,stream);
 
+        // then
         Mockito.verify(userRepository).findByUserId(anyLong());
         Mockito.verify(exinfoRepository).findByExSeq(anyLong());
     }
@@ -72,13 +75,15 @@ public class ExerciesVideoServiceTest {
     @DisplayName("selectVideoInfo service")
     @Test
     void selectVideoInfo() throws Exception {
-
+        // given
         ExerciesVideo video = userHelper.makeVideo();
+
+        // when
         Mockito.when(videoRepository.findByVideoSeq(anyLong())).thenReturn(Optional.ofNullable(video));
 
+        // then
         exerciesVideoService = new ExerciesVideoService(userRepository,exinfoRepository,videoRepository);
         Map<String,Object> result = exerciesVideoService.selectVideoInfo(anyLong());
-
         assertEquals(result.size(),2);
         Mockito.verify(videoRepository).findByVideoSeq(anyLong());
     }

@@ -87,7 +87,7 @@
             var resultDay = year+"-"+MD;
             const json = JSON.stringify(userinfo);
             $.ajax({
-                url: "/user/calendar-infoView",
+                url: "/user/calendar-info",
                 type: "POST",
                 data: JSON.stringify({"user" : userinfo, "exDay" : resultDay}),
                 dataType: "JSON",

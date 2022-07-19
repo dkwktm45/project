@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ExinfoRepository extends JpaRepository<Exercies,Long> {
@@ -13,7 +14,7 @@ public interface ExinfoRepository extends JpaRepository<Exercies,Long> {
             "where ex.user_id = (select user_id from user u "+
             "where u.user_id = :userId) and ex.ex_day = :exDay",nativeQuery = true)
     List<Exercies> findExDay( @Param("userId") Long userId,
-                              @Param("exDay") Date exDay);
+                              @Param("exDay") LocalDate exDay);
 
     @Query(value = "SELECT * FROM user_exercies uex " +
             "where uex.user_id= (select user_id from user u " +

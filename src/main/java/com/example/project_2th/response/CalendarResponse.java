@@ -10,12 +10,13 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Getter
 public class CalendarResponse {
     private Long id;
 
-    private Date exDay;
+    private LocalDate exDay;
     private String timeDiff;
     private String userWeight;
 

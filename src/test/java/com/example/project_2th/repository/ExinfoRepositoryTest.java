@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,7 +53,7 @@ class ExinfoRepositoryTest {
         logger.info("given");
         user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
 
-        Exercies exercies = Exercies.builder().exDay(Date.valueOf("2022-10-10")).exName("체스트 플라이").exCount("12")
+        Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
         em.persist(exercies);
 
@@ -70,7 +71,7 @@ class ExinfoRepositoryTest {
         logger.info("given");
         user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
 
-        Exercies exercies = Exercies.builder().exDay(Date.valueOf("2022-10-10")).exName("체스트 플라이").exCount("12")
+        Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
         em.persist(exercies);
 
@@ -89,7 +90,7 @@ class ExinfoRepositoryTest {
         logger.info("given");
         user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
 
-        Exercies exercies = Exercies.builder().exDay(Date.valueOf("2022-10-10")).exName("체스트 플라이").exCount("12")
+        Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
         em.persist(exercies);
         exercies = em.find(Exercies.class,1L);
@@ -105,7 +106,7 @@ class ExinfoRepositoryTest {
     void findByExKinds() {
         logger.info("given");
         user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
-        Exercies exercies = Exercies.builder().exDay(Date.valueOf("2022-10-10")).exName("체스트 플라이").exCount("12")
+        Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
         em.persist(exercies);
         em.persist(exercies);

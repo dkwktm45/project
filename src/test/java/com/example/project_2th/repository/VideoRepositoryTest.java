@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,7 +51,7 @@ class VideoRepositoryTest {
         user = userHelper.userCalendar();
         em.persist(user);
         user = em.find(User.class,1L);
-        exercies = Exercies.builder().exDay(Date.valueOf("2022-06-15")).exName("체스트 플라이").exCount("12")
+        exercies = Exercies.builder().exDay(LocalDate.parse("2022-06-15")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
         em.persist(exercies);
     }

@@ -3,9 +3,11 @@ package com.example.project_2th.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +20,9 @@ public class Exercies {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long exSeq;
-    private Date exDay;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate exDay;
     private String exName;
     private String exKinds;
     private String userSet;

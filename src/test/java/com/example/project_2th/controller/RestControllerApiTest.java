@@ -1,5 +1,6 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.controller.helper.GsonLocalDateTimeAdapter;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
@@ -12,6 +13,8 @@ import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
 import com.example.project_2th.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -94,22 +97,29 @@ class RestControllerApiTest {
     @Test
     @WithMockUser(roles = "USER")
     void calendarView() throws Exception {
+        // given
         calendar = Calendar.builder().user(User.builder().userId(1L).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
-                .managerYn(0).videoYn(1).userGym("해운대").build()).exDay(Date.valueOf("2021-05-05")).build();
+                .managerYn(0).videoYn(1).userGym("해운대").build()).exDay(LocalDate.parse("2021-05-05")).build();
         exerciesList = new ArrayList<>();
         exerciesList.add(this.userHelper.makeExercies());
         exerciesList.add(this.userHelper.makeExercies());
         exerciesList.add(this.userHelper.makeExercies());
         List<ExerciesResponse> list = new ArrayList(exerciesList);
+
+        // when
         given(this.exerciesService.calendarExinfo(any(Calendar.class)))
                 .willReturn(list);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new GsonLocalDateTimeAdapter())
+                .create();
 
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonInString = mapper.writeValueAsString(calendar);
+        String json = gson.toJson(calendar);
 
+        // then
         mockMvc.perform(post("/user/calendar-info")
-                        .content(jsonInString)
+                        .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(csrf()))
@@ -130,15 +140,18 @@ class RestControllerApiTest {
     @Test
     @WithMockUser(roles = "USER")
     void insertExURL() throws Exception {
+        //given
         byte[] bytes = new byte[]{1, 2};
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("userId", "1");
         data.add("exSeq", String.valueOf(userHelper.makeExercies().getExSeq()));
         data.add("cnt", userHelper.makeExercies().getCnt());
 
+        // when
         MvcResult result = mockMvc.perform(post("/user/exercies-info")
                         .params(data).content(bytes)
                         .contentType(MediaType.APPLICATION_JSON).with(csrf()))
+                //then
                 .andExpect(status().isOk())
                 .andExpect(handler().handlerType(RestControllerApi.class))
                 .andDo(print()).andReturn();
@@ -167,15 +180,17 @@ class RestControllerApiTest {
         @Test
         @WithMockUser(roles = "USER")
         void getVideoinfo() throws Exception {
+            // given
             ExerciesVideo exerciesVideo = userHelper.makeVideo();
             data.add("videoSeq", String.valueOf(exerciesVideo.getVideoSeq()));
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("exinfo", userHelper.makeExercies());
             map.put("postures", userHelper.makePose());
 
+            // when
             given(exerciesVideoService.selectVideoInfo(exerciesVideo.getVideoSeq()))
                     .willReturn(map);
-
+            // then
             mockMvc.perform(get("/user/pose")
                             .params(data)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -195,10 +210,12 @@ class RestControllerApiTest {
         @Test
         @WithMockUser(roles = "USER")
         void insertBadImage() throws Exception {
+            //given
             data.add("ai_comment", String.valueOf(2L));
             data.add("ex_seq", String.valueOf(1L));
 
 
+            // when
             MvcResult result = mockMvc.perform(put("/user/pose-bad")
                             .params(data)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -206,7 +223,7 @@ class RestControllerApiTest {
                     .andExpect(status().isOk())
                     .andExpect(handler().handlerType(RestControllerApi.class))
                     .andDo(print()).andReturn();
-
+            // then
             MockHttpServletRequest request = result.getRequest();
             String comment = String.valueOf(request.getAttribute("ai_comment"));
             String seq = String.valueOf(request.getAttribute("ex_seq"));
@@ -218,9 +235,11 @@ class RestControllerApiTest {
         @Test
         @WithMockUser(roles = "ADMIN")
         void updateMonth() throws Exception {
+            // given
             data.add("userExpireDate", "2022-10-10");
             data.add("userId", String.valueOf(1L));
 
+            //when
             MvcResult result = mockMvc.perform(patch("/admin/month")
                             .params(data)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -229,6 +248,7 @@ class RestControllerApiTest {
                     .andExpect(handler().handlerType(RestControllerApi.class))
                     .andDo(print()).andReturn();
 
+            //then
             MockHttpServletRequest request = result.getRequest();
             String userExpireDate = String.valueOf(request.getAttribute("userExpireDate"));
             String userId = String.valueOf(request.getAttribute("userId"));

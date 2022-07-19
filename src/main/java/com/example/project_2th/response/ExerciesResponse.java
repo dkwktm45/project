@@ -10,11 +10,12 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Getter
 public class ExerciesResponse {
     private Long exSeq;
-    private Date exDay;
+    private LocalDate exDay;
     private String exName;
     private String exKinds;
     private String userSet;

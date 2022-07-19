@@ -4,6 +4,7 @@ import com.example.project_2th.entity.User;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.ExerciesResponse;
+import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +38,11 @@ public class MainController {
     
     // 기록페이지 re
     @GetMapping("/exinfo")
-    public String goRecord(HttpServletRequest req) {
+    public String goRecord(HttpServletRequest req,@AuthenticationPrincipal User user) {
         logger.info("exinfo [get] perform");
 
         HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
+
         Map<String,Object> map = userService.infoRecord(user);
         session.setAttribute("exinfoList", map.get("exinfoList"));
         session.setAttribute("videoList", map.get("videoList"));
@@ -86,11 +88,10 @@ public class MainController {
 
     // gocalender
     @GetMapping(value = "/calendar")
-    public String infoCalender(HttpServletRequest req) {
+    public String infoCalender(HttpServletRequest req,@AuthenticationPrincipal User user) {
         logger.info("calendar perform");
 
         HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("user");
         List<CalendarResponse> responses = userService.infoCalendar(user);
         session.setAttribute("calendarInfo",responses);
 

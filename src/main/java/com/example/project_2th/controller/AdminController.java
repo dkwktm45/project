@@ -30,11 +30,11 @@ public class AdminController {
 
     @GetMapping({"/",""})
     public String adminPage(HttpServletRequest request
-            ,@AuthenticationPrincipal UserContext user) {
+            ,@AuthenticationPrincipal User user) {
         logger.info("admin : loadUser perform");
 
         HttpSession session = request.getSession();
-        List<UserResponse> videoResponses = userService.loadUser(user.getUser());
+        List<UserResponse> videoResponses = userService.loadUser(user);
         session.setAttribute("userList",videoResponses);
 
         logger.info("admin : loadUser end {}",videoResponses);
@@ -79,5 +79,4 @@ public class AdminController {
         userService.join(user);
         return "redirect:/admin/register";
     }
-
 }

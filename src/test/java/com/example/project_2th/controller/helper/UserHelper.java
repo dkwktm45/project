@@ -27,7 +27,7 @@ public class UserHelper {
     }
 
     public Calendar userCalendar2(){
-        return Calendar.builder().user(makeUser()).exDay(Date.valueOf("2021-05-05")).build();
+        return Calendar.builder().user(makeUser()).exDay(LocalDate.parse("2021-05-05")).build();
     }
     public List<User> makeUsers(){
         List<User> users = new ArrayList<>();
@@ -48,8 +48,9 @@ public class UserHelper {
         return Exercies.builder().exSeq(makeId()).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(makeUser()).cnt("10").build();
     }
+
     public Calendar makeCalendar(){
-        return Calendar.builder().userWeight("80").exDay(Date.valueOf("2022-10-11"))
+        return Calendar.builder().userWeight("80").exDay(LocalDate.parse("2022-10-11"))
                 .timeDiff("30").user(makeUser()).build();
     }
 
@@ -105,7 +106,7 @@ public class UserHelper {
     }
 
     public List<ExerciesVideo> makeVideos(){
-        Exercies exinfo = Exercies.builder().exDay(Date.valueOf("2022-06-15")).exName("체스트 플라이").exCount("12")
+        Exercies exinfo = Exercies.builder().exDay(LocalDate.parse("2022-06-15")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(makeUser()).cnt("10").build();
 
         ExerciesVideo video = ExerciesVideo.builder().exercies(makeExercies()).fileName("test").videoDate(Date.valueOf("2022-06-15"))
@@ -117,7 +118,7 @@ public class UserHelper {
         return videoList;
     }
     public List<Exercies> makeExinfos(){
-        Exercies exinfo = Exercies.builder().exDay(Date.valueOf("2022-06-15")).exName("체스트 플라이").exCount("12")
+        Exercies exinfo = Exercies.builder().exDay(LocalDate.parse("2022-06-15")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(makeUser()).cnt("10").build();
         List<Exercies> exercies = new ArrayList<>();
         exercies.add(exinfo);

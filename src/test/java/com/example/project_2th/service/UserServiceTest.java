@@ -75,13 +75,13 @@ public class UserServiceTest {
         @DisplayName("캘린더정보 4개를 가져온다.")
         @Test
         void infoCalendarSuccess(){
-
+            // when
             Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(users));
 
             UserService userService = new UserService(userRepository,encoder);
 
             List<CalendarResponse> exinfo = userService.infoCalendar(user);
-
+            // then
             assertEquals(4,exinfo.size());
             verify(userRepository).findAllByFetchJoin();
         }
@@ -89,11 +89,11 @@ public class UserServiceTest {
         @DisplayName("캘린더정보 없을시 PostNotFound 클래스를 호출한다.")
         @Test
         void infoCalendarFail(){
-
+            // when
             Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(null));
 
             UserService userService = new UserService(userRepository,encoder);
-
+            // then
             assertThrows(PostNotFound.class,()->{userService.infoCalendar(user);});
             verify(userRepository).findAllByFetchJoin();
         }
@@ -101,16 +101,19 @@ public class UserServiceTest {
         @DisplayName("사용자의 video exercies 정보들을 가져온다.")
         @Test
         void infoRecordSuccess(){
+            // given
             Map<String,Object> map = new HashMap<>();
             List<Exercies> exinfoList = userHelper.makeExinfos();
             List<ExerciesVideo> videoList = userHelper.makeVideos();
             map.put("videoList",videoList);
             map.put("exinfoList",exinfoList);
 
+            // when
             Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(users));
 
             UserService userService = new UserService(userRepository,encoder);
 
+            // then
             Map<String, Object> exinfo = userService.infoRecord(user);
             assertEquals(exinfo.size(),2);
             assertNotNull(exinfo.get("videoList"));
@@ -121,16 +124,17 @@ public class UserServiceTest {
         @DisplayName("Video 정보가 없을 시 PostNotFound를 호출한다.")
         @Test
         void infoRecordFail(){
+            // given
             Map<String,Object> map = new HashMap<>();
             List<Exercies> exinfoList = userHelper.makeExinfos();
             List<ExerciesVideo> videoList = userHelper.makeVideos();
             map.put("videoList",videoList);
             map.put("exinfoList",exinfoList);
-
+            // when
             Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(null));
 
             UserService userService = new UserService(userRepository,encoder);
-
+            // then
             assertThrows(PostNotFound.class,()->{userService.infoRecord(user);});
             verify(userRepository).findAllByFetchJoin();
         }
@@ -161,31 +165,29 @@ public class UserServiceTest {
         @DisplayName("join success")
         @Test
         void test4(){
+            // when
             Mockito.when(userRepository.findByUserIdAndUserGym(loginUser.getUserPhone(),loginUser.getUserGym())).thenReturn(null);
             Mockito.when(userRepository.save(any(User.class))).thenReturn(null);
 
+            // then
             UserService userService = new UserService(userRepository,encoder);
             userService.join(user);
-
             verify(userRepository).findByUserIdAndUserGym(
                     refEq(loginUser.getUserPhone()),refEq(loginUser.getUserGym()));
         }
-        @DisplayName("join success")
-        @Test
-        void test20(){
-            String test = encoder.encode("1234");
-            System.out.println("encoder 값 : " + test);
-        }
+
 
         @DisplayName("join fail")
         @Test
         void test5(){
+            // when
             Mockito.when(userRepository.findByUserIdAndUserGym(
                     anyString()
                     ,anyString())).thenReturn(ofNullable(loginUser));
             Mockito.when(userRepository.save(loginUser)).thenReturn(null);
             UserService userService = new UserService(userRepository,encoder);
 
+            // then
             IllegalStateException e = assertThrows(IllegalStateException.class,() ->{
                 userService.join(user);
             });
