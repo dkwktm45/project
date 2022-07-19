@@ -85,7 +85,7 @@ public class UserHelper {
     }
 
     public Map<String , Object> makeAdmin(){
-        User user =  User.builder().userName("김화순").loginNumber("9696").userPhone("010-4311-9696")
+        User user =  User.builder().userName("김화순").loginNumber("9696").userPhone("010-1234-5678")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                 .managerYn(1).exerciesList(makeExinfos()).exercieVideosList(makeVideos())
                 .calendarList(makeCalendars()).role("ADMIN").videoYn(1).userGym("해운대").build();
