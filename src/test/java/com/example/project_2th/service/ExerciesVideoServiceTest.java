@@ -8,6 +8,7 @@ import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.response.VideoResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,9 +22,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.servlet.ServletInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 
@@ -46,6 +50,23 @@ public class ExerciesVideoServiceTest {
 
     protected MockHttpServletRequest request;
     protected UserHelper userHelper = new UserHelper();
+
+    private User user;
+    @DisplayName("load User")
+    @Test
+    void loadUser(){
+        user = User.builder().userId(1L).exercieVideosList(userHelper.makeVideos()).exerciesList(userHelper.makeExinfos()).calendarList(userHelper.makeCalendars()).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
+                .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
+                .managerYn(1).role("ROLE_ADMIN").videoYn(1).userGym("해운대").build();
+        Mockito.when(videoRepository.findUserVideos(user.getUserGym(),"ROLE_USER")).thenReturn(ofNullable(userHelper.makeVideos()));
+
+
+        exerciesVideoService = new ExerciesVideoService(userRepository,exinfoRepository,videoRepository);
+
+        List<VideoResponse> responses = exerciesVideoService.loadUser(user);
+
+        Mockito.verify(videoRepository).findUserVideos(user.getUserGym(),"ROLE_USER");
+    }
 
 
     @DisplayName("videoSave service")

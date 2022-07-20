@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +41,11 @@ public class VideoResponse{
         return this.postures == null ? new ArrayList<>() : this.postures;
     }
 
-    @Builder
     public VideoResponse(ExerciesVideo exerciesVideo){
         this.videoSeq = exerciesVideo.getVideoSeq();
         this.fileName = exerciesVideo.getFileName();
         this.videoDate = exerciesVideo.getVideoDate();
         this.user = new UserResponse(exerciesVideo.getUser());
-        this.postures = new ArrayList(exerciesVideo.getPostures());
         this.exercies = new ExerciesResponse(exerciesVideo.getExercies());
     }
 }

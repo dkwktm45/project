@@ -68,7 +68,7 @@ public class UserResponse{
     private List<VideoResponse> exercieVideosList = new ArrayList<>();
 
     @Builder
-    public void VideoInfo(List<ExerciesVideo> exercieVideosList) {
+    public void setExercieVideosList(List<ExerciesVideo> exercieVideosList) {
         this.exercieVideosList = new ArrayList(exercieVideosList);
     }
 }

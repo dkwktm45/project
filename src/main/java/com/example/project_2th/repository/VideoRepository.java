@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,9 @@ public interface VideoRepository extends JpaRepository<ExerciesVideo,Long> {
 
     List<ExerciesVideo> findAll();
 
+    @Query(value = "select * from user_exercies_videos video " +
+            "where video.user_id = (select user_id from user u "+
+            "where u.user_gym = :userGym and u.role = :role)",nativeQuery = true)
+    Optional<List<ExerciesVideo>> findUserVideos(@Param("userGym") String userGym
+                                       ,@Param("role") String role);
 }

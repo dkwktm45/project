@@ -8,6 +8,7 @@ import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
+import com.example.project_2th.response.UserResponse;
 import com.example.project_2th.response.VideoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.sql.Date;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -36,6 +38,14 @@ public class ExerciesVideoService {
 
     private final VideoRepository videoRepository;
     private final Logger logger = LoggerFactory.getLogger(ExerciesVideoService.class);
+    // 주의!!
+    public List<VideoResponse> loadUser(User user){
+        String role = "ROLE_USER";
+        return videoRepository.findUserVideos(user.getUserGym(), role)
+                .orElseThrow(PostNotFound::new)
+                .stream()
+                .map(VideoResponse::new).collect(Collectors.toList());
+    }
 
     public void videoSave(String cnt, Long user_id, Long ex_seq, ServletInputStream input) throws IOException {
         logger.info("videoSave perform");

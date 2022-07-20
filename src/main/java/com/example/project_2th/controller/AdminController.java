@@ -2,7 +2,9 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.User;
 import com.example.project_2th.response.UserResponse;
+import com.example.project_2th.response.VideoResponse;
 import com.example.project_2th.security.service.UserContext;
+import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,9 @@ public class AdminController {
     @Autowired
     private final UserService userService;
 
+    @Autowired
+    private final ExerciesVideoService exerciesVideoService;
+
     private final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @GetMapping({"/",""})
@@ -34,7 +39,7 @@ public class AdminController {
         logger.info("admin : loadUser perform");
 
         HttpSession session = request.getSession();
-        List<UserResponse> videoResponses = userService.loadUser(user);
+        List<VideoResponse> videoResponses = exerciesVideoService.loadUser(user);
         session.setAttribute("userList",videoResponses);
 
         logger.info("admin : loadUser end {}",videoResponses);

@@ -6,6 +6,7 @@ import com.example.project_2th.entity.User;
 import com.example.project_2th.response.UserResponse;
 import com.example.project_2th.security.service.CustomUserDetailsServiceTest;
 import com.example.project_2th.security.service.UserContext;
+import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -45,6 +46,10 @@ public class AdminControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private ExerciesVideoService exerciesVideoService;
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -79,14 +84,14 @@ public class AdminControllerTest {
         responses.add(response);
 
         // when
-        given(this.userService.loadUser(any(User.class))).willReturn(responses);
+        given(this.exerciesVideoService.loadUser(any(User.class))).willReturn(responses.get(0).getExercieVideosList());
 
         userContext = (UserContext) customUserDetailsService.loadUserByUsername("010-1234-5678");
 
         // then
         mockMvc.perform(get("/admin").with(user(userContext)).session(new MockHttpSession()))
                 .andExpect(status().isOk())
-                .andExpect(request().sessionAttribute("userList", responses))
+                .andExpect(request().sessionAttribute("userList", responses.get(0).getExercieVideosList()))
                 .andExpect(handler().handlerType(AdminController.class))
                 .andDo(print());
     }

@@ -5,22 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
-
-    <style>
-
-        [type="date"] {
-            background: #fff /*   url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set
-                  /blacks/16x16/calendar_2.png) */ url(image/circlesm.png) 90% 50% no-repeat;
-        }
-
-        [type="date"]::-webkit-inner-spin-button {
-            display: none;
-        }
-
-        [type="date"]::-webkit-calendar-picker-indicator {
-            opacity: 0;
-        }
-    </style>
     <!--css-->
     <link rel="stylesheet" th:href="@{/static/css/side/modal.css}">
     <link rel="stylesheet" href="/static/css/bootstrap.css">
@@ -29,8 +13,6 @@
 </head>
 <body>
 <th:block th:replace="sidebar/modal :: sideModal">
-    <th:block layout:fragment="css"></th:block>
-    <th:block layout:fragment="script"></th:block>
 </th:block>
 <div class="record_bg"></div>
 <div class="record_wrap">
@@ -70,24 +52,12 @@
                      </span>
                             <!-- 옵션 영역 -->
                             <ul class="hide" id="wrap">
-                                <li class="전체"><i><img src="/static/image/menu.png" alt="전체"/></i>
-                                    <div class="sunteck">전체</div>
-                                </li>
-                                <li class="div_d"><i><img src="/static/image/등.png" alt="등"/></i>
-                                    <div class="sunteck">등</div>
-                                </li>
-                                <li class="div_p"><i><img src="/static/image/팔.png" alt="팔"/></i>
-                                    <div class="sunteck">팔</div>
-                                </li>
-                                <li class="div_g"><i><img src="/static/image/가슴.png" alt="가슴"/></i>
-                                    <div class="sunteck">가슴</div>
-                                </li>
-                                <li class="div_u"><i><img src="/static/image/어깨.png" alt="어깨"/></i>
-                                    <div class="sunteck">어깨</div>
-                                </li>
-                                <li class="div_b"><i><img src="/static/image/복근.png" alt="복근"/></i>
-                                    <div class="sunteck">복근</div>
-                                </li>
+                                <li class ="전체"><i><img src="/static/image/menu.png" alt="전체"/></i>전체</li>
+                                <li class ="div_d"><i><img src="/static/image/등.png"  alt="등" /></i>등</li>
+                                <li class ="div_p"><i><img src="/static/image/팔.png" alt="팔" /></i>팔</li>
+                                <li class ="div_g"><i><img src="/static/image/가슴.png" alt="가슴" /></i>가슴</li>
+                                <li class ="div_u"><i><img src="/static/image/어깨.png" alt="어깨" /></i>어깨</li>
+                                <li class ="div_b"><i><img src="/static/image/복근.png" alt="복근" /></i>복근</li>
                             </ul>
                         </div>
                     </td>

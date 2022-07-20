@@ -33,14 +33,6 @@ public class UserService {
     private final PasswordEncoder encoder;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    // 주의!!
-    public List<VideoResponse> loadUser(User user){
-        List<ExerciesVideo> responses = new ArrayList<>();
-        return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
-                .orElseThrow(PostNotFound::new)
-                .stream()
-                .map().collect(Collectors.toList());
-    }
 
     public List<CalendarResponse> infoCalendar(User user) {
         List<CalendarResponse> users = userRepository.findAllByFetchJoin().orElseThrow(PostNotFound::new)
