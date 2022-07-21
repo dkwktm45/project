@@ -24,13 +24,10 @@ public class CustomUserDetailsServiceTest implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        List<GrantedAuthority> roles= new ArrayList<>();
+        List<GrantedAuthority> roles = new ArrayList<>();
 
         roles.add(new SimpleGrantedAuthority(getUser().getRole()));
 
-        if (s.equals(USERNAME)) {
-            return new UserContext(getUser(),roles);
-        }
-        return null;
+        return new UserContext(getUser(), roles);
     }
 }

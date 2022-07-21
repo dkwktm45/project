@@ -7,7 +7,7 @@ function go_record(){
 }
 
 function goJoin(){
-    location.href = "/admin/Join";
+    location.href = "/admin/register";
 }
 function goVideo(){
     location.href = "/admin/video";

@@ -35,7 +35,7 @@ public class AdminController {
 
     @GetMapping({"/",""})
     public String adminPage(HttpServletRequest request
-            ,@AuthenticationPrincipal User user) {
+            ,@AuthenticationPrincipal(expression = "user") User user) {
         logger.info("admin : loadUser perform");
 
         HttpSession session = request.getSession();
@@ -45,7 +45,6 @@ public class AdminController {
         logger.info("admin : loadUser end {}",videoResponses);
         return "/admin";
     }
-
 
     @GetMapping("/video")
     public String vidoeMember() {
@@ -58,16 +57,16 @@ public class AdminController {
     }
 
     @GetMapping("/member")
-    public String aminMember(HttpServletRequest req , HttpSession session) {
+    public String aminMember(
+            @AuthenticationPrincipal(expression = "user") User user
+            , HttpSession session) {
         logger.info("aminMember : reLoadMember perform");
 
-        session =req.getSession();
-        User loginUser = (User) session.getAttribute("user");
-        List<UserResponse> responseList = userService.reLoadMember(loginUser);
+        List<UserResponse> responseList = userService.reLoadMember(user);
         session.setAttribute("userList",responseList);
 
         logger.info("aminMember : reLoadMember end {}",responseList);
-        return "/admin-member";
+        return "admin-member";
     }
 
     @PutMapping(value = "/join-member")

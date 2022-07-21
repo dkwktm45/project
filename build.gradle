@@ -39,7 +39,8 @@ dependencies {
     implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
 
 
-    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.3.3.RELEASE'
+
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'

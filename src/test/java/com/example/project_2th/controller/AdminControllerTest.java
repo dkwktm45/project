@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -41,9 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser(username = "user1", value = "User", password = "pwd", roles = "ADMIN")
 public class AdminControllerTest {
-
     @MockBean
     private UserService userService;
 
@@ -60,19 +59,23 @@ public class AdminControllerTest {
     private static User user;
 
     private static MockHttpSession session;
+
+
     private final CustomUserDetailsServiceTest customUserDetailsService = new CustomUserDetailsServiceTest();
 
     @MockBean
     private UserContext userContext;
 
     @BeforeClass
-    public static void setUp(){
+    public static void beforeClassSetUp(){
         userHelper = new UserHelper();
         map = userHelper.makeAdmin();
         user = (User) map.get("user");
 
        session = new MockHttpSession();
-
+    }
+    @BeforeEach
+    void eachSetUp(){
     }
 
     @DisplayName("admin페이지로 관리자와 회원 정보를 가져온다.")
@@ -85,8 +88,8 @@ public class AdminControllerTest {
 
         // when
         given(this.exerciesVideoService.loadUser(any(User.class))).willReturn(responses.get(0).getExercieVideosList());
-
         userContext = (UserContext) customUserDetailsService.loadUserByUsername("010-1234-5678");
+
 
         // then
         mockMvc.perform(get("/admin").with(user(userContext)).session(new MockHttpSession()))
@@ -99,21 +102,20 @@ public class AdminControllerTest {
     @Test
     public void test2() throws Exception {
         //given
-        user = (User) this.userHelper.makeAdmin().get("user");
-        session.setAttribute("user", user);
         List<UserResponse> userList = (List<UserResponse>) this.userHelper.makeAdmin().get("userList");
-
         // when
-        given(this.userService.reLoadMember(user)).willReturn(userList);
+        given(this.userService.reLoadMember(any(User.class))).willReturn(userList);
+        userContext = (UserContext) customUserDetailsService.loadUserByUsername("010-1234-5678");
 
         // then
-        mockMvc.perform(get("/admin/member").session(session))
+        mockMvc.perform(get("/admin/member").with(user(userContext)).session(session))
                 .andExpect(status().isOk())
                 .andExpect(request().sessionAttribute("userList", userList))
                 .andExpect(handler().handlerType(AdminController.class))
                 .andDo(print());
     }
 
+    @WithMockUser(username = "user1", value = "User", password = "pwd", roles = "ADMIN")
     @DisplayName("회원가입")
     @Test
     public void test3() throws Exception {
