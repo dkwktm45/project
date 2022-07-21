@@ -4,6 +4,7 @@ import com.example.project_2th.controller.helper.GsonLocalDateTimeAdapter;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.response.UserResponse;
+import com.example.project_2th.security.mock.WithMockCustomUser;
 import com.example.project_2th.security.service.CustomUserDetailsServiceTest;
 import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesVideoService;
@@ -14,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,13 +24,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithSecurityContext;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -39,8 +47,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {AdminController.class})
+@WebAppConfiguration
 @AutoConfigureMockMvc
 public class AdminControllerTest {
     @MockBean
@@ -103,14 +112,15 @@ public class AdminControllerTest {
     public void test2() throws Exception {
         //given
         List<UserResponse> userList = (List<UserResponse>) this.userHelper.makeAdmin().get("userList");
+
         // when
-        given(this.userService.reLoadMember(any(User.class))).willReturn(userList);
+        given(this.userService.reLoadMember(any(User.class))).willReturn(any(userList.getClass()));
         userContext = (UserContext) customUserDetailsService.loadUserByUsername("010-1234-5678");
 
         // then
-        mockMvc.perform(get("/admin/member").with(user(userContext)).session(session))
+        mockMvc.perform(get("/admin/member").with(user(userContext)))
                 .andExpect(status().isOk())
-                .andExpect(request().sessionAttribute("userList", userList))
+                .andExpect(request().sessionAttribute("userList", null))
                 .andExpect(handler().handlerType(AdminController.class))
                 .andDo(print());
     }

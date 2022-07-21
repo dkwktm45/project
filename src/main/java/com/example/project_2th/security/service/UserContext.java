@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class UserContext extends User implements UserDetails {
+public class UserContext extends User implements UserDetails{
 
     private final com.example.project_2th.entity.User user;
 

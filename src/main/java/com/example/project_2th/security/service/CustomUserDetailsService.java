@@ -5,6 +5,7 @@ import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,6 +32,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         roles.add(new SimpleGrantedAuthority(user.getRole()));
 
         UserContext userContext = new UserContext(user,roles);
+
+
         return userContext;
     }
 }

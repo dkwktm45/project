@@ -11,12 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -35,7 +39,7 @@ public class AdminController {
 
     @GetMapping({"/",""})
     public String adminPage(HttpServletRequest request
-            ,@AuthenticationPrincipal(expression = "user") User user) {
+            ,@AuthenticationPrincipal User user) {
         logger.info("admin : loadUser perform");
 
         HttpSession session = request.getSession();
@@ -58,10 +62,9 @@ public class AdminController {
 
     @GetMapping("/member")
     public String aminMember(
-            @AuthenticationPrincipal(expression = "user") User user
+            @AuthenticationPrincipal User user
             , HttpSession session) {
         logger.info("aminMember : reLoadMember perform");
-
         List<UserResponse> responseList = userService.reLoadMember(user);
         session.setAttribute("userList",responseList);
 

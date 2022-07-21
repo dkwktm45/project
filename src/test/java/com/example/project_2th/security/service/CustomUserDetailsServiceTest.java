@@ -2,17 +2,18 @@ package com.example.project_2th.security.service;
 
 import com.example.project_2th.entity.User;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-@Profile("test")
+@Service("customUserDetailsServiceTest")
 public class CustomUserDetailsServiceTest implements UserDetailsService {
     public static final String USERNAME = "010-1234-5678";
 
@@ -27,7 +28,8 @@ public class CustomUserDetailsServiceTest implements UserDetailsService {
         List<GrantedAuthority> roles = new ArrayList<>();
 
         roles.add(new SimpleGrantedAuthority(getUser().getRole()));
+        UserContext userContext = new UserContext(getUser(), roles);
 
-        return new UserContext(getUser(), roles);
+        return userContext;
     }
 }
