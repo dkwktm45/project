@@ -21,4 +21,5 @@ public abstract class SuperException extends RuntimeException {
     public void addValidation(String fieldName, String message){
         validation.put(fieldName,message);
     }
+
 }

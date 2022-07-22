@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -64,6 +65,8 @@ public class AdminController {
     public String aminMember(
             @AuthenticationPrincipal User user
             , HttpSession session) {
+        SecurityContextHolder.getContext();
+
         logger.info("aminMember : reLoadMember perform");
         List<UserResponse> responseList = userService.reLoadMember(user);
         session.setAttribute("userList",responseList);
@@ -72,6 +75,7 @@ public class AdminController {
         return "admin-member";
     }
 
+    @PreAuthorize("haseRole('ROLE_ADMIN')")
     @PutMapping(value = "/join-member")
     public String insertMember(@RequestBody User user){
         logger.info("join-member : join perform");

@@ -1,17 +1,13 @@
 package com.example.project_2th.security.config;
 
-import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.UserRepository;
-import com.example.project_2th.security.service.UserContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,14 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
+import static org.springframework.http.RequestEntity.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @Transactional
@@ -67,12 +61,12 @@ class SecurityConfigTest {
         String password = "1234";
 
         // when
-        mvc.perform(formLogin("/loginInsert").user("userPhone",userId)
-                        .password("loginNumber",password))
-                .andDo(print())
+        mvc.perform(formLogin("/loginInsert").user("userPhone", userId)
+                .password("loginNumber", password)).andDo(print())
                 // then
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/main"));
+
     }
     @Test
     @DisplayName("manager login 테스트")

@@ -4,6 +4,7 @@ import com.example.project_2th.controller.helper.GsonLocalDateTimeAdapter;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.response.UserResponse;
+import com.example.project_2th.security.config.SecurityConfig;
 import com.example.project_2th.security.mock.WithMockCustomUser;
 import com.example.project_2th.security.service.CustomUserDetailsServiceTest;
 import com.example.project_2th.security.service.UserContext;
@@ -19,18 +20,25 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithSecurityContext;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,10 +55,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {AdminController.class})
-@WebAppConfiguration
-@AutoConfigureMockMvc
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+@WebMvcTest(controllers = AdminController.class,
+        excludeFilters = {
+                @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE,classes = SecurityConfig.class)
+        })
 public class AdminControllerTest {
     @MockBean
     private UserService userService;
@@ -74,6 +84,8 @@ public class AdminControllerTest {
 
     @MockBean
     private UserContext userContext;
+    @Autowired
+    private WebApplicationContext context;
 
     @BeforeClass
     public static void beforeClassSetUp(){
@@ -85,6 +97,10 @@ public class AdminControllerTest {
     }
     @BeforeEach
     void eachSetUp(){
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
     }
 
     @DisplayName("admin페이지로 관리자와 회원 정보를 가져온다.")
@@ -114,20 +130,18 @@ public class AdminControllerTest {
         List<UserResponse> userList = (List<UserResponse>) this.userHelper.makeAdmin().get("userList");
 
         // when
-        given(this.userService.reLoadMember(any(User.class))).willReturn(any(userList.getClass()));
+        given(this.userService.reLoadMember(any(User.class))).willReturn(userList);
         userContext = (UserContext) customUserDetailsService.loadUserByUsername("010-1234-5678");
-
         // then
         mockMvc.perform(get("/admin/member").with(user(userContext)))
                 .andExpect(status().isOk())
-                .andExpect(request().sessionAttribute("userList", null))
                 .andExpect(handler().handlerType(AdminController.class))
                 .andDo(print());
     }
 
-    @WithMockUser(username = "user1", value = "User", password = "pwd", roles = "ADMIN")
     @DisplayName("회원가입")
     @Test
+    @WithMockCustomUser
     public void test3() throws Exception {
         //given
         Gson gson = new GsonBuilder()
@@ -139,13 +153,12 @@ public class AdminControllerTest {
         String json = gson.toJson(req);
 
         // when
-        mockMvc.perform(put("/admin/join-member")
+        mockMvc.perform(put("/admin/join-member").with(csrf())
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON))
                 // then
                 .andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(AdminController.class))
                 .andDo(print());
-
     }
 }
