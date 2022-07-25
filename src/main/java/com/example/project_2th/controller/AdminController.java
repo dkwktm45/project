@@ -42,6 +42,7 @@ public class AdminController {
     public String adminPage(HttpServletRequest request
             ,@AuthenticationPrincipal User user) {
         logger.info("admin : loadUser perform");
+        SecurityContextHolder.getContext().getAuthentication();
 
         HttpSession session = request.getSession();
         List<VideoResponse> videoResponses = exerciesVideoService.loadUser(user);

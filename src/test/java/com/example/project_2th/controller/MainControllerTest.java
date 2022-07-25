@@ -1,67 +1,47 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
-import com.example.project_2th.controller.helper.UserHelper;
-import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.response.CalendarResponse;
-import com.example.project_2th.response.ErrorResponse;
 import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.security.config.SecurityConfig;
+import com.example.project_2th.security.mock.WithMockCustomUser;
 import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.verify;
-import static org.springframework.boot.autoconfigure.condition.ConditionOutcome.match;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -70,9 +50,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = MainController.class,
         excludeFilters = {
-                @ComponentScan.Filter(type= FilterType.ASSIGNABLE_TYPE,classes = SecurityConfig.class)
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
         })
-@WithMockUser(roles = "USER")
+@WithMockCustomUser(username = "test",role = "ROLE_USER")
 public class MainControllerTest {
 
     @MockBean
@@ -88,6 +68,8 @@ public class MainControllerTest {
     protected UserHelper userHelper = new UserHelper();
     protected User user;
 
+    @MockBean
+    private UserContext userContext;
     @Test
     @DisplayName("로그인 페이지")
     public void test1() throws Exception {
@@ -102,53 +84,24 @@ public class MainControllerTest {
     @Test
     public void test6() throws Exception {
         // given
-        session = new MockHttpSession();
-        session.setAttribute("user", userHelper.makeUser());
-        user = (User) session.getAttribute("user");
-        Calendar calendar = userHelper.makeCalendar();
-        CalendarResponse response = new CalendarResponse(calendar);
-        List<CalendarResponse> calendarList = new ArrayList<>();
-        calendarList.add(response);
-        calendarList.add(response);
-        calendarList.add(response);
-
+        Exercies calendar = userHelper.makeExercies();
+        ExerciesResponse exerciesResponse = new ExerciesResponse(calendar);
+        List<ExerciesResponse> responses = new ArrayList<>();
+        responses.add(exerciesResponse);
+        responses.add(exerciesResponse);
+        responses.add(exerciesResponse);
+        User result = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         // when
-        given(this.userService.infoCalendar(user)).willReturn(calendarList);
+        given(this.exerciesService.calendarResponse(result)).willReturn(responses);
 
         // then
-        mockMvc.perform(get("/user/calendar").session(session))
+        mockMvc.perform(get("/user/calendar"))
                 .andExpect(redirectedUrl("/user/test"))
-                .andExpect(request().sessionAttribute("calendarInfo", calendarList))
+                .andExpect(request().sessionAttribute("exerciesInfo",responses))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
 
-        verify(userService).infoCalendar(user);
-    }
-    @DisplayName("calendar 페이지로 유저에 대한 운동 정보가 담겨서 이동한다.")
-    @Test
-    public void test11() throws Exception {
-        //given
-        session = new MockHttpSession();
-        session.setAttribute("user", userHelper.makeUser());
-        user = (User) session.getAttribute("user");
-        Calendar calendar = userHelper.makeCalendar();
-        CalendarResponse response = new CalendarResponse(calendar);
-        List<CalendarResponse> calendarList = new ArrayList<>();
-        calendarList.add(response);
-        calendarList.add(response);
-        calendarList.add(response);
-
-        // when
-        given(this.userService.infoCalendar(user)).willReturn(calendarList);
-
-        //then
-        mockMvc.perform(get("/user/calendar").session(session))
-                .andExpect(redirectedUrl("/user/test"))
-                .andExpect(request().sessionAttribute("calendarInfo", calendarList))
-                .andExpect(status().is3xxRedirection())
-                .andDo(print());
-
-        verify(userService).infoCalendar(user);
+        verify(exerciesService).calendarResponse(result);
     }
 
 
@@ -156,10 +109,6 @@ public class MainControllerTest {
     @Test
     public void test7() throws Exception {
         // given
-        session = new MockHttpSession();
-        session.setAttribute("user", userHelper.makeUser());
-        user = (User) session.getAttribute("user");
-
         Map<String, Object> map = new HashMap<>();
         List<Exercies> exinfoList = this.userHelper.makeExinfos();
         List<ExerciesVideo> videoList = this.userHelper.makeVideos();
@@ -167,17 +116,16 @@ public class MainControllerTest {
         map.put("exinfoList", exinfoList);
 
         // when
-        given(this.userService.infoRecord(user)).willReturn(map);
+        given(this.userService.infoRecord(any(User.class))).willReturn(map);
 
         // then
-        mockMvc.perform(get("/user/exinfo").session(session))
+        mockMvc.perform(get("/user/exinfo"))
                 .andExpect(redirectedUrl("/user/record"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(request().sessionAttribute("exinfoList", map.get("exinfoList")))
                 .andExpect(request().sessionAttribute("videoList", map.get("videoList")))
                 .andDo(print());
-        verify(userService).infoRecord(user);
-
+        verify(userService).infoRecord(any(User.class));
     }
 
     @DisplayName("/exinfo 이동하면서 session exinfo 정보를 담는다.")
@@ -199,6 +147,7 @@ public class MainControllerTest {
                 .andExpect(status().is3xxRedirection());
     }
 
+    @WithMockCustomUser(username = "test",role = "ROLE_USER")
     @Nested
     @DisplayName("main redirect")
     class t1est11 {

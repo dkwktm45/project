@@ -92,8 +92,8 @@ public class MainController {
         logger.info("calendar perform");
 
         HttpSession session = req.getSession();
-        List<CalendarResponse> responses = userService.infoCalendar(user);
-        session.setAttribute("calendarInfo",responses);
+        List<ExerciesResponse> responses = exerciesService.calendarResponse(user);
+        session.setAttribute("exerciesInfo",responses);
 
         logger.info("[session] : calendarInfo {} ",responses);
         return "redirect:/user/test";

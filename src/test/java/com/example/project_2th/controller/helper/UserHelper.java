@@ -70,11 +70,11 @@ public class UserHelper {
 
     public List<Postures> makePose(){
         List<Postures> postures = new ArrayList<>();
-        postures.add(Postures.builder().videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+        postures.add(Postures.builder().poseResult("굿").aiComment("잘못된 자세 x")
                 .build());
-        postures.add(Postures.builder().videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+        postures.add(Postures.builder().poseResult("굿").aiComment("잘못된 자세 x")
                 .build());
-        postures.add(Postures.builder().videoTime(10).poseResult("굿").aiComment("잘못된 자세 x")
+        postures.add(Postures.builder().poseResult("굿").aiComment("잘못된 자세 x")
                 .build());
         return postures;
     }

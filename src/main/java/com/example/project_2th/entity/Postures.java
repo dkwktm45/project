@@ -21,7 +21,6 @@ public class Postures {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postureSeq;
 
-    private int videoTime;
     private String poseResult;
     private String aiComment;
 

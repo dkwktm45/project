@@ -3,6 +3,7 @@ package com.example.project_2th.security.service;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.repository.UserRepository;
+import com.example.project_2th.response.UserResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,9 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> roles= new ArrayList<>();
 
         roles.add(new SimpleGrantedAuthority(user.getRole()));
-
         UserContext userContext = new UserContext(user,roles);
-
 
         return userContext;
     }

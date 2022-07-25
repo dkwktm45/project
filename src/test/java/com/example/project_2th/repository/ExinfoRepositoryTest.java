@@ -65,7 +65,22 @@ class ExinfoRepositoryTest {
         logger.info("then");
         assertEquals(exercies.getExDay(),result.get(0).getExDay());
     }
+    @DisplayName("id를 통한 운동 정보를 가져온다.")
+    @Test
+    void findByidExinfo() {
+        logger.info("given");
+        user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
 
+        Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
+                .userSet("4").exKinds("가슴").user(user).cnt("10").build();
+        em.persist(exercies);
+
+        logger.info("when");
+        List<Exercies> result = exinfoRepository.findByidExinfo(user.getUserId());
+        System.out.println("result : " + result);
+        logger.info("then");
+        assertEquals(exercies.getExDay(),result.get(0).getExDay());
+    }
     @Test
     void findByOne() {
         logger.info("given");

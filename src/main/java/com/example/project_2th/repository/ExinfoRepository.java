@@ -23,6 +23,12 @@ public interface ExinfoRepository extends JpaRepository<Exercies,Long> {
             @Param("userId") Long userId,
             @Param("exName") String exName);
 
+    @Query(value = "SELECT * FROM user_exercies uex " +
+            "where uex.user_id= (select user_id from user u " +
+            "where u.user_id = :userId)",nativeQuery = true)
+    List<Exercies> findByidExinfo(
+            @Param("userId") Long userId);
+
     Exercies findByExSeq(Long ex_seq);
 
     List<Exercies> findByExKinds(String exKinds);

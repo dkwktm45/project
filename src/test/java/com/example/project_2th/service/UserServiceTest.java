@@ -72,31 +72,6 @@ public class UserServiceTest {
             users = null;
         }
 
-        @DisplayName("캘린더정보 4개를 가져온다.")
-        @Test
-        void infoCalendarSuccess(){
-            // when
-            Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(users));
-
-            UserService userService = new UserService(userRepository,encoder);
-
-            List<CalendarResponse> exinfo = userService.infoCalendar(user);
-            // then
-            assertEquals(4,exinfo.size());
-            verify(userRepository).findAllByFetchJoin();
-        }
-
-        @DisplayName("캘린더정보 없을시 PostNotFound 클래스를 호출한다.")
-        @Test
-        void infoCalendarFail(){
-            // when
-            Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(null));
-
-            UserService userService = new UserService(userRepository,encoder);
-            // then
-            assertThrows(PostNotFound.class,()->{userService.infoCalendar(user);});
-            verify(userRepository).findAllByFetchJoin();
-        }
 
         @DisplayName("사용자의 video exercies 정보들을 가져온다.")
         @Test

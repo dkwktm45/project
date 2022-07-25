@@ -3,6 +3,7 @@ package com.example.project_2th.service;
 
 import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
+import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.response.ExerciesResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,10 @@ public class ExerciesService {
         exercies.setExDay(LocalDate.now());
         ExerciesResponse response = new ExerciesResponse(exercies);
         return response;
+    }
+
+    public List<ExerciesResponse> calendarResponse(User user){
+        return exinfoRepository.findByidExinfo(user.getUserId()).stream().map(ExerciesResponse::new).collect(Collectors.toList());
     }
 
     public List<ExerciesResponse> calendarExinfo(Calendar calendar){

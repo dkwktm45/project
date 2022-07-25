@@ -4,6 +4,7 @@ import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.entity.*;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.response.CalendarResponse;
+import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.response.UserResponse;
 import com.example.project_2th.response.VideoResponse;
 import lombok.RequiredArgsConstructor;

@@ -72,6 +72,7 @@
     var exinfoList =/*[[${session.calendarInfo}]]*/;
     var userinfo =/*[[${session.user}]]*/;
     /*]]*/
+
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
@@ -79,7 +80,6 @@
         eventClick: function (info){
             var dateSettings = { "year": "numeric", "month": "2-digit", "day": "2-digit"};
             var rentdate = calendar.formatDate(info.event.start,  dateSettings);
-
             rentdate = rentdate.replace("/","-");
             rentdate = rentdate.replace("/","-");
             year = rentdate.substr(6,9);
@@ -125,7 +125,6 @@
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
                 }
             });
-
 
             //console.log(info.event.start)
             $('.modal2_wrap').css('display', 'block');

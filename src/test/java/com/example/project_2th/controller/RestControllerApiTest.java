@@ -8,6 +8,7 @@ import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.security.config.SecurityConfig;
+import com.example.project_2th.security.mock.WithMockCustomUser;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -95,7 +96,7 @@ class RestControllerApiTest {
 
     @DisplayName("calendarView 에서 날짜에 따른 운동 정보들을 가져온다.")
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockCustomUser(username = "test",role = "ROLE_USER")
     void calendarView() throws Exception {
         // given
         calendar = Calendar.builder().user(User.builder().userId(1L).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
@@ -138,7 +139,7 @@ class RestControllerApiTest {
 
     @DisplayName("video 저장 uri")
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockCustomUser(username = "test",role = "ROLE_USER")
     void insertExURL() throws Exception {
         //given
         byte[] bytes = new byte[]{1, 2};
@@ -197,7 +198,6 @@ class RestControllerApiTest {
                             .with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.exinfo").exists())
-                    .andExpect(jsonPath("$.postures[0:3].videoTime").exists())
                     .andExpect(jsonPath("$.postures[0:3].poseResult").exists())
                     .andExpect(jsonPath("$.postures[0:3].aiComment").exists())
                     .andExpect(handler().handlerType(RestControllerApi.class))
@@ -208,7 +208,7 @@ class RestControllerApiTest {
 
         @DisplayName("/pose-bad : bad image 를 저장하는 uri")
         @Test
-        @WithMockUser(roles = "USER")
+        @WithMockCustomUser(username = "test",role = "ROLE_USER")
         void insertBadImage() throws Exception {
             //given
             data.add("ai_comment", String.valueOf(2L));
@@ -233,7 +233,7 @@ class RestControllerApiTest {
 
         @DisplayName("updateMonth uri 에서 개월수 update")
         @Test
-        @WithMockUser(roles = "ADMIN")
+        @WithMockCustomUser(username = "test")
         void updateMonth() throws Exception {
             // given
             data.add("userExpireDate", "2022-10-10");

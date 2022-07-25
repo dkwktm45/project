@@ -49,7 +49,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Optional.ofNullable;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -80,7 +83,24 @@ public class ExerciesServiceTest {
         assertEquals(exinfo.getExCount(),exercies.getExCount());
 
     }
+    @DisplayName("exerciesInfo service : userId를 통한 운동 정보를 가져온다.")
+    @Test
+    void calendarResponse() {
+        //given
+        User user = User.builder().userId(0L).exercieVideosList(userHelper.makeVideos()).exerciesList(userHelper.makeExinfos())
+                .calendarList(userHelper.makeCalendars()).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
+                .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
+                .managerYn(0).videoYn(1).userGym("해운대").build();
+        Mockito.when(exinfoRepository.findByidExinfo(anyLong()))
+                .thenReturn(user.getExerciesList());
 
+        // when
+        exerciesService = new ExerciesService(exinfoRepository);
+        List<ExerciesResponse> exinfo = exerciesService.calendarResponse(user);
+
+        // then
+        assertNotNull(exinfo);
+    }
     @Test
     @DisplayName("calendarExinfo : 날짜에 맞는 운동 정보")
     void calendarExinfo() {

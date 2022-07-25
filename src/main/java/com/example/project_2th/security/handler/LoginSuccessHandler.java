@@ -30,15 +30,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         logger.info("login handler perform");
-        HttpSession session = request.getSession(true);
         User user = (User) authentication.getPrincipal();
         UserResponse userResponse = new UserResponse(user);
 
         if (userResponse.getManagerYn() == 1) {
-            session.setAttribute("user", userResponse);
             response.sendRedirect("/admin");
         } else if(userResponse.getManagerYn() == 0){
-            session.setAttribute("user", userResponse);
             response.sendRedirect("/user/main");
         }
     }
