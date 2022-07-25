@@ -1,11 +1,8 @@
 package com.example.project_2th.security.mock;
 
 import com.example.project_2th.entity.User;
-import com.example.project_2th.security.service.CustomUserDetailsService;
-import com.example.project_2th.security.service.CustomUserDetailsServiceTest;
 import com.example.project_2th.security.service.UserContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
