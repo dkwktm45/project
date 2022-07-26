@@ -1,10 +1,8 @@
 package com.example.project_2th.service;
 
-import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.controller.helper.UserHelper;
-import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
+import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.response.UserResponse;
 import org.junit.After;
@@ -22,12 +20,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Optional.ofNullable;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 
@@ -46,7 +44,6 @@ public class UserServiceTest {
     @Spy
     User user;
 
-    protected MockHttpSession session;
     protected MockHttpServletRequest request;
     protected UserHelper userHelper = new UserHelper();
 

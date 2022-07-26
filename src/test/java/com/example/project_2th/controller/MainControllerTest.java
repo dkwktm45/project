@@ -29,16 +29,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -94,7 +90,7 @@ public class MainControllerTest {
 
         // then
         mockMvc.perform(get("/user/calendar"))
-                .andExpect(redirectedUrl("/user/test"))
+                .andExpect(redirectedUrl("/user/calendar-exinfo"))
                 .andExpect(request().sessionAttribute("exerciesInfo",responses))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
@@ -166,7 +162,7 @@ public class MainControllerTest {
             session.setAttribute("user", userHelper.makeUser());
             session.setAttribute("calendarInfo", userHelper.makeExercies());
 
-            mockMvc.perform(get("/user/test").session(session))
+            mockMvc.perform(get("/user/calendar-exinfo").session(session))
                     .andDo(print())
                     .andExpect(status().isOk());
         }

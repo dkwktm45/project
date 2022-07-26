@@ -19,7 +19,7 @@ import java.util.Date;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-public class userPostures {
+public class PosturesRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
@@ -28,12 +28,8 @@ public class userPostures {
     @Test
     @Transactional
     public void insertEx(){
-        String date = String.valueOf(new Date());
-        System.out.println("date : "+date);
-
-
         User user = User.builder().userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
-                .userBirthdate(LocalDate.parse(date)).userExpireDate(LocalDate.parse((date)))
+                .userBirthdate(LocalDate.parse("2021-10-10")).userExpireDate(LocalDate.parse("2021-10-10"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
         userRepository.save(user);
         User result = userRepository.findById(1L).orElseThrow(PostNotFound::new);
