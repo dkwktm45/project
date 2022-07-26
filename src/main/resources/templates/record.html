@@ -104,7 +104,9 @@
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script defer src="/static/js/bootstrap.js"></script>
 <script th:inline="javascript">
-
+    /*<![CDATA[*/
+    var videoList =/*[[${session.videoList}]]*/;
+    /*]]*/
     $("#modal_btn").on("click", function () {
         $(".black_bg").attr("class", "black_bg show1")
     })
@@ -200,24 +202,19 @@
     $("video").on("click",function (){
         var changeSrc = $(this).attr('src');
         $("#video").attr("src",changeSrc);
-        console.log(changeSrc);
         var video_seq = $(this).attr('class');
         document.querySelector('.record_wrap').style.display = 'block';
         document.querySelector('.record_bg').style.display = 'block';
-
+        var request = videoList.filter(info => info.videoSeq == video_seq)[0]
         $.ajax({
-            url: "/pose?videoSeq=" + video_seq,
+            url: "/user/pose",
+            data: JSON.stringify(request),
             contentType: "application/json; charset=UTF-8",
-            type: "GET",
+            type: "post",
             success: function (result) {
                 var html1;
-                var exinfo = result.exinfo;
-                var postures = result.postures;
-                console.log(postures);
-                console.log(exinfo);
-                $(".ttleft").text(exinfo.exName)
-                if (postures.length != "") {
-                    $.each(postures, (index, obj) => {
+                if (result.length != "") {
+                    $.each(result, (index, obj) => {
                         if (index == 0) {
                             html1 += "<div class='jase'>자세교정</div>";
                         }

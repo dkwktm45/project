@@ -60,7 +60,7 @@ class VideoRepositoryTest {
     void findByExercies() {
         logger.info("given");
         exercies = em.find(Exercies.class,1L);
-        ExerciesVideo exerciesVideo = ExerciesVideo.builder().exercies(exercies).fileName("test").videoDate(Date.valueOf("2022-06-15"))
+        ExerciesVideo exerciesVideo = ExerciesVideo.builder().exercies(exercies).fileName("test").videoDate(LocalDate.parse("2022-06-15"))
                 .user(user).build();
         em.persist(exerciesVideo);
 
@@ -77,7 +77,7 @@ class VideoRepositoryTest {
         exercies = em.find(Exercies.class,1L);
         postures = userHelper.makePose();
 
-        ExerciesVideo exerciesVideo = ExerciesVideo.builder().postures(postures).exercies(exercies).fileName("test").videoDate(Date.valueOf("2022-06-15"))
+        ExerciesVideo exerciesVideo = ExerciesVideo.builder().postures(postures).exercies(exercies).fileName("test").videoDate(LocalDate.parse("2022-06-15"))
                 .user(user).build();
         em.persist(exerciesVideo);
 
@@ -94,7 +94,7 @@ class VideoRepositoryTest {
         exercies = em.find(Exercies.class,1L);
         postures = userHelper.makePose();
 
-        ExerciesVideo exerciesVideo = ExerciesVideo.builder().postures(postures).exercies(exercies).fileName("test").videoDate(Date.valueOf("2022-06-15"))
+        ExerciesVideo exerciesVideo = ExerciesVideo.builder().postures(postures).exercies(exercies).fileName("test").videoDate(LocalDate.parse("2022-06-15"))
                 .user(user).build();
         em.persist(exerciesVideo);
 
@@ -107,11 +107,11 @@ class VideoRepositoryTest {
     @Test
     void findAll() {
         logger.info("given");
-        em.persist(ExerciesVideo.builder().fileName("test1").videoDate(Date.valueOf("2022-06-15"))
+        em.persist(ExerciesVideo.builder().fileName("test1").videoDate(LocalDate.parse("2022-06-15"))
                 .build());
-        em.persist(ExerciesVideo.builder().fileName("test2").videoDate(Date.valueOf("2022-06-15"))
+        em.persist(ExerciesVideo.builder().fileName("test2").videoDate(LocalDate.parse("2022-06-15"))
                 .build());
-        em.persist(ExerciesVideo.builder().fileName("test3").videoDate(Date.valueOf("2022-06-15"))
+        em.persist(ExerciesVideo.builder().fileName("test3").videoDate(LocalDate.parse("2022-06-15"))
                 .build());
 
         logger.info("when");

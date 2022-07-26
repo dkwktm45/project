@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,9 @@ public class ExerciesVideo {
     private Long videoSeq;
 
     private String fileName;
-    private Date videoDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate videoDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

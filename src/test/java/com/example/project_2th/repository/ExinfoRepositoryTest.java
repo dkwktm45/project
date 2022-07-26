@@ -51,7 +51,7 @@ class ExinfoRepositoryTest {
     @Test
     void findExDay() {
         logger.info("given");
-        user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
+        user =userRepository.findById(1L).orElseThrow(PostNotFound::new);
 
         Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
@@ -69,7 +69,7 @@ class ExinfoRepositoryTest {
     @Test
     void findByidExinfo() {
         logger.info("given");
-        user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
+        user =userRepository.findById(1L).orElseThrow(PostNotFound::new);
 
         Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
@@ -84,7 +84,7 @@ class ExinfoRepositoryTest {
     @Test
     void findByOne() {
         logger.info("given");
-        user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
+        user =userRepository.findById(1L).orElseThrow(PostNotFound::new);
 
         Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
@@ -103,7 +103,7 @@ class ExinfoRepositoryTest {
     @Test
     void findByExSeq() {
         logger.info("given");
-        user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
+        user =userRepository.findById(1L).orElseThrow(PostNotFound::new);
 
         Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
@@ -120,7 +120,7 @@ class ExinfoRepositoryTest {
     @Test
     void findByExKinds() {
         logger.info("given");
-        user =userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
+        user =userRepository.findById(1L).orElseThrow(PostNotFound::new);
         Exercies exercies = Exercies.builder().exDay(LocalDate.parse("2022-10-10")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
         em.persist(exercies);

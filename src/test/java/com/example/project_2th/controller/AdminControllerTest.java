@@ -116,7 +116,6 @@ public class AdminControllerTest {
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new GsonLocalDateTimeAdapter())
                 .create();
-
         User req = userHelper.makeUser();
         String json = gson.toJson(req);
 

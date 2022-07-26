@@ -1,13 +1,18 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.controller.helper.GsonLocalDateTimeAdapter;
 import com.example.project_2th.controller.helper.UserHelper;
 import com.example.project_2th.entity.ExerciesVideo;
+import com.example.project_2th.entity.Postures;
+import com.example.project_2th.response.PoseResponse;
 import com.example.project_2th.security.config.SecurityConfig;
 import com.example.project_2th.security.mock.WithMockCustomUser;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
 import com.example.project_2th.service.UserService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -28,10 +33,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import javax.servlet.ServletInputStream;
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -111,27 +120,29 @@ class RestControllerApiTest {
         void getVideoinfo() throws Exception {
             // given
             ExerciesVideo exerciesVideo = userHelper.makeVideo();
-            data.add("videoSeq", String.valueOf(exerciesVideo.getVideoSeq()));
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("exinfo", userHelper.makeExercies());
-            map.put("postures", userHelper.makePose());
-
+            List<PoseResponse> videoList = userHelper.makePose().stream()
+                    .map(PoseResponse::new).collect(Collectors.toList());
             // when
-            given(exerciesVideoService.selectVideoInfo(exerciesVideo.getVideoSeq()))
-                    .willReturn(map);
+            given(postruesService.selectVideoInfo(any(ExerciesVideo.class)))
+                    .willReturn(videoList);
+
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .registerTypeAdapter(LocalDate.class, new GsonLocalDateTimeAdapter())
+                    .create();
+
+            String json = gson.toJson(exerciesVideo);
+
             // then
-            mockMvc.perform(get("/user/pose")
-                            .params(data)
+            mockMvc.perform(post("/user/pose")
+                            .content(json)
                             .contentType(MediaType.APPLICATION_JSON)
                             .with(csrf()))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.exinfo").exists())
-                    .andExpect(jsonPath("$.postures[0:3].poseResult").exists())
-                    .andExpect(jsonPath("$.postures[0:3].aiComment").exists())
+                    .andExpect(jsonPath("$.[0:3].poseResult").exists())
+                    .andExpect(jsonPath("$.[0:3].aiComment").exists())
                     .andExpect(handler().handlerType(RestControllerApi.class))
                     .andDo(print());
-
-            verify(exerciesVideoService).selectVideoInfo(exerciesVideo.getVideoSeq());
         }
 
         @DisplayName("/pose-bad : bad image 를 저장하는 uri")

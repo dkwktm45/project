@@ -75,7 +75,6 @@ public class AdminController {
         logger.info("aminMember : reLoadMember end {}",responseList);
         return "admin-member";
     }
-
     @PreAuthorize("haseRole('ROLE_ADMIN')")
     @PutMapping(value = "/join-member")
     public String insertMember(@RequestBody User user){

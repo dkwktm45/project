@@ -63,10 +63,8 @@ public class MainController {
     public String loginPage(@RequestParam(value = "exception",required = false)String exception,
                         @RequestParam(value = "error",required = false)String error,
                         Model model) {
-
         model.addAttribute("exception",exception);
         model.addAttribute("error",error);
-
         return "login";
     }
 
@@ -107,7 +105,7 @@ public class MainController {
         ExerciesResponse exinfo = exerciesService.exerciesInfo(exercies);
         if (exinfo== null){
             log.error("운동 정보가 담겨 있지 않습니다.");
-            return "redirect:/main";
+            return "redirect:/user/main";
         }
         session.setAttribute("exinfo",exinfo);
 

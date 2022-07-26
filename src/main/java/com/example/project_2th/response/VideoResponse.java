@@ -12,6 +12,7 @@ import lombok.Getter;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class VideoResponse{
     private Long videoSeq;
 
     private String fileName;
-    private Date videoDate;
+    private LocalDate videoDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

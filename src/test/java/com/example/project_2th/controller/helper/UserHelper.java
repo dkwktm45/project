@@ -48,7 +48,7 @@ public class UserHelper {
     }
 
     public ExerciesVideo makeVideo(){
-        return ExerciesVideo.builder().videoSeq(1L).videoSeq(makeId()).videoDate(Date.valueOf("2022-10-10"))
+        return ExerciesVideo.builder().videoSeq(1L).videoSeq(makeId()).videoDate(LocalDate.parse("2022-10-10"))
                 .user(makeUser()).exercies(makeExercies()).postures(makePose()).fileName("test").build();
     }
 
@@ -93,7 +93,7 @@ public class UserHelper {
         Exercies exinfo = Exercies.builder().exDay(LocalDate.parse("2022-06-15")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(makeUser()).cnt("10").build();
 
-        ExerciesVideo video = ExerciesVideo.builder().exercies(makeExercies()).fileName("test").videoDate(Date.valueOf("2022-06-15"))
+        ExerciesVideo video = ExerciesVideo.builder().exercies(makeExercies()).fileName("test").videoDate(LocalDate.parse("2022-06-15"))
                 .user(makeUser()).exercies(exinfo).build();
         List<ExerciesVideo> videoList = new ArrayList<>();
         videoList.add(video);

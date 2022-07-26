@@ -34,26 +34,6 @@ public class UserRepositoryTest {
     protected UserHelper userHelper;
     private Logger logger = LoggerFactory.getLogger(UserRepositoryTest.class);
 
-    @DisplayName("loginNumber and gym findUser")
-    @Test
-    void findByLoginNumberAndUserGym() {
-        //given
-        userHelper = new UserHelper();
-        User user = userHelper.makeUser();
-
-        logger.info("저장 시작");
-        testEntityManager.persist(user);
-        logger.info("저장 끝");
-
-        //when
-        logger.info("find 시작");
-        User result = userRepository.findByLoginNumberAndUserGym(user.getLoginNumber(), user.getUserGym()).orElseThrow(PostNotFound::new);
-        logger.info("find 끝");
-
-        //then
-        assertEquals(user.getUserId(), result.getUserId());
-    }
-
     @DisplayName("phone and gym findUser")
     @Test
     void findByUserIdAndUserGym() {
@@ -87,7 +67,7 @@ public class UserRepositoryTest {
 
         //when
         logger.info("find 시작");
-        User result = userRepository.findByUserId(user.getUserId()).orElseThrow(PostNotFound::new);
+        User result = userRepository.findById(user.getUserId()).orElseThrow(PostNotFound::new);
         logger.info("find 끝");
 
         //then

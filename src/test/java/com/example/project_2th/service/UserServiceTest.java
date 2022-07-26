@@ -195,14 +195,14 @@ public class UserServiceTest {
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-10-12"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
 
-        Mockito.when(userRepository.findByUserId(user.getUserId())).thenReturn(ofNullable(user));
+        Mockito.when(userRepository.findById(user.getUserId())).thenReturn(ofNullable(user));
 
 
         UserService userService = new UserService(userRepository,encoder);
 
         userService.updateMonth(request);
 
-        Mockito.verify(userRepository).findByUserId(user.getUserId());
+        Mockito.verify(userRepository).findById(user.getUserId());
     }
     @DisplayName("updateMonth fail")
     @Test
@@ -215,7 +215,7 @@ public class UserServiceTest {
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-10-12"))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
 
-        Mockito.when(userRepository.findByUserId(user.getUserId())).thenReturn(ofNullable(null));
+        Mockito.when(userRepository.findById(user.getUserId())).thenReturn(ofNullable(null));
 
 
         UserService userService = new UserService(userRepository,encoder);
@@ -223,7 +223,7 @@ public class UserServiceTest {
         assertThrows(PostNotFound.class,() ->{
             userService.updateMonth(request);
         });
-        Mockito.verify(userRepository).findByUserId(user.getUserId());
+        Mockito.verify(userRepository).findById(user.getUserId());
     }
     @After
     public void clear(){

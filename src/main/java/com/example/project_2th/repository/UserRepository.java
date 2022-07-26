@@ -26,8 +26,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> findByUserPhone(String userPhone);
 
-    User findByLoginNumber(String loginNumber);
-
     @Nullable
     @EntityGraph(attributePaths = {"exercieVideosList"})
     Optional<List<User>> findByUserGymAndManagerYn(String gym, int yn);

@@ -59,7 +59,7 @@ public class UserService {
     public void updateMonth(HttpServletRequest req) {
         LocalDate expiredDate = LocalDate.parse((req.getParameter("userExpireDate")));
         Long id = Long.valueOf(req.getParameter("userId"));
-        User user = userRepository.findByUserId(id).orElseThrow(PostNotFound::new);
+        User user = userRepository.findById(id).orElseThrow(PostNotFound::new);
 
         logger.info("update perform service , expired : {}",expiredDate);
         UserEditor.UserEditorBuilder editorBuilder = user.toEditor();

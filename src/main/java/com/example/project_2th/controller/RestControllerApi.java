@@ -1,5 +1,7 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.entity.ExerciesVideo;
+import com.example.project_2th.response.PoseResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 
@@ -55,22 +58,20 @@ public class RestControllerApi {
         return "main";
     }
 
-    @GetMapping(value = "/user/pose")
-    public ResponseEntity<Map<String, Object>> getVideoinfo(HttpServletRequest request) throws Exception {
+    @PostMapping(value = "/user/pose")
+    public ResponseEntity<List<PoseResponse>> getVideoinfo(@RequestBody ExerciesVideo exerciesVideo) throws Exception {
         logger.info("insertPose perfom ");
 
-        if (request.getParameter("videoSeq") == null){
+        if (exerciesVideo == null){
             logger.error("videoSeq : null");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
-        Long videoSeq = Long.valueOf(request.getParameter("videoSeq"));
-        Map<String,Object> videoInfo = exerciesVideoService.selectVideoInfo(videoSeq);
+        List<PoseResponse> response = postruesService.selectVideoInfo(exerciesVideo);
 
-        logger.info("[response] exinfo : {},postures : {}"
-                ,videoInfo.get("exinfo")
-                ,videoInfo.get("postures"));
-        return ResponseEntity.ok().body(videoInfo);
+        logger.info("[response] postures : {}"
+                ,response);
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping(value = "/user/pose-bad")

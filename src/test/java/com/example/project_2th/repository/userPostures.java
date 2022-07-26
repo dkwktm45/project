@@ -36,7 +36,7 @@ public class userPostures {
                 .userBirthdate(LocalDate.parse(date)).userExpireDate(LocalDate.parse((date)))
                 .managerYn(0).videoYn(1).userGym("해운대").build();
         userRepository.save(user);
-        User result = userRepository.findByUserId(1L).orElseThrow(PostNotFound::new);
+        User result = userRepository.findById(1L).orElseThrow(PostNotFound::new);
         System.out.println("user : " + result.getUserBirthdate());
     }
 }
