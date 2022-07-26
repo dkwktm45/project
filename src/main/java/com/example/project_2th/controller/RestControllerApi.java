@@ -1,7 +1,5 @@
 package com.example.project_2th.controller;
 
-import com.example.project_2th.entity.Calendar;
-import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.PostruesService;
@@ -12,13 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 import java.util.Map;
 
 
@@ -41,17 +37,6 @@ public class RestControllerApi {
 
     private final Logger logger = LoggerFactory.getLogger(RestControllerApi.class);
 
-    @PostMapping(value = "/user/calendar-info")
-    public ResponseEntity<List<ExerciesResponse>> calendarView(@RequestBody  Calendar calendar) throws Exception {
-        logger.info("calendar-info perfom");
-
-        logger.info("user : " + calendar.getUser());
-        logger.info("day : " + calendar.getExDay());
-        List<ExerciesResponse> exinfoList = exerciesService.calendarExinfo(calendar);
-
-        logger.info(" [response] exinfoList : {}",exinfoList);
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(exinfoList);
-    }
 
     @PostMapping(value = "/user/exercies-info")
     public String insertExURL(HttpServletRequest request) throws Exception {

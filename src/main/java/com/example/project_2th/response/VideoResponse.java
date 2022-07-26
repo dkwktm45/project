@@ -45,7 +45,6 @@ public class VideoResponse{
         this.videoSeq = exerciesVideo.getVideoSeq();
         this.fileName = exerciesVideo.getFileName();
         this.videoDate = exerciesVideo.getVideoDate();
-        this.user = new UserResponse(exerciesVideo.getUser());
         this.exercies = new ExerciesResponse(exerciesVideo.getExercies());
     }
 }

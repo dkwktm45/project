@@ -1,23 +1,22 @@
 package com.example.project_2th.controller;
 
 import com.example.project_2th.controller.helper.UserHelper;
-import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
-import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.ExerciesResponse;
+import com.example.project_2th.response.VideoResponse;
 import com.example.project_2th.security.config.SecurityConfig;
 import com.example.project_2th.security.mock.WithMockCustomUser;
 import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesService;
+import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.UserService;
 import org.junit.After;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,9 +25,7 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -60,7 +57,8 @@ public class MainControllerTest {
 
     @MockBean
     private ExerciesService exerciesService;
-
+    @MockBean
+    private ExerciesVideoService exerciesVideoService;
     @Autowired
     private MockMvc mockMvc;
 
@@ -109,23 +107,21 @@ public class MainControllerTest {
     @Test
     public void test7() throws Exception {
         // given
-        Map<String, Object> map = new HashMap<>();
-        List<Exercies> exinfoList = this.userHelper.makeExinfos();
-        List<ExerciesVideo> videoList = this.userHelper.makeVideos();
-        map.put("videoList", videoList);
-        map.put("exinfoList", exinfoList);
-
+        ExerciesVideo video = this.userHelper.makeVideo();
+        VideoResponse videoResponse = new VideoResponse(video);
+        List<VideoResponse> videoResponses = new ArrayList<>();
+        videoResponses.add(videoResponse);
         // when
-        given(this.userService.infoRecord(any(User.class))).willReturn(map);
+        given(this.exerciesVideoService.infoVideo(any(User.class))).willReturn(videoResponses);
 
         // then
         mockMvc.perform(get("/user/exinfo"))
                 .andExpect(redirectedUrl("/user/record"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(request().sessionAttribute("exinfoList", map.get("exinfoList")))
-                .andExpect(request().sessionAttribute("videoList", map.get("videoList")))
+                .andExpect(request().sessionAttribute("videoList", videoResponses))
                 .andDo(print());
-        verify(userService).infoRecord(any(User.class));
+
+        verify(exerciesVideoService).infoVideo(any(User.class));
     }
 
     @DisplayName("/exinfo 이동하면서 session exinfo 정보를 담는다.")
@@ -162,13 +158,13 @@ public class MainControllerTest {
                     .andExpect(status().isOk());
         }
 
-        @DisplayName("/test 페이지로 user, calendar 정보를 담고 이동한다.")
+        @DisplayName("/calenar-exinf 페이지로 user, exinfo 정보를 담고 이동한다.")
         @Test
         public void test9() throws Exception {
 
             session = new MockHttpSession();
             session.setAttribute("user", userHelper.makeUser());
-            session.setAttribute("calendarInfo", userHelper.makeCalendar());
+            session.setAttribute("calendarInfo", userHelper.makeExercies());
 
             mockMvc.perform(get("/user/test").session(session))
                     .andDo(print())

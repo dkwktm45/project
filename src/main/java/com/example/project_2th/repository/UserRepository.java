@@ -28,10 +28,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     User findByLoginNumber(String loginNumber);
 
-    @EntityGraph(attributePaths = {"calendarList"})
-    @Query(value = "select u from User u")
-    Optional<List<User>> findAllByFetchJoin();
-
     @Nullable
     @EntityGraph(attributePaths = {"exercieVideosList"})
     Optional<List<User>> findByUserGymAndManagerYn(String gym, int yn);

@@ -42,7 +42,6 @@
 <div class="record_bg"></div>
 <div class="modal2_wrap">
 </div>
-
 <div class="main_map">
 
     <div class="main_top" style="text-align : center;">
@@ -58,18 +57,15 @@
     <div class="main_mid">
         <div id='calendar'></div>
     </div>
-
     <div class="main_bot">
         <div class="bot_left"><img class="bimg_left" src="/static/image/woman.png"></div>
         <div class="bot_right"><a href="http://localhost:8081/web/main.do"><img class="bimg_right"
                                                                                 src="/static/image/gym2.png"></a></div>
     </div>
-
 </div>
 <script type="text/javascript" th:inline="javascript">
-    const log = console.log;
     /*<![CDATA[*/
-    var exinfoList =/*[[${session.calendarInfo}]]*/;
+    var exinfoList =/*[[${session.exerciesInfo}]]*/;
     var userinfo =/*[[${session.user}]]*/;
     /*]]*/
 
@@ -86,66 +82,45 @@
             MD = rentdate.substr(0,5);
             var resultDay = year+"-"+MD;
             const json = JSON.stringify(userinfo);
-            $.ajax({
-                url: "/user/calendar-info",
-                type: "POST",
-                data: JSON.stringify({"user" : userinfo, "exDay" : resultDay}),
-                dataType: "JSON",
-                contentType:"application/json; charset=UTF-8",
-                success: function (result) {
-                    var html1;
-                    console.log(result);
-                    $.each(result, (index, obj) => {
-                        html1 += "<div class = 'modal2_top'>";
-                        html1 += "<div class='modal2_top_top'>";
-                        html1 += "<div class = 'modal2_top_left'>";
-                        html1 += "<div id='NSK_font'><b>" + obj.exName + "</b></div></div>";
-                        html1 += "<div class = 'modal2_top_right'>";
-                        html1 += "</div>";
-                        html1 += "</div>";
-                        html1 += "<div id='NSK_font' class='modal2_top_bot'>";
-                        for (var i = obj.userSet; i > 0; i--) {
-                            html1 += "<div class='set1'>" + (obj.userSet - (i - 1)) + "set</div><div class='set2'>" + obj.userSet + "set</div>";
-                            html1 += "<div class='reps'>" + obj.exCount + "reps</div>";
-                            html1 += "<div class='reps2'>" + obj.exCount + "reps</div>";
+            var testset = exinfoList.filter(info => info.exDay == resultDay);
+            var html1;
+            testset.forEach(function(obj){
+                html1 += "<div class = 'modal2_top'>";
+                html1 += "<div class='modal2_top_top'>";
+                html1 += "<div class = 'modal2_top_left'>";
+                html1 += "<div id='NSK_font'><b>" + obj.exName + "</b></div></div>";
+                html1 += "<div class = 'modal2_top_right'>";
+                html1 += "</div>";
+                html1 += "</div>";
+                html1 += "<div id='NSK_font' class='modal2_top_bot'>";
+                for (var i = obj.userSet; i > 0; i--) {
+                    html1 += "<div class='set1'>" + (obj.userSet - (i - 1)) + "set</div><div class='set2'>" + obj.userSet + "set</div>";
+                    html1 += "<div class='reps'>" + obj.exCount + "reps</div>";
+                    html1 += "<div class='reps2'>" + obj.exCount + "reps</div>";
 
-                            if (i == 1) {
-                                html1 += "<div class='border'></div>";
-                            }
-                        }
-                        html1 += "</div>";
-                        html1 += "</div>";
-
-                    })
-
-                    $(".modal2_wrap").html(html1);
-
-                },
-                error: function (request, status, error) {
-                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                    if (i == 1) {
+                        html1 += "<div class='border'></div>";
+                    }
                 }
-            });
+                html1 += "</div>";
+                html1 += "</div>";
 
-            //console.log(info.event.start)
+            });
+            $(".modal2_wrap").html(html1);
             $('.modal2_wrap').css('display', 'block');
             $('.record_bg').css('display', 'block');
 
         }
     });
     calendar.render();
-
-    for (const exinfo of exinfoList) {
+    var exDaies = Array.from(new Set(exinfoList.map(p => p.exDay)))
+    for (const exinfo of exDaies) {
         calendar.addEvent({
             id: userinfo.userId,
-            start: exinfo.exDay,
+            start: exinfo,
             title: 150 + "kal"
         });
     }
-
-
-
-
-
     $('.fc-event-title-container').on('click', function () {
         $('.modal2_wrap').css('display', 'block');
         $('.record_bg').css('display', 'block');

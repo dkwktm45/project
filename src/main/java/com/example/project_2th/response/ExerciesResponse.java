@@ -1,16 +1,16 @@
 package com.example.project_2th.response;
 
-import com.example.project_2th.entity.Calendar;
 import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.entity.User;
+import com.example.project_2th.entity.ExerciesVideo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class ExerciesResponse {
@@ -37,4 +37,5 @@ public class ExerciesResponse {
         this.userSet = exercies.getUserSet();
         this.exCount = exercies.getExCount();
     }
+
 }

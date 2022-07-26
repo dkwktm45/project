@@ -20,6 +20,8 @@ public interface VideoRepository extends JpaRepository<ExerciesVideo,Long> {
     @EntityGraph(attributePaths = {"exercies","postures"})
     Optional<ExerciesVideo> findByVideoSeq(Long id);
 
+    @EntityGraph(attributePaths = {"exercies"})
+    Optional<List<ExerciesVideo>> findByUser(User user);
 
     List<ExerciesVideo> findAll();
 

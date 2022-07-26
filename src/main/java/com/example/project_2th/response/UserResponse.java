@@ -56,12 +56,6 @@ public class UserResponse{
     @JsonIgnore
     private List<ExerciesResponse> exerciesList = new ArrayList<>();
 
-    @JsonManagedReference
-    @OneToMany
-    @JoinColumn(name = "user_id",updatable = false,insertable = false)
-    @JsonIgnore
-    private List<CalendarResponse> calendarList = new ArrayList<>();
-
     @OneToMany
     @JoinColumn(name = "user_id",updatable = false,insertable = false)
     @JsonIgnore

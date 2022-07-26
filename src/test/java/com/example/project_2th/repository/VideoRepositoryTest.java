@@ -88,7 +88,22 @@ class VideoRepositoryTest {
         assertNotNull(result.getExercies());
         assertNotNull(result.getPostures());
     }
+    @Test
+    void findByUser() {
+        logger.info("given");
+        exercies = em.find(Exercies.class,1L);
+        postures = userHelper.makePose();
 
+        ExerciesVideo exerciesVideo = ExerciesVideo.builder().postures(postures).exercies(exercies).fileName("test").videoDate(Date.valueOf("2022-06-15"))
+                .user(user).build();
+        em.persist(exerciesVideo);
+
+        logger.info("when");
+        List<ExerciesVideo> result = videoRepository.findByUser(user).orElseThrow(PostNotFound::new);
+
+        logger.info("then");
+        assertNotNull(result);
+    }
     @Test
     void findAll() {
         logger.info("given");

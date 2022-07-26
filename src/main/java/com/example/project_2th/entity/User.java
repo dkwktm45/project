@@ -18,8 +18,8 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "user")
-@JsonIgnoreProperties(value = {"exerciesList","calendarList","exercieVideosList"} , allowSetters = true)
-@ToString(exclude = {"exerciesList","calendarList","exercieVideosList"})
+@JsonIgnoreProperties(value = {"exerciesList","exercieVideosList"} , allowSetters = true)
+@ToString(exclude = {"exerciesList","exercieVideosList"})
 public class User{
 
     @Id
@@ -48,11 +48,6 @@ public class User{
     @JoinColumn(name = "user_id",updatable = false,insertable = false)
     private final List<Exercies> exerciesList = new ArrayList<>();
 
-    @JsonManagedReference
-    @OneToMany
-    @Builder.Default
-    @JoinColumn(name = "user_id",updatable = false,insertable = false)
-    private final List<Calendar> calendarList = new ArrayList<>();
 
     @OneToMany
     @Builder.Default

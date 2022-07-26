@@ -95,23 +95,6 @@ public class UserRepositoryTest {
 
     }
 
-    @DisplayName("calendarList를 같이 가져오는 fetchJoin")
-    @Test
-    void findAllByFetchJoin() {
-        //given
-        userHelper = new UserHelper();
-        User user = userHelper.userCalendar();
-
-        logger.info("저장 시작");
-        testEntityManager.persist(user);
-        logger.info("저장 끝");
-
-        //when
-        List<User> users= userRepository.findAllByFetchJoin().orElseThrow(PostNotFound::new);
-
-        //then
-        assertEquals(4,users.get(0).getCalendarList().size());
-    }
 
     @DisplayName("gym 과 관리자 여부에 따른 회원조회")
     @Test

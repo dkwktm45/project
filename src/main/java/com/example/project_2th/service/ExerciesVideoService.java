@@ -40,13 +40,19 @@ public class ExerciesVideoService {
     private final Logger logger = LoggerFactory.getLogger(ExerciesVideoService.class);
     // 주의!!
     public List<VideoResponse> loadUser(User user){
+        logger.info("loadUser perform");
         String role = "ROLE_USER";
         return videoRepository.findUserVideos(user.getUserGym(), role)
                 .orElseThrow(PostNotFound::new)
                 .stream()
                 .map(VideoResponse::new).collect(Collectors.toList());
     }
-
+    public List<VideoResponse> infoVideo(User user) {
+        logger.info("infoVideo perform");
+        List<VideoResponse> videoList = videoRepository.findByUser(user).orElseThrow(PostNotFound::new)
+                .stream().map(VideoResponse::new).collect(Collectors.toList());
+        return videoList;
+    }
     public void videoSave(String cnt, Long user_id, Long ex_seq, ServletInputStream input) throws IOException {
         logger.info("videoSave perform");
         Optional<User> user = userRepository.findByUserId(user_id);

@@ -6,11 +6,8 @@ import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.repository.UserRepository;
-import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.UserResponse;
-import com.example.project_2th.response.VideoResponse;
 import org.junit.After;
-import org.junit.function.ThrowingRunnable;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -20,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -54,7 +50,7 @@ public class UserServiceTest {
     protected MockHttpServletRequest request;
     protected UserHelper userHelper = new UserHelper();
 
-    @Nested
+    /*@Nested
     @DisplayName("user 운동정보 및 캘린더 정보")
     class userInfo{
         List<User> users = null;
@@ -73,6 +69,7 @@ public class UserServiceTest {
         }
 
 
+
         @DisplayName("사용자의 video exercies 정보들을 가져온다.")
         @Test
         void infoRecordSuccess(){
@@ -82,7 +79,6 @@ public class UserServiceTest {
             List<ExerciesVideo> videoList = userHelper.makeVideos();
             map.put("videoList",videoList);
             map.put("exinfoList",exinfoList);
-
             // when
             Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(users));
 
@@ -114,7 +110,7 @@ public class UserServiceTest {
             verify(userRepository).findAllByFetchJoin();
         }
 
-    }
+    }*/
 
 
     @Nested

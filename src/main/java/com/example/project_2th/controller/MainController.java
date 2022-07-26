@@ -2,10 +2,10 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.User;
 import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.response.CalendarResponse;
 import com.example.project_2th.response.ExerciesResponse;
-import com.example.project_2th.security.service.UserContext;
+import com.example.project_2th.response.VideoResponse;
 import com.example.project_2th.service.ExerciesService;
+import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +34,9 @@ public class MainController {
     @Autowired
     private final ExerciesService exerciesService;
 
+    @Autowired
+    private final ExerciesVideoService exerciesVideoService;
+
     private final Logger logger = LoggerFactory.getLogger(MainController.class);
     
     // 기록페이지 re
@@ -42,14 +45,11 @@ public class MainController {
         logger.info("exinfo [get] perform");
 
         HttpSession session = req.getSession();
+        List<VideoResponse> responses = exerciesVideoService.infoVideo(user);
+        session.setAttribute("videoList", responses);
 
-        Map<String,Object> map = userService.infoRecord(user);
-        session.setAttribute("exinfoList", map.get("exinfoList"));
-        session.setAttribute("videoList", map.get("videoList"));
-
-        logger.info("[session] : exinfoList {} , videoList {}"
-                ,map.get("exinfoList")
-                ,map.get("videoList"));
+        logger.info("[session] : videoList {}"
+                ,responses);
         return "redirect:/user/record";
     }
 
@@ -81,9 +81,9 @@ public class MainController {
         return "error";
     }
     // calender
-    @GetMapping("/test")
+    @GetMapping("/calendar-exinfo")
     public String testPage() {
-        return "test";
+        return "calendar-exinfo";
     }
 
     // gocalender
@@ -95,8 +95,8 @@ public class MainController {
         List<ExerciesResponse> responses = exerciesService.calendarResponse(user);
         session.setAttribute("exerciesInfo",responses);
 
-        logger.info("[session] : calendarInfo {} ",responses);
-        return "redirect:/user/test";
+        logger.info("[session] : exerciesInfo {} ",responses);
+        return "redirect:/user/calendar-exinfo";
     }
 
     @PostMapping(value = "/exinfo")

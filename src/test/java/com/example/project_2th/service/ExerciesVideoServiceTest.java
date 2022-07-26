@@ -55,7 +55,7 @@ public class ExerciesVideoServiceTest {
     @DisplayName("load User")
     @Test
     void loadUser(){
-        user = User.builder().userId(1L).exercieVideosList(userHelper.makeVideos()).exerciesList(userHelper.makeExinfos()).calendarList(userHelper.makeCalendars()).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
+        user = User.builder().userId(1L).exercieVideosList(userHelper.makeVideos()).exerciesList(userHelper.makeExinfos()).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                 .managerYn(1).role("ROLE_ADMIN").videoYn(1).userGym("해운대").build();
         Mockito.when(videoRepository.findUserVideos(user.getUserGym(),"ROLE_USER")).thenReturn(ofNullable(userHelper.makeVideos()));
