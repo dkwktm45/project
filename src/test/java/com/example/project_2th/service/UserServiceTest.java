@@ -44,7 +44,6 @@ import static org.mockito.Mockito.verify;
     @Spy
     User user;
 
-    protected MockHttpServletRequest request;
     protected UserHelper userHelper = new UserHelper();
 
     /*@Nested
@@ -162,9 +161,6 @@ import static org.mockito.Mockito.verify;
             assertEquals("존재하는 회원입니다.",e.getMessage());
         }
     }
-
-
-
 
     @DisplayName("reload Service")
     @Test

@@ -1,6 +1,6 @@
 .modal_wrap{
-    width: 585px;
-    height: 1280px;
+    width: 63%;
+    height: 57%;
     position: relative;
     left: 50%;
     background:#FFFFFF;
@@ -12,7 +12,7 @@
 .black_bg{
     position: fixed;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-color:rgba(218, 215, 216, 0.5);
     top:0;
     left: 0;
@@ -47,14 +47,14 @@
     height:19%;
     text-align: center;
 }
-
+.modal_admin{
+    padding-left: 4%;
+}
 .modal_top_left{
     font-size: 50px;
-    width: 29%;
-    height: 51%;
+    width: 33%;
     float: left;
     top: 56px;
-    margin-bottom: 40px;
     text-align: right;
     font-family: 'Noto Sans KR';
     padding: 76px 16px;
@@ -63,12 +63,10 @@
 .modal_top_right{
     font-size: 40px;
     width: 60%;
-    height: 64%;
     float: right;
     text-align: left;
-    margin-bottom: 20px;
     font-family: 'Noto Sans KR';
-    padding: 80px 0px 0px 0px;
+    padding: 82px 0px 0px 0px;
 }
 
 .modal_mid{
@@ -77,9 +75,16 @@
     height:44%;
     font-size:50px;
     text-align: center;
-    margin-top: 106%;
+    margin-top: 83%;
 }
-
+.modal_mid_admin {
+    position: absolute;
+    width: 111%;
+    height: 44%;
+    font-size: 50px;
+    text-align: center;
+    margin-top: 56%;
+}
 .modal_mid_mid{
     width: 119%;
     height:30%;
@@ -112,10 +117,19 @@
 
 .modal_bot{
     position: absolute;
-    margin-top: 200%;
+    margin-top: 195%;
     width:84%;
     height:10%;
     font-size:40px;
+    text-align: center;
+    font-family: 'Noto Sans KR';
+}
+.modal_bot_admin {
+    position: absolute;
+    margin-top: 185%;
+    width: 84%;
+    height: 10%;
+    font-size: 40px;
     text-align: center;
     font-family: 'Noto Sans KR';
 }

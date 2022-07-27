@@ -9,10 +9,10 @@ h1{
     left:-10%;
     top:-5%;
 }
-.top_left{
-    float:left;
-    width:80%;
-    height:100%;
+.top_left {
+    float: left;
+    width: 80%;
+    padding-top: 4%;
 }
 
 .top_right{

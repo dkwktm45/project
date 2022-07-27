@@ -35,6 +35,7 @@ public class UserResponse{
     private String contents;
     private int managerYn;
     private int videoYn;
+    private String role;
 
     public UserResponse(User user){
         this.userId = user.getUserId();
@@ -47,7 +48,7 @@ public class UserResponse{
         this.userExpireDate = user.getUserExpireDate();
         this.managerYn = user.getManagerYn();
         this.videoYn = user.getVideoYn();
-
+        this.role = user.getRole();
     }
 
     @JsonManagedReference

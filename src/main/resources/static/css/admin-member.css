@@ -71,24 +71,23 @@ html, body {
     color:#362222;
 }
 
-.top_left{
-    float:left;
-    width:80%;
-    height:100%;
+.top_left {
+    float: left;
+    width: 80%;
+    padding-top: 4%;
 }
-
 .top_right{
     float:right;
     width:20%;
     height:100%;
 }
 
-.main_top {
-    width:100%;
-    height:8%;
-    color:#362222;
-}
 
+h1{
+    position:relative;
+    left:-10%;
+    font-size:80px;
+}
 .main_mid {
     width:100%;
     height:10%;
@@ -195,12 +194,7 @@ html, body {
     font-weight: 600;
 }
 
-h1{
-    position:relative;
-    left:-10%;
-    top:-5%;
-    font-size:80px;
-}
+
 
 #modal_btn{
     position:relative;

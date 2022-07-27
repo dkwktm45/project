@@ -1,7 +1,6 @@
 package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.User;
-import com.example.project_2th.response.VideoResponse;
 import com.example.project_2th.service.ExerciesVideoService;
 import com.example.project_2th.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -42,13 +40,11 @@ public class AdminController {
         logger.info("admin : loadUser perform");
 
         HttpSession session = request.getSession();
-        List<VideoResponse> videoResponses = exerciesVideoService.loadUser(user);
-        session.setAttribute("userList",videoResponses);
+        session.setAttribute("userList",exerciesVideoService.loadUser(user));
 
-        logger.info("admin : loadUser end {}",videoResponses);
+        logger.info("admin : loadUser end ");
         return "/admin";
     }
-
     @GetMapping("/video")
     public String vidoeMember() {
         return "redirect:/admin";

@@ -13,7 +13,7 @@
 <div th:fragment="sideModal" class="black_bg">
   <div class="modal_wrap">
     <div class="modal_main">
-      <div class = "modal_top">
+      <div th:class="${session.user.getRole() == 'ROLE_USER'? 'modal_top' : 'modal_admin'}" class = "modal_top">
         <div style = "font-size:80px;"><b style="font-size: 54px;">
           <br sec:authorize="hasRole('ROLE_USER')" th:text="${session.user?.getUserName()} + ' 님'"></div>
           <br sec:authorize="hasRole('ROLE_ADMIN')" th:text="${session.user?.getUserName()}+' 트레이너님'"></div>
@@ -28,7 +28,7 @@
       </div>
       <div sec:authorize="hasRole('ROLE_ADMIN')"></div>
     <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-      <div class = "modal_mid" >
+      <div th:class="${session.user.getRole() == 'USER'? 'modal_mid' : 'modal_mid_admin'}" >
         <div class = "modal_mid_mid">
           <div class = "modal_mid_left"><img id="moicon" src="/static/image/diary.png" onclick = "goMember()"></div>
           <div class = "modal_mid_right"><b id = "modal_mid_b" onclick = "goMember()">회원 관리</b></div>
@@ -55,7 +55,7 @@
           </div>
         </div>
     </th:block>
-      <div class = "modal_bot">
+      <div th:class="${session.user.getRole() == 'USER'? 'modal_bot' : 'modal_bot_admin'}">
         <div>고객센터     010-4903-4073</div>
       </div>
     </div>

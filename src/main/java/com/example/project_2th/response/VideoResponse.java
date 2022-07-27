@@ -41,5 +41,6 @@ public class VideoResponse{
         this.fileName = exerciesVideo.getFileName();
         this.videoDate = exerciesVideo.getVideoDate();
         this.exercies = new ExerciesResponse(exerciesVideo.getExercies());
+        this.user = new UserResponse(exerciesVideo.getUser());
     }
 }
