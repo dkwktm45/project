@@ -3,7 +3,6 @@ package com.example.project_2th.entity;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 

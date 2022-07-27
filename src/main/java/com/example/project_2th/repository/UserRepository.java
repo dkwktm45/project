@@ -13,20 +13,14 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
 
 
-    @Nullable
     @Query(value = "select * from user where user_phone = :user_phone and user_gym = :user_gym"
             ,nativeQuery=true)
     Optional<User> findByUserIdAndUserGym(
             @Param("user_phone") String userPhone,
             @Param("user_gym") String userGym);
 
-    Optional<User> findByLoginNumberAndUserGym(String loginNumber, String userGym);
-
-    Optional<User> findByUserId(Long userId);
-
     Optional<User> findByUserPhone(String userPhone);
 
-    @Nullable
     @EntityGraph(attributePaths = {"exercieVideosList"})
     Optional<List<User>> findByUserGymAndManagerYn(String gym, int yn);
 }

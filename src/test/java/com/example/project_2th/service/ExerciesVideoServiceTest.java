@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(SpringExtension.class)
 @Import({ExerciesService.class, ExinfoRepository.class})
-public class ExerciesVideoServiceTest {
+class ExerciesVideoServiceTest {
 
     @MockBean
     ExinfoRepository exinfoRepository;

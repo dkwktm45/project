@@ -45,15 +45,16 @@ public class UserService {
         Optional<User> vaildUser = userRepository.findByUserIdAndUserGym(
                 user.getUserPhone()
                 , user.getUserGym());
-        Object vaild = (vaildUser == null) ? userRepository.save(user) : vaildUser.get().valid();
+        if (vaildUser.isEmpty()) {
+            userRepository.save(user);
+        }
     }
 
     public List<UserResponse> reLoadMember(User user) {
-        List<UserResponse> result = userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
+        return userRepository.findByUserGymAndManagerYn(user.getUserGym(), user.getManagerYn() - 1)
                 .orElseThrow(PostNotFound::new).stream()
                 .map(UserResponse::new)
                 .collect(Collectors.toList());
-        return result;
     }
 
     public void updateMonth(HttpServletRequest req) {

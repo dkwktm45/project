@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
-public class ExerciesServiceTest {
+ class ExerciesServiceTest {
 
     @Mock
     ExinfoRepository exinfoRepository;

@@ -45,8 +45,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
         })
-@WithMockCustomUser(username = "test",role = "ROLE_USER")
-public class MainControllerTest {
+@WithMockCustomUser(username = "test", role = "ROLE_USER")
+class MainControllerTest {
 
     @MockBean
     private UserService userService;
@@ -64,9 +64,10 @@ public class MainControllerTest {
 
     @MockBean
     private UserContext userContext;
+
     @Test
     @DisplayName("로그인 페이지")
-    public void test1() throws Exception {
+    void test1() throws Exception {
         mockMvc.perform(get("/user/login"))
                 .andDo(print())
                 //정상 처리 되는지 확인
@@ -76,7 +77,7 @@ public class MainControllerTest {
 
     @DisplayName("calendar 페이지로 유저에 대한 운동 정보가 담겨서 이동한다.")
     @Test
-    public void test6() throws Exception {
+    void test6() throws Exception {
         // given
         Exercies calendar = userHelper.makeExercies();
         ExerciesResponse exerciesResponse = new ExerciesResponse(calendar);
@@ -91,7 +92,7 @@ public class MainControllerTest {
         // then
         mockMvc.perform(get("/user/calendar"))
                 .andExpect(redirectedUrl("/user/calendar-exinfo"))
-                .andExpect(request().sessionAttribute("exerciesInfo",responses))
+                .andExpect(request().sessionAttribute("exerciesInfo", responses))
                 .andExpect(status().is3xxRedirection())
                 .andDo(print());
 
@@ -101,7 +102,7 @@ public class MainControllerTest {
 
     @DisplayName("/exinfo session에는 exinfoList, videoList가 담긴채로 이동한다.")
     @Test
-    public void test7() throws Exception {
+    void test7() throws Exception {
         // given
         ExerciesVideo video = this.userHelper.makeVideo();
         VideoResponse videoResponse = new VideoResponse(video);
@@ -122,7 +123,7 @@ public class MainControllerTest {
 
     @DisplayName("/exinfo 이동하면서 session exinfo 정보를 담는다.")
     @Test
-    public void test8() throws Exception {
+    void test8() throws Exception {
         // given
         session = new MockHttpSession();
         session.setAttribute("user", userHelper.makeUser());
@@ -139,14 +140,14 @@ public class MainControllerTest {
                 .andExpect(status().is3xxRedirection());
     }
 
-    @WithMockCustomUser(username = "test",role = "ROLE_USER")
+    @WithMockCustomUser(username = "test", role = "ROLE_USER")
     @Nested
     @DisplayName("main redirect")
     class t1est11 {
 
         @DisplayName("main 페이지로 유저 정보가 담겨서 이동한다.")
         @Test
-        public void test5() throws Exception {
+        void test5() throws Exception {
             session = new MockHttpSession();
             session.setAttribute("user", userHelper.makeUser());
             mockMvc.perform(get("/user/main").session(session))
@@ -156,7 +157,7 @@ public class MainControllerTest {
 
         @DisplayName("/calenar-exinf 페이지로 user, exinfo 정보를 담고 이동한다.")
         @Test
-        public void test9() throws Exception {
+        void test9() throws Exception {
 
             session = new MockHttpSession();
             session.setAttribute("user", userHelper.makeUser());
@@ -169,7 +170,7 @@ public class MainControllerTest {
 
         @DisplayName("/record 페이지로 exinfoList, videoList 정보를 담고 이동한다.")
         @Test
-        public void test10() throws Exception {
+        void test10() throws Exception {
             session = new MockHttpSession();
             session.setAttribute("user", userHelper.makeUser());
             user = (User) session.getAttribute("user");
@@ -181,11 +182,6 @@ public class MainControllerTest {
                     .andDo(print())
                     .andExpect(status().isOk());
         }
-    }
-
-    @After
-    public void clean() {
-        session.clearAttributes();
     }
 
 }

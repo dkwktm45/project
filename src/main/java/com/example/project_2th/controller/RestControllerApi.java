@@ -15,10 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -45,21 +43,18 @@ public class RestControllerApi {
     public String insertExURL(HttpServletRequest request) throws Exception {
         logger.info("insertExURL perfom");
 
-        String cnt = request.getParameter("cnt");
-        Long user_id = Long.valueOf(request.getParameter("userId"));
-        Long ex_seq = Long.valueOf(request.getParameter("exSeq"));
-        ServletInputStream inputStream = request.getInputStream();
+        exerciesVideoService.videoSave(request.getParameter("cnt")
+                , Long.valueOf(request.getParameter("userId")),
+                Long.valueOf(request.getParameter("exSeq")),
+                request.getInputStream());
 
-        exerciesVideoService.videoSave(cnt, user_id, ex_seq, inputStream);
-
-        logger.info("[createVideo] cnt : {},userId : {}, exSeq : {},stream : {}"
-                ,cnt,user_id,ex_seq,inputStream);
+        logger.info("[insertExURL] end");
 
         return "main";
     }
 
     @PostMapping(value = "/user/pose")
-    public ResponseEntity<List<PoseResponse>> getVideoinfo(@RequestBody ExerciesVideo exerciesVideo) throws Exception {
+    public ResponseEntity<List<PoseResponse>> getVideoinfo(@RequestBody ExerciesVideo exerciesVideo){
         logger.info("insertPose perfom ");
 
         if (exerciesVideo == null){
@@ -78,11 +73,10 @@ public class RestControllerApi {
     public void insertBadImage(HttpServletRequest requestuest) throws Exception {
         logger.info("insertBadImage perfom");
 
-        String ai_comment = requestuest.getParameter("ai_comment");
-        Long ex_seq = Long.valueOf(requestuest.getParameter("ex_seq"));
 
-        logger.info("void ai_comment : {} , ex_seq : {}",ai_comment,ex_seq);
-        postruesService.badeImage(ai_comment, ex_seq);
+        postruesService.badeImage(requestuest.getParameter("ai_comment")
+                , Long.valueOf(requestuest.getParameter("ex_seq")));
+        logger.info("insertBadImage void end");
     }
 
 

@@ -1,10 +1,7 @@
 package com.example.project_2th.response;
 
-import com.example.project_2th.entity.Exercies;
-import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.Postures;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;

@@ -1,17 +1,11 @@
 package com.example.project_2th.response;
 
-import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
-import com.example.project_2th.entity.Postures;
-import com.example.project_2th.entity.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

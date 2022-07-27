@@ -30,9 +30,8 @@ public class ExerciesService {
     public ExerciesResponse exerciesInfo(Exercies exercies){
         logger.info("exerciesInfo perform");
         exercies.setExDay(LocalDate.now());
-        ExerciesResponse response = new ExerciesResponse(exercies);
 
-        return response;
+        return new ExerciesResponse(exercies);
     }
 
     public List<ExerciesResponse> calendarResponse(User user){

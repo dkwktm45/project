@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;

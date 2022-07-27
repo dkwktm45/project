@@ -40,7 +40,7 @@ class SecurityConfigTest {
 
     private MockMvc mvc;
     @BeforeEach
-    public void setup(){
+     void setup(){
         mvc = MockMvcBuilders
                 .webAppContextSetup(this.context)
                 .apply(springSecurity())
@@ -50,10 +50,10 @@ class SecurityConfigTest {
 
     @Test
     @DisplayName("user login 테스트")
-    public void login_test() throws Exception {
+     void login_test() throws Exception {
         User user = User.builder().userName("김화순").loginNumber(passwordEncoder.encode("1234")).userPhone("010-2345-1234")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
-                .managerYn(0).videoYn(1).userGym("해운대").role("USER").build();
+                .videoYn(1).userGym("해운대").role("USER").build();
         userRepository.save(user);
 
         // given
@@ -70,7 +70,7 @@ class SecurityConfigTest {
     }
     @Test
     @DisplayName("manager login 테스트")
-    public void admin_test() throws Exception {
+     void admin_test() throws Exception {
         User user = User.builder().userName("김화순").loginNumber(passwordEncoder.encode("1234")).userPhone("010-2345-1234")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                 .managerYn(1).videoYn(1).userGym("해운대").role("USER").build();
@@ -91,7 +91,7 @@ class SecurityConfigTest {
 
     @Test
     @DisplayName("login fail테스트")
-    public void fail_test() throws Exception {
+     void fail_test() throws Exception {
         User user = User.builder().userName("김화순").loginNumber(passwordEncoder.encode("1234")).userPhone("010-2345-1234")
                 .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
                 .managerYn(1).videoYn(1).userGym("해운대").role("USER").build();
@@ -107,6 +107,6 @@ class SecurityConfigTest {
                 .andDo(print())
                 // then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login?error"));
+                .andExpect(redirectedUrl("/user/login?error=true&exception=badCredentialsException"));
     }
 }

@@ -31,7 +31,7 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @Import({UserService.class,UserRepository.class,PasswordEncoder.class})
-public class UserServiceTest {
+ class UserServiceTest {
 
     @MockBean
     UserRepository userRepository;
@@ -177,7 +177,7 @@ public class UserServiceTest {
         UserService userService = new UserService(userRepository,encoder);
         List<UserResponse> resultUsers = userService.reLoadMember(admin);
 
-        assertEquals(resultUsers.size(),4);
+        assertEquals(4,resultUsers.size());
         verify(userRepository).findByUserGymAndManagerYn(admin.getUserGym(), admin.getManagerYn()-1);
     }
 
@@ -222,10 +222,6 @@ public class UserServiceTest {
         });
         Mockito.verify(userRepository).findById(user.getUserId());
     }
-    @After
-    public void clear(){
-        request.clearAttributes();
-        request = null;
-    }
+
 
 }

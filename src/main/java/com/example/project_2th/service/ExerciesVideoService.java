@@ -1,14 +1,13 @@
 package com.example.project_2th.service;
 
 
-import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
+import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.repository.ExinfoRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
-import com.example.project_2th.response.UserResponse;
 import com.example.project_2th.response.VideoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +21,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
-import java.sql.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,9 +51,8 @@ public class ExerciesVideoService {
 
     public List<VideoResponse> infoVideo(User user) {
         logger.info("infoVideo perform");
-        List<VideoResponse> videoList = videoRepository.findByUser(user).orElseThrow(PostNotFound::new)
+        return videoRepository.findByUser(user).orElseThrow(PostNotFound::new)
                 .stream().map(VideoResponse::new).collect(Collectors.toList());
-        return videoList;
     }
 
     public void videoSave(String cnt, Long user_id, Long ex_seq, ServletInputStream input) throws IOException {
@@ -63,24 +62,26 @@ public class ExerciesVideoService {
 
         UUID uuid = UUID.randomUUID();
         String file_name = uuid.toString() + "_" + exercies.getExName();
-        FileOutputStream out = new FileOutputStream(new File("C:\\user\\projectVideo\\" + file_name + ".webm"));
-
-        byte[] charBuffer = new byte[128];
-
+        byte[] charBuffer = null;
         int bytesRead = -1;
-        while ((bytesRead = input.read(charBuffer)) > 0) {
-            //System.out.println("저장중");
-            out.write(charBuffer, 0, bytesRead);
+        try(FileOutputStream out = new FileOutputStream(new File("C:\\user\\projectVideo\\" + file_name + ".webm"));){
+
+
+            charBuffer = new byte[128];
+
+            while ((bytesRead = input.read(charBuffer)) > 0) {
+                out.write(charBuffer, 0, bytesRead);
+            }
+
+            input.close();
+        }catch (Exception e){
+            logger.warn(e.getMessage());
         }
-
-        input.close();
-        out.close();
-
-        System.out.println("저장 끝");
+        logger.info("저장 끝");
 
         // video 파일 저장
         ExerciesVideo exerciesVideo = ExerciesVideo.builder()
-                .user(user.get())
+                .user(user.orElseThrow(PostNotFound::new))
                 .fileName(file_name)
                 .exercies(exercies)
                 .videoDate(LocalDate.now())

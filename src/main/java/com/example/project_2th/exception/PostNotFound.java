@@ -12,7 +12,6 @@ public class PostNotFound extends SuperException {
         addValidation(name,message);
     }
 
-
     @Override
     public int getStatusCode(){
         return 400;
