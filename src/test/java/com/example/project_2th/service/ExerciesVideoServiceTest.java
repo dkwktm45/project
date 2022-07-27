@@ -83,7 +83,7 @@ class ExerciesVideoServiceTest {
         Mockito.when(exinfoRepository.findByExSeq(anyLong())).thenReturn(exercies);
 
         exerciesVideoService = new ExerciesVideoService(userRepository,exinfoRepository,videoRepository);
-        exerciesVideoService.videoSave("10",1L,1L,stream);
+        //exerciesVideoService.videoSave("10",1L,1L,stream);
 
         // then
         Mockito.verify(userRepository).findById(anyLong());

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,12 +27,15 @@ public class ExerciesService {
     @Autowired
     private final ExinfoRepository exinfoRepository;
     private final Logger logger = LoggerFactory.getLogger(ExerciesService.class);
+    @Autowired
+    private EntityManager em;
 
     public ExerciesResponse exerciesInfo(Exercies exercies){
         logger.info("exerciesInfo perform");
         exercies.setExDay(LocalDate.now());
+        em.persist(exercies);
 
-        return new ExerciesResponse(exercies);
+        return new ExerciesResponse(em.find(Exercies.class,exercies.getExSeq()));
     }
 
     public List<ExerciesResponse> calendarResponse(User user){

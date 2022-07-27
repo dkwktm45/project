@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
@@ -32,8 +31,13 @@
 
   <!-- <img src="http://localhost:8080/video_feed"> -->
   <img id="image" width=820 height=550 src="" />
-  <script type="text/javascript" >
+  <script type="text/javascript" th:inline="javascript">
+    window.onload = function (){
+      /* <![CDATA[ */
+      var exinfo = /*[[${session.exinfo}]]*/; //MAP에 경우
+      var user = /*[[${session.user}]]*/;
 
+      /* ]]> */
 
     // 중지 버튼
     const stopButton = document.querySelector(".stop-button")
@@ -74,13 +78,11 @@
         var data = new FormData();
         data.append('user', userinfo);
         data.append('pwd', 'password');
-        url = "/exercies-info?userId="+[[${session.user.userId}]]+"&ex_seq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
-
+        url = "/exercies-info?&cnt="+cnt;
         var oReq = new XMLHttpRequest();
         oReq.open("POST", url, true);
         oreq.send(data)
         oReq.onload = function (oEvent) {
-          // Uploaded.
           if (oReq.status == 200){
             let result = oReq.response;
             location.href="/"+result;
@@ -88,7 +90,7 @@
             alert("error"+ this.status);
           }
         };
-
+        oReq.send(exinfo)
         oReq.send(b);
       };
       console.log(recordedChunks);
@@ -134,18 +136,14 @@
     }
 
 
-
+    // 중지 버튼
     stopButton.onclick = function(){
-      console.log("클릭성공");
       recorder.ondataavailable = (e) => {
-        console.log("onDataAvailable")
         recordedChunks.push(e.data)
-        console.log("밖에있는 cnt : "+cnt);
         const b = new Blob(recordedChunks,{ type: "video/webm"});
-        console.log(b);
 
         cnt = 0;
-        url = "/user/exercies-info?userId="+[[${session.user.userId}]]+"&exSeq="+[[${session.exinfo.exSeq}]]+"&cnt="+cnt;
+        url = "/user/exercies-info?cnt="+cnt;
 
         var oReq = new XMLHttpRequest();
         oReq.open("POST", url, true);
@@ -202,10 +200,10 @@
           var oReq = new XMLHttpRequest();
           var url
           if (feedback_l==null){
-            url = "/user/pose-bad?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_l;
+            url = "/user/pose-bad?ex_seq="+exinfo+"&ai_comment="+feedback_l;
           }else if(feedback_r==null){
             feedback_r ="test"
-            url = "/user/pose-bad?ex_seq="+ [[${session.exinfo.exSeq}]]+"&ai_comment="+feedback_r;
+            url = "/user/pose-bad?ex_seq="+exinfo+"&ai_comment="+feedback_r;
           }
           console.log(url)
           oReq.open("PUT", url, true);
@@ -227,7 +225,7 @@
         // 강제 종료 버튼
 
         // 만약 갯수를 채운다면 즉시 중지 된다.
-        if (cnt==([[${session.exinfo.exCount}]]*[[${session.exinfo.userSet}]])){
+        if (cnt==("test")){
           console.log("성공!!");
 
           recorder.ondataavailable = (e) => {
@@ -260,6 +258,8 @@
       };
       xhr.send(data);
     }
+    }
+
   </script>
 
   <!-- OpencvJS 라이브러리 가져오기 -->

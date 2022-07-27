@@ -1,5 +1,6 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.response.PoseResponse;
 import com.example.project_2th.service.ExerciesService;
@@ -43,14 +44,13 @@ public class RestControllerApi {
     public String insertExURL(HttpServletRequest request) throws Exception {
         logger.info("insertExURL perfom");
 
+        Exercies exercies = (Exercies) request.getSession().getAttribute("exinfo");
         exerciesVideoService.videoSave(request.getParameter("cnt")
-                , Long.valueOf(request.getParameter("userId")),
-                Long.valueOf(request.getParameter("exSeq")),
+                , exercies,
                 request.getInputStream());
 
         logger.info("[insertExURL] end");
-
-        return "main";
+        return "user/main";
     }
 
     @PostMapping(value = "/user/pose")

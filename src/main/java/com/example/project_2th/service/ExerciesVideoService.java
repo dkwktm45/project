@@ -55,10 +55,8 @@ public class ExerciesVideoService {
                 .stream().map(VideoResponse::new).collect(Collectors.toList());
     }
 
-    public void videoSave(String cnt, Long user_id, Long ex_seq, ServletInputStream input) throws IOException {
+    public void videoSave(String cnt, Exercies exercies, ServletInputStream input) throws IOException {
         logger.info("videoSave perform");
-        Optional<User> user = userRepository.findById(user_id);
-        Exercies exercies = exinfoRepository.findByExSeq(ex_seq);
 
         UUID uuid = UUID.randomUUID();
         String file_name = uuid.toString() + "_" + exercies.getExName();
@@ -81,13 +79,13 @@ public class ExerciesVideoService {
 
         // video 파일 저장
         ExerciesVideo exerciesVideo = ExerciesVideo.builder()
-                .user(user.orElseThrow(PostNotFound::new))
+                .user(exercies.getUser())
                 .fileName(file_name)
                 .exercies(exercies)
                 .videoDate(LocalDate.now())
                 .build();
         logger.info("videoSave info : {}", exerciesVideo);
-
+        videoRepository.save(exerciesVideo);
 
 
         logger.info("cnt update : {}", cnt);

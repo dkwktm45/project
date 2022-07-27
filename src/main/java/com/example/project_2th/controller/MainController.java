@@ -98,7 +98,7 @@ public class MainController {
     }
 
     @PostMapping(value = "/exinfo")
-    public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,HttpServletRequest req) throws Exception {
+    public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,Model model,HttpServletRequest req) throws Exception {
         logger.info("exinfo [post] perform");
 
         HttpSession session = req.getSession();
@@ -108,8 +108,7 @@ public class MainController {
             return "redirect:/user/main";
         }
         session.setAttribute("exinfo",exinfo);
-
-        logger.info("[session] : exinfo {} ",exinfo);
+        logger.info("[session] : exinfo {} ",exinfo.toString());
         return "redirect:/user/cam";
     }
 
