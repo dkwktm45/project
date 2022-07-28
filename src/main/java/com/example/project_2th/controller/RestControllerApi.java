@@ -2,6 +2,8 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
+import com.example.project_2th.entity.User;
+import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.response.PoseResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,12 +44,12 @@ public class RestControllerApi {
 
 
     @PostMapping(value = "/user/exercies-info")
-    public String insertExURL(HttpServletRequest request) throws Exception {
+    public String insertExURL(HttpServletRequest request, @AuthenticationPrincipal User user) throws Exception {
         logger.info("insertExURL perfom");
 
-        Exercies exercies = (Exercies) request.getSession().getAttribute("exinfo");
+        ExerciesResponse exercies = (ExerciesResponse) request.getSession().getAttribute("exinfo");
         exerciesVideoService.videoSave(request.getParameter("cnt")
-                , exercies,
+                , exercies,user,
                 request.getInputStream());
 
         logger.info("[insertExURL] end");

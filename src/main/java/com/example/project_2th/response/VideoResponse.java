@@ -43,4 +43,10 @@ public class VideoResponse{
         this.exercies = new ExerciesResponse(exerciesVideo.getExercies());
         this.user = new UserResponse(exerciesVideo.getUser());
     }
+    public String changeName(String fileName){
+        if(fileName == ""){
+            return null;
+        };
+        return null;
+    }
 }

@@ -18,7 +18,7 @@
 <div class="record_wrap">
     <div class="record_top" style="width:100%; height:200px;">
         <div id="record_top_title">
-            <div class="ttleft"> 체스트프레스</div>
+            <div class="ttleft"> test</div>
             <div class="ttright"><img id="out" src="/static/image/out.png" onclick="go_record()"></div>
         </div>
         <hr style="border: solid 5px gray;">
@@ -206,6 +206,7 @@
         document.querySelector('.record_wrap').style.display = 'block';
         document.querySelector('.record_bg').style.display = 'block';
         var request = videoList.filter(info => info.videoSeq == video_seq)[0]
+        console.log(request.exercies.exName)
         $.ajax({
             url: "/user/pose",
             data: JSON.stringify(request),
@@ -213,6 +214,8 @@
             type: "post",
             success: function (result) {
                 var html1;
+
+                document.querySelector(".ttleft").textContent  = request.exercies.exName
                 if (result.length != "") {
                     $.each(result, (index, obj) => {
                         if (index == 0) {

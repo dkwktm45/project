@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -41,13 +42,13 @@ public class MainController {
     
     // 기록페이지 re
     @GetMapping("/exinfo")
-    public String goRecord(HttpServletRequest req,@AuthenticationPrincipal User user) {
+    public String goRecord(HttpServletRequest req,@AuthenticationPrincipal User user) throws UnsupportedEncodingException {
         logger.info("exinfo [get] perform");
 
         HttpSession session = req.getSession();
         List<VideoResponse> responses = exerciesVideoService.infoVideo(user);
         session.setAttribute("videoList", responses);
-
+        req.setCharacterEncoding("utf-8");
         logger.info("[session] : videoList {}"
                 ,responses);
         return "redirect:/user/record";

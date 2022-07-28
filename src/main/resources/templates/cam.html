@@ -78,7 +78,7 @@
         var data = new FormData();
         data.append('user', userinfo);
         data.append('pwd', 'password');
-        url = "/exercies-info?&cnt="+cnt;
+        url = "/user/exercies-info?&cnt="+cnt;
         var oReq = new XMLHttpRequest();
         oReq.open("POST", url, true);
         oreq.send(data)
@@ -90,7 +90,6 @@
             alert("error"+ this.status);
           }
         };
-        oReq.send(exinfo)
         oReq.send(b);
       };
       console.log(recordedChunks);
@@ -111,11 +110,10 @@
       function processVideo() {
         let begin = Date.now();
         cap.read(src);
-//       console.log(src.data);
-        //sendData(src.data); // 서버로 데이터 전송
-        //cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
-        //cv.imshow("canvasOutput", dst);
-        // schedule next one.
+        console.log(src.data);
+        sendData(src.data); // 서버로 데이터 전송
+        cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+        cv.imshow("canvasOutput", dst);
         let delay = 1000/FPS - (Date.now() - begin);
         setTimeout(processVideo, delay);
         // insertData();
@@ -141,7 +139,6 @@
       recorder.ondataavailable = (e) => {
         recordedChunks.push(e.data)
         const b = new Blob(recordedChunks,{ type: "video/webm"});
-
         cnt = 0;
         url = "/user/exercies-info?cnt="+cnt;
 
@@ -160,6 +157,7 @@
       };
       stopRecording();
     }
+
     function sendData(data){
       const xhr = new XMLHttpRequest();
       xhr.open('POST', sendURL);

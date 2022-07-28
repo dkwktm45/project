@@ -1,6 +1,7 @@
 package com.example.project_2th.entity;
 
 
+import com.example.project_2th.response.ExerciesResponse;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -33,6 +34,5 @@ public class Exercies {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 
 }
