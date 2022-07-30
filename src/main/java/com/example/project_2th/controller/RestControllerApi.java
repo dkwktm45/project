@@ -75,8 +75,6 @@ public class RestControllerApi {
     @PutMapping(value = "/user/pose-bad")
     public void insertBadImage(HttpServletRequest requestuest) throws Exception {
         logger.info("insertBadImage perfom");
-
-
         postruesService.badeImage(requestuest.getParameter("ai_comment")
                 , Long.valueOf(requestuest.getParameter("ex_seq")));
         logger.info("insertBadImage void end");
