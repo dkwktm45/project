@@ -22,6 +22,7 @@ import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,10 +66,10 @@ class VideoRepositoryTest {
         em.persist(exerciesVideo);
 
         logger.info("when");
-        ExerciesVideo result = videoRepository.findByExercies(exercies);
+        Optional<ExerciesVideo> result = videoRepository.findByExercies(exercies);
 
         logger.info("then");
-        assertEquals(exercies,result.getExercies());
+        assertEquals(exercies,result.get().getExercies());
     }
 
     @Test

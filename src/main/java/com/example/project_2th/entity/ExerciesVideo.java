@@ -39,7 +39,7 @@ public class ExerciesVideo {
     @Builder.Default
     @OneToMany
     @JsonManagedReference
-    @JoinColumn(name = "video_seq", insertable = false,updatable = false)
+    @JoinColumn(name = "video_seq")
     private List<Postures> postures = new ArrayList<>();
 
     //getter 재정의를 통한 null 처리

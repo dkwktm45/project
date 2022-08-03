@@ -2,8 +2,8 @@ package com.example.project_2th.controller;
 
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.entity.ExerciesVideo;
+import com.example.project_2th.entity.Postures;
 import com.example.project_2th.entity.User;
-import com.example.project_2th.response.ExerciesResponse;
 import com.example.project_2th.response.PoseResponse;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
@@ -15,11 +15,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -39,17 +47,19 @@ public class RestControllerApi {
 
     @Autowired
     private final UserService userService;
-
+    @Autowired
+    private final EntityManager em;
     private final Logger logger = LoggerFactory.getLogger(RestControllerApi.class);
 
 
     @PostMapping(value = "/user/exercies-info")
-    public String insertExURL(HttpServletRequest request, @AuthenticationPrincipal User user) throws Exception {
+    @Transactional
+    public String insertExURL(HttpServletRequest request) throws Exception {
         logger.info("insertExURL perfom");
 
-        ExerciesResponse exercies = (ExerciesResponse) request.getSession().getAttribute("exinfo");
-        exerciesVideoService.videoSave(request.getParameter("cnt")
-                , exercies,user,
+        ExerciesVideo video = (ExerciesVideo) request.getSession().getAttribute("video");
+        exerciesVideoService.videoUpdate(request.getParameter("cnt")
+                , video,
                 request.getInputStream());
 
         logger.info("[insertExURL] end");
@@ -72,14 +82,17 @@ public class RestControllerApi {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping(value = "/user/pose-bad")
-    public void insertBadImage(HttpServletRequest requestuest) throws Exception {
+    @PostMapping(value = "/user/pose-bad",produces = { "application/json" })
+    @Transactional
+    public void insertBadImage(@RequestParam("aiComment") List<String> aiComment
+            ,HttpServletRequest req
+            ,@RequestParam("file") List<MultipartFile> files) throws Exception {
         logger.info("insertBadImage perfom");
-        postruesService.badeImage(requestuest.getParameter("ai_comment")
-                , Long.valueOf(requestuest.getParameter("ex_seq")));
+        HttpSession session = req.getSession();
+        ExerciesVideo video = (ExerciesVideo) session.getAttribute("video");
+        postruesService.badeImage(video,aiComment,files);
         logger.info("insertBadImage void end");
     }
-
 
     @PatchMapping("/admin/month")
     public void updateMonth(HttpServletRequest request){

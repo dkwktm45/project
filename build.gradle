@@ -36,8 +36,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.6.6'
     implementation "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect"
-
-
+    implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.1'
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.3.3.RELEASE'
 
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'

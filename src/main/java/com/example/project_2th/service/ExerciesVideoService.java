@@ -6,6 +6,7 @@ import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.repository.ExinfoRepository;
+import com.example.project_2th.repository.PosturesRepository;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.repository.VideoRepository;
 import com.example.project_2th.response.ExerciesResponse;
@@ -14,9 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,14 +35,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ExerciesVideoService {
-
-    private final UserRepository userRepository;
-
-    private final ExinfoRepository exinfoRepository;
-
+    private final PosturesRepository posturesRepository;
     private final VideoRepository videoRepository;
     private final Logger logger = LoggerFactory.getLogger(ExerciesVideoService.class);
-
     // 주의!!
     public List<VideoResponse> loadUser(User user){
         logger.info("loadUser perform");
@@ -55,16 +53,19 @@ public class ExerciesVideoService {
         return videoRepository.findByUser(user).orElseThrow(PostNotFound::new)
                 .stream().map(VideoResponse::new).collect(Collectors.toList());
     }
-
-    public void videoSave(String cnt, ExerciesResponse exercies,User user, ServletInputStream input) throws IOException {
-        logger.info("videoSave perform");
-        Exercies reqObject = Exercies.builder().user(user).userSet(exercies.getUserSet())
-                .exSeq(exercies.getExSeq()).exKinds(exercies.getExKinds())
-                .exCount(exercies.getExCount()).cnt(exercies.getCnt())
-                .exName(exercies.getExName()).exDay(exercies.getExDay()).build();
+    public ExerciesVideo Video(Exercies exercies) {
+        logger.info("infoVideo perform");
+        return ExerciesVideo.builder()
+                .user(exercies.getUser())
+                .exercies(exercies)
+                .videoDate(LocalDate.now())
+                .build();
+    }
+    public void videoUpdate(String cnt,ExerciesVideo exerciesVideo, ServletInputStream input) throws IOException {
+        logger.info("videoUpdate perform");
 
         UUID uuid = UUID.randomUUID();
-        String file_name = uuid.toString() + "_" + changeVideoName(reqObject.getExName());
+        String file_name = uuid.toString() + "_" + changeVideoName(exerciesVideo.getExercies().getExName());
         byte[] charBuffer = null;
         int bytesRead = -1;
         try(FileOutputStream out = new FileOutputStream(new File("C:\\user\\projectVideo\\" + file_name + ".webm"));){
@@ -81,19 +82,12 @@ public class ExerciesVideoService {
         logger.info("저장 끝");
 
         // video 파일 저장
-        ExerciesVideo exerciesVideo = ExerciesVideo.builder()
-                .user(reqObject.getUser())
-                .fileName(file_name)
-                .exercies(reqObject)
-                .videoDate(LocalDate.now())
-                .build();
-        logger.info("videoSave info : {}", exerciesVideo);
+        exerciesVideo.setFileName(file_name);
+        exerciesVideo.getExercies().setCnt(cnt);
         videoRepository.save(exerciesVideo);
-
-
+        posturesRepository.saveAll(exerciesVideo.getPostures());
         logger.info("cnt update : {}", cnt);
         // cnt 데이터 update
-        reqObject.setCnt(cnt);
 
     }
 

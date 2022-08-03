@@ -1,5 +1,6 @@
 package com.example.project_2th.controller;
 
+import com.example.project_2th.entity.ExerciesVideo;
 import com.example.project_2th.entity.User;
 import com.example.project_2th.entity.Exercies;
 import com.example.project_2th.response.ExerciesResponse;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +55,6 @@ public class MainController {
                 ,responses);
         return "redirect:/user/record";
     }
-
     // 기록페이지
     @GetMapping("/record")
     public String recordPage() {
@@ -99,16 +100,19 @@ public class MainController {
     }
 
     @PostMapping(value = "/exinfo")
-    public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,Model model,HttpServletRequest req) throws Exception {
+    public String insertEx(@ModelAttribute("user_exercies") Exercies exercies,HttpServletRequest req) throws Exception {
         logger.info("exinfo [post] perform");
 
         HttpSession session = req.getSession();
         ExerciesResponse exinfo = exerciesService.exerciesInfo(exercies);
+        ExerciesVideo video = exerciesVideoService.Video(exercies);
         if (exinfo== null){
             log.error("운동 정보가 담겨 있지 않습니다.");
             return "redirect:/user/main";
         }
+        session.setAttribute("video",video);
         session.setAttribute("exinfo",exinfo);
+
         logger.info("[session] : exinfo {} ",exinfo.toString());
         return "redirect:/user/cam";
     }

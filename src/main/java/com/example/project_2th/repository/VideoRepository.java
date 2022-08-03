@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface VideoRepository extends JpaRepository<ExerciesVideo,Long> {
 
-    ExerciesVideo findByExercies(Exercies exinfo);
+    Optional<ExerciesVideo> findByExercies(Exercies exinfo);
 
     @EntityGraph(attributePaths = {"exercies","postures"})
     Optional<ExerciesVideo> findByVideoSeq(Long id);
