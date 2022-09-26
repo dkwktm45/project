@@ -43,7 +43,7 @@ public class AdminController {
         session.setAttribute("userList",exerciesVideoService.loadUser(user));
 
         logger.info("admin : loadUser end ");
-        return "/admin";
+        return "admin";
     }
     @GetMapping("/video")
     public String vidoeMember() {

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,7 +26,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 
     @Mock
     ExinfoRepository exinfoRepository;
-
+    @Mock
+    EntityManager em;
     @InjectMocks
     ExerciesService exerciesService;
     protected UserHelper userHelper = new UserHelper();
@@ -37,7 +39,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
         Exercies exercies = userHelper.makeExercies();
 
         // when
-        exerciesService = new ExerciesService(exinfoRepository);
+        exerciesService = new ExerciesService(exinfoRepository,em);
         ExerciesResponse exinfo = exerciesService.exerciesInfo(exercies);
 
         // then
@@ -56,7 +58,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
                 .thenReturn(user.getExerciesList());
 
         // when
-        exerciesService = new ExerciesService(exinfoRepository);
+        exerciesService = new ExerciesService(exinfoRepository,em);
         List<ExerciesResponse> exinfo = exerciesService.calendarResponse(user);
 
         // then

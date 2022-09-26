@@ -28,21 +28,18 @@ public class ExerciesService {
     private final ExinfoRepository exinfoRepository;
     private final Logger logger = LoggerFactory.getLogger(ExerciesService.class);
     @Autowired
-    private EntityManager em;
+    private final EntityManager em;
 
     public ExerciesResponse exerciesInfo(Exercies exercies){
         logger.info("exerciesInfo perform");
         exercies.setExDay(LocalDate.now());
         em.persist(exercies);
 
-        return new ExerciesResponse(em.find(Exercies.class,exercies.getExSeq()));
+        return new ExerciesResponse(exercies);
     }
 
     public List<ExerciesResponse> calendarResponse(User user){
         logger.info("calendarResponse perform");
         return exinfoRepository.findByidExinfo(user.getUserId()).stream().map(ExerciesResponse::new).collect(Collectors.toList());
-    }
-    public List<Exercies> findExercies(String exkinds){
-        return exinfoRepository.findByExKinds(exkinds);
     }
 }

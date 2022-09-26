@@ -26,7 +26,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
@@ -55,6 +54,7 @@ class VideoRepositoryTest {
         exercies = Exercies.builder().exDay(LocalDate.parse("2022-06-15")).exName("체스트 플라이").exCount("12")
                 .userSet("4").exKinds("가슴").user(user).cnt("10").build();
         em.persist(exercies);
+
     }
 
     @Test
@@ -78,6 +78,8 @@ class VideoRepositoryTest {
         exercies = em.find(Exercies.class,1L);
         postures = userHelper.makePose();
 
+        postures.forEach(info -> em.persist(info));
+
         ExerciesVideo exerciesVideo = ExerciesVideo.builder().postures(postures).exercies(exercies).fileName("test").videoDate(LocalDate.parse("2022-06-15"))
                 .user(user).build();
         em.persist(exerciesVideo);
@@ -94,6 +96,7 @@ class VideoRepositoryTest {
         logger.info("given");
         exercies = em.find(Exercies.class,1L);
         postures = userHelper.makePose();
+        postures.forEach(info -> em.persist(info));
 
         ExerciesVideo exerciesVideo = ExerciesVideo.builder().postures(postures).exercies(exercies).fileName("test").videoDate(LocalDate.parse("2022-06-15"))
                 .user(user).build();

@@ -47,8 +47,7 @@ public class RestControllerApi {
 
     @Autowired
     private final UserService userService;
-    @Autowired
-    private final EntityManager em;
+
     private final Logger logger = LoggerFactory.getLogger(RestControllerApi.class);
 
 

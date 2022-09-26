@@ -5,19 +5,16 @@ import com.example.project_2th.entity.User;
 import com.example.project_2th.exception.PostNotFound;
 import com.example.project_2th.repository.UserRepository;
 import com.example.project_2th.response.UserResponse;
-import org.junit.After;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,84 +26,21 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(SpringExtension.class)
-@Import({UserService.class,UserRepository.class,PasswordEncoder.class})
+@ExtendWith(MockitoExtension.class)
  class UserServiceTest {
 
-    @MockBean
+    @Mock
     UserRepository userRepository;
-    @MockBean
+    @Mock
     PasswordEncoder encoder;
 
-    @Autowired
+    @InjectMocks
     UserService userService;
 
     @Spy
     User user;
 
     protected UserHelper userHelper = new UserHelper();
-
-    /*@Nested
-    @DisplayName("user 운동정보 및 캘린더 정보")
-    class userInfo{
-        List<User> users = null;
-
-        @BeforeEach
-        void setUp(){
-            users = userHelper.makeUsers();
-            user = User.builder().userId(1L).userName("김화순").loginNumber("1234").userPhone("010-2345-1234")
-                    .userBirthdate(LocalDate.parse("1963-07-16")).userExpireDate(LocalDate.parse("2022-08-20"))
-                    .managerYn(0).videoYn(1).userGym("해운대").build();
-        }
-        @AfterEach
-        void afterSet(){
-            user = null;
-            users = null;
-        }
-
-
-
-        @DisplayName("사용자의 video exercies 정보들을 가져온다.")
-        @Test
-        void infoRecordSuccess(){
-            // given
-            Map<String,Object> map = new HashMap<>();
-            List<Exercies> exinfoList = userHelper.makeExinfos();
-            List<ExerciesVideo> videoList = userHelper.makeVideos();
-            map.put("videoList",videoList);
-            map.put("exinfoList",exinfoList);
-            // when
-            Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(users));
-
-            UserService userService = new UserService(userRepository,encoder);
-
-            // then
-            Map<String, Object> exinfo = userService.infoRecord(user);
-            assertEquals(exinfo.size(),2);
-            assertNotNull(exinfo.get("videoList"));
-            assertNotNull(exinfo.get("exinfoList"));
-            verify(userRepository).findAllByFetchJoin();
-        }
-
-        @DisplayName("Video 정보가 없을 시 PostNotFound를 호출한다.")
-        @Test
-        void infoRecordFail(){
-            // given
-            Map<String,Object> map = new HashMap<>();
-            List<Exercies> exinfoList = userHelper.makeExinfos();
-            List<ExerciesVideo> videoList = userHelper.makeVideos();
-            map.put("videoList",videoList);
-            map.put("exinfoList",exinfoList);
-            // when
-            Mockito.when(userRepository.findAllByFetchJoin()).thenReturn(ofNullable(null));
-
-            UserService userService = new UserService(userRepository,encoder);
-            // then
-            assertThrows(PostNotFound.class,()->{userService.infoRecord(user);});
-            verify(userRepository).findAllByFetchJoin();
-        }
-
-    }*/
 
 
     @Nested
@@ -148,10 +82,10 @@ import static org.mockito.Mockito.verify;
         @Test
         void test5(){
             // when
-            Mockito.when(userRepository.findByUserIdAndUserGym(
+            Mockito.lenient().when(userRepository.findByUserIdAndUserGym(
                     anyString()
                     ,anyString())).thenReturn(ofNullable(loginUser));
-            Mockito.when(userRepository.save(loginUser)).thenReturn(null);
+            Mockito.lenient().when(userRepository.save(loginUser)).thenReturn(null);
             UserService userService = new UserService(userRepository,encoder);
 
             // then

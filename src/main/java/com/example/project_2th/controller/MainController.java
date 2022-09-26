@@ -32,9 +32,6 @@ import java.util.Map;
 public class MainController {
 
     @Autowired
-    private final UserService userService;
-
-    @Autowired
     private final ExerciesService exerciesService;
 
     @Autowired

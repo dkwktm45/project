@@ -45,8 +45,10 @@ public class UserService {
         Optional<User> vaildUser = userRepository.findByUserIdAndUserGym(
                 user.getUserPhone()
                 , user.getUserGym());
-        if (vaildUser.isEmpty()) {
+        if (vaildUser == null) {
             userRepository.save(user);
+        }else{
+            throw new IllegalStateException("존재하는 회원입니다.");
         }
     }
 

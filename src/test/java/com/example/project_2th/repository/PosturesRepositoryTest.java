@@ -15,7 +15,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Date;
 
-@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")

@@ -25,18 +25,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.ServletInputStream;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -150,22 +151,34 @@ class RestControllerApiTest {
         @WithMockCustomUser(username = "test",role = "ROLE_USER")
         void insertBadImage() throws Exception {
             //given
-            data.add("ai_comment", String.valueOf(2L));
-            data.add("ex_seq", String.valueOf(1L));
+            List<String> aiComments = new ArrayList<>();
+            aiComments.add("오른쪽을 들어주세요.");
+            aiComments.add("왼쪽을 들어주세요.");
+            MockMultipartFile file
+                = new MockMultipartFile(
+                "file",
+                "hello.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+            );
 
+            List<MockMultipartFile> files = new ArrayList<>();
+            files.add(file);
+            files.add(file);
 
             // when
-            MvcResult result = mockMvc.perform(put("/user/pose-bad")
-                            .params(data)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .with(csrf()))
-                    .andExpect(status().isOk())
-                    .andExpect(handler().handlerType(RestControllerApi.class))
-                    .andDo(print()).andReturn();
+            MvcResult result = mockMvc.perform(multipart("/user/pose-bad").file(file).file(file)
+                    .param("aiComment", String.valueOf(aiComments))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(handler().handlerType(RestControllerApi.class))
+                .andDo(print()).andReturn();
+
             // then
-            MockHttpServletRequest request = result.getRequest();
-            String comment = String.valueOf(request.getAttribute("ai_comment"));
-            String seq = String.valueOf(request.getAttribute("ex_seq"));
+            MultipartHttpServletRequest request = (MultipartHttpServletRequest) result.getRequest();
+            List<String> comment = Collections.singletonList(request.getParameter("aiComment"));
+            List<MultipartFile> seq = request.getFiles("file");
             assertNotNull(comment);
             assertNotNull(seq);
         }

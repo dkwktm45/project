@@ -11,8 +11,6 @@ import com.example.project_2th.security.mock.WithMockCustomUser;
 import com.example.project_2th.security.service.UserContext;
 import com.example.project_2th.service.ExerciesService;
 import com.example.project_2th.service.ExerciesVideoService;
-import com.example.project_2th.service.UserService;
-import org.junit.After;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,9 +45,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         })
 @WithMockCustomUser(username = "test", role = "ROLE_USER")
 class MainControllerTest {
-
-    @MockBean
-    private UserService userService;
 
     @MockBean
     private ExerciesService exerciesService;
