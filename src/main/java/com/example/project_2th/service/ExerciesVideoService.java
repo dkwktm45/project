@@ -79,7 +79,6 @@ public class ExerciesVideoService {
         }catch (Exception e){
             logger.warn(e.getMessage());
         }
-        logger.info("저장 끝");
 
         // video 파일 저장
         exerciesVideo.setFileName(file_name);
@@ -87,8 +86,6 @@ public class ExerciesVideoService {
         videoRepository.save(exerciesVideo);
         posturesRepository.saveAll(exerciesVideo.getPostures());
         logger.info("cnt update : {}", cnt);
-        // cnt 데이터 update
-
     }
 
     public String changeVideoName(String value){
