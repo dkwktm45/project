@@ -61,7 +61,7 @@ public class ExerciesVideoService {
                 .videoDate(LocalDate.now())
                 .build();
     }
-    public void videoUpdate(String cnt,ExerciesVideo exerciesVideo, ServletInputStream input) throws IOException {
+    public void videoUpdate(String cnt,ExerciesVideo exerciesVideo, ServletInputStream input) {
         logger.info("videoUpdate perform");
 
         UUID uuid = UUID.randomUUID();
